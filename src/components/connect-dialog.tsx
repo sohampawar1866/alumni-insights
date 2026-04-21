@@ -11,6 +11,13 @@ type ConnectDialogProps = {
   onSuccess: () => void;
 };
 
+const TEMPLATES = [
+  "Informational chat: Hi! I'd love to learn more about your career journey and experience.",
+  "Resume review: Hello! Could you spare a few minutes to review my resume for SDE roles?",
+  "Referral ask: Hi! I'm applying to your company and would appreciate a referral if possible.",
+  "Company insight: Hello! I'm curious about the work culture and projects at your company."
+];
+
 export function ConnectDialog({
   alumniId,
   alumniName,
@@ -53,20 +60,37 @@ export function ConnectDialog({
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-slate-700">Message</label>
-            <textarea
-              required
-              maxLength={500}
-              rows={5}
-              placeholder="Hi! I'm currently a junior in CSE and would love to get your advice on applying for SDE roles..."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring resize-none"
-            />
-            <div className="flex justify-between text-xs text-slate-400">
-              <span>Keep it professional and concise.</span>
-              <span>{message.length}/500</span>
+          <div className="space-y-3">
+            <div className="flex flex-wrap gap-2">
+              {TEMPLATES.map((t, i) => {
+                const label = t.split(":")[0];
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setMessage(t.split(": ")[1])}
+                    className="text-xs px-2.5 py-1.5 rounded-full border border-slate-200 bg-slate-50 text-slate-600 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-colors"
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-slate-700">Message</label>
+              <textarea
+                required
+                maxLength={200}
+                rows={4}
+                placeholder="Hi! I'm currently a junior in CSE and would love to get your advice..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring resize-none"
+              />
+              <div className="flex justify-between text-xs text-slate-400">
+                <span>Keep it professional and concise.</span>
+                <span>{message.length}/200</span>
+              </div>
             </div>
           </div>
 

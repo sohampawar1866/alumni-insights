@@ -32,6 +32,9 @@ export default async function StudentDashboard() {
 
   const firstName = profile?.full_name?.split(" ")[0] || "there";
 
+  const currentAcademicYear = parseInt(process.env.NEXT_PUBLIC_CURRENT_ACADEMIC_YEAR || new Date().getFullYear().toString());
+  const isEligibleForAlumni = profile?.graduation_year && (profile.graduation_year - currentAcademicYear <= 1);
+
   return (
     <div className="max-w-4xl mx-auto px-6 py-10 space-y-8">
       {/* Welcome */}
@@ -68,19 +71,38 @@ export default async function StudentDashboard() {
         {/* Search CTA Card */}
         <Link
           href="/search"
-          className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-md hover:border-blue-200"
+          className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-md hover:border-blue-200 flex flex-col justify-between"
         >
-          <p className="text-sm font-medium text-slate-500 mb-1">
-            Alumni Directory
-          </p>
-          <p className="text-lg font-semibold text-slate-900 group-hover:text-blue-700 transition-colors">
-            Search & discover alumni →
-          </p>
-          <p className="mt-1 text-sm text-slate-400">
-            Filter by company, role, branch, city, and more.
-          </p>
+          <div>
+            <p className="text-sm font-medium text-slate-500 mb-1">
+              Alumni Directory
+            </p>
+            <p className="text-lg font-semibold text-slate-900 group-hover:text-blue-700 transition-colors">
+              Search & discover alumni →
+            </p>
+            <p className="mt-1 text-sm text-slate-400">
+              Filter by company, role, branch, city, and more.
+            </p>
+          </div>
         </Link>
       </div>
+
+      {isEligibleForAlumni && (
+        <div className="rounded-2xl border border-blue-100 bg-blue-50/50 p-6 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h3 className="text-lg font-semibold text-blue-900">Are you working or interning?</h3>
+            <p className="text-sm text-blue-700 mt-1 max-w-xl">
+              Since you're in your final year (or beyond), you can apply to have your profile listed in the Alumni Directory so juniors can reach out to you.
+            </p>
+          </div>
+          <Link
+            href="/dashboard/apply"
+            className="shrink-0 bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+          >
+            Apply as Alumni
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

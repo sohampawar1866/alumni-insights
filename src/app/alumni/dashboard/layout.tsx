@@ -2,6 +2,8 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
+import { FirstLoginNudge } from "@/components/first-login-nudge";
+
 export default async function AlumniLayout({
   children,
 }: {
@@ -60,7 +62,10 @@ export default async function AlumniLayout({
         </div>
       </aside>
 
-      <main className="flex-1 bg-slate-50 overflow-auto">{children}</main>
+      <main className="flex-1 bg-slate-50 overflow-auto">
+        {children}
+        <FirstLoginNudge />
+      </main>
     </div>
   );
 }

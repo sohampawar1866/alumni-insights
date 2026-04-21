@@ -16,6 +16,8 @@ type Alumni = {
   branch: string | null;
   city: string | null;
   mentorship_available: boolean | null;
+  bio: string | null;
+  linkedin_url: string | null;
 };
 
 export default function SearchPage() {
@@ -39,10 +41,9 @@ export default function SearchPage() {
     let query = supabase
       .from("profiles")
       .select(
-        "id, full_name, role_title, company, emp_type, graduation_year, branch, city, mentorship_available"
+        "id, full_name, role_title, company, emp_type, graduation_year, branch, city, mentorship_available, bio, linkedin_url"
       )
-      .eq("role", "alumni")
-      .order("full_name", { ascending: true });
+      .eq("role", "alumni");
 
     if (company.trim()) query = query.ilike("company", `%${company.trim()}%`);
     if (roleKeyword.trim())
@@ -55,7 +56,32 @@ export default function SearchPage() {
     if (mentorshipOnly) query = query.eq("mentorship_available", true);
 
     const { data } = await query;
-    setResults((data as Alumni[]) || []);
+    let fetchedData = (data as Alumni[]) || [];
+
+    // Calculate completeness and sort
+    fetchedData = fetchedData.sort((a, b) => {
+      const getScore = (profile: Alumni) => {
+        let score = 0;
+        if (profile.role_title?.trim()) score += 20;
+        if (profile.company?.trim()) score += 20;
+        if (profile.emp_type) score += 10;
+        if (profile.city?.trim()) score += 15;
+        if (profile.bio?.trim()) score += 20;
+        if (profile.linkedin_url?.trim()) score += 15;
+        return score;
+      };
+      
+      const scoreA = getScore(a);
+      const scoreB = getScore(b);
+      
+      // Secondary sort by name
+      if (scoreA === scoreB) {
+        return (a.full_name || "").localeCompare(b.full_name || "");
+      }
+      return scoreB - scoreA;
+    });
+
+    setResults(fetchedData);
     setLoading(false);
   }, [company, roleKeyword, branch, city, yearFrom, yearTo, empType, mentorshipOnly, supabase]);
 

@@ -36,6 +36,7 @@ export default async function ModeratorLayout({
         <nav className="flex-1 p-4 space-y-1">
           <SidebarLink href="/moderator/dashboard" label="Alumni Management" icon="👤" />
           <SidebarLink href="/moderator/dashboard/import" label="Bulk Import" icon="📁" />
+          <SidebarLink href="/moderator/dashboard/applications" label="Applications" icon="📝" />
           <SidebarLink href="/moderator/dashboard/audit" label="Audit Log" icon="📋" />
           <SidebarLink href="/moderator/dashboard/analytics" label="Analytics" icon="📊" />
         </nav>

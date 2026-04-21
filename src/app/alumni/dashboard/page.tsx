@@ -87,6 +87,19 @@ export default function AlumniDashboardPage() {
     setTimeout(() => setSaved(false), 3000);
   };
 
+  const calculateCompleteness = () => {
+    let score = 0;
+    if (roleTitle?.trim()) score += 20;
+    if (company?.trim()) score += 20;
+    if (empType) score += 10;
+    if (city?.trim()) score += 15;
+    if (bio?.trim()) score += 20;
+    if (linkedinUrl?.trim()) score += 15;
+    return score;
+  };
+
+  const completeness = calculateCompleteness();
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -103,6 +116,25 @@ export default function AlumniDashboardPage() {
           Update your professional details. Students will see this when they
           search for alumni.
         </p>
+      </div>
+
+      {/* Profile Completeness Score */}
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-slate-700">Profile Completeness</h2>
+          <span className="text-sm font-bold text-blue-600">{completeness}%</span>
+        </div>
+        <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-blue-600 transition-all duration-500 ease-out" 
+            style={{ width: `${completeness}%` }} 
+          />
+        </div>
+        {completeness < 100 && (
+          <p className="text-xs text-slate-500">
+            Complete your profile to rank higher in student search results.
+          </p>
+        )}
       </div>
 
       <form
@@ -219,31 +251,34 @@ export default function AlumniDashboardPage() {
 
         {/* Mentorship Preferences */}
         {mentorshipAvailable && (
-          <div className="space-y-2">
+          <div className="space-y-2 relative group">
             <label className="text-xs font-medium text-slate-500">
               Mentorship Preferences
             </label>
-            <div className="flex flex-wrap gap-1.5 mb-2">
+            <Input
+              placeholder="Type your preferences or tap suggestions below"
+              value={mentorshipPreferences}
+              onChange={(e) => setMentorshipPreferences(e.target.value)}
+              className="peer"
+            />
+            <div className="hidden peer-focus:flex hover:flex flex-wrap gap-1.5 mt-2 bg-white p-3 rounded-lg border border-slate-100 shadow-lg absolute z-10 w-full top-[60px]">
+              <p className="w-full text-xs font-semibold text-slate-400 mb-1">Common Suggestions:</p>
               {MENTORSHIP_SUGGESTIONS.map((s) => (
                 <button
                   key={s}
                   type="button"
-                  onClick={() =>
+                  onMouseDown={(e) => {
+                    e.preventDefault(); // Prevents input onBlur from firing immediately
                     setMentorshipPreferences((prev) =>
                       prev ? `${prev}, ${s}` : s
-                    )
-                  }
+                    );
+                  }}
                   className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-slate-600 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-colors"
                 >
                   + {s}
                 </button>
               ))}
             </div>
-            <Input
-              placeholder="Type your preferences or tap suggestions above"
-              value={mentorshipPreferences}
-              onChange={(e) => setMentorshipPreferences(e.target.value)}
-            />
           </div>
         )}
 
