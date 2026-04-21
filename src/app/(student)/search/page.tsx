@@ -5,6 +5,7 @@ import { createClient } from "@/utils/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AlumniCard } from "@/components/alumni-card";
+import Link from "next/link";
 
 type Alumni = {
   id: string;

@@ -39,6 +39,7 @@ export default async function ModeratorLayout({
           <SidebarLink href="/moderator/dashboard/applications" label="Applications" icon="📝" />
           <SidebarLink href="/moderator/dashboard/audit" label="Audit Log" icon="📋" />
           <SidebarLink href="/moderator/dashboard/analytics" label="Analytics" icon="📊" />
+          <SidebarLink href="/moderator/dashboard/announcements" label="Announcements" icon="📢" />
         </nav>
 
         <div className="p-4 border-t border-slate-100">

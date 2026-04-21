@@ -49,6 +49,13 @@ export default async function AlumniLayout({
             <span>⚙️</span>
             Settings
           </Link>
+          <Link
+            href="/alumni/dashboard/announcements"
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
+          >
+            <span>📢</span>
+            Announcements
+          </Link>
         </nav>
         <div className="p-4 border-t border-slate-100">
           <form action="/api/auth/signout" method="POST">
