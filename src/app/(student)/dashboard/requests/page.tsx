@@ -29,6 +29,12 @@ export default async function MyRequestsPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10 space-y-8">
+      <Link
+        href="/dashboard"
+        className="inline-flex items-center text-sm text-slate-500 hover:text-slate-700 transition-colors"
+      >
+        ← Back to Dashboard
+      </Link>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">My Requests</h1>

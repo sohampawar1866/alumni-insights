@@ -84,6 +84,12 @@ export default function SearchPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-10">
+      <Link
+        href="/dashboard"
+        className="inline-flex items-center text-sm text-slate-500 hover:text-slate-700 transition-colors mb-4"
+      >
+        ← Back to Dashboard
+      </Link>
       <h1 className="text-3xl font-bold text-slate-900 tracking-tight mb-8">
         Alumni Directory
       </h1>
