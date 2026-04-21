@@ -7,8 +7,8 @@ import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
 
 export function ProfileForm({ initialData }: { initialData?: Record<string, unknown> | null }) {
-  const [branch, setBranch] = useState(initialData?.branch || '')
-  const [graduationYear, setGraduationYear] = useState(initialData?.graduation_year || '')
+  const [branch, setBranch] = useState<string>((initialData?.branch as string) || '')
+  const [graduationYear, setGraduationYear] = useState<string | number>((initialData?.graduation_year as string | number) || '')
   const [loading, setLoading] = useState(false)
   const supabase = createClient()
   const router = useRouter()
@@ -24,7 +24,7 @@ export function ProfileForm({ initialData }: { initialData?: Record<string, unkn
         .from('profiles')
         .update({
           branch,
-          graduation_year: parseInt(graduationYear),
+          graduation_year: parseInt(String(graduationYear)),
         })
         .eq('id', user.id)
 
