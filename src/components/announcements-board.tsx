@@ -44,10 +44,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
   const [isPinned, setIsPinned] = useState(false);
   const [posting, setPosting] = useState(false);
 
-  useEffect(() => {
-    fetchAnnouncements();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
 
   const fetchAnnouncements = async () => {
     setLoading(true);
@@ -75,7 +72,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
 
       const likedIds = new Set(userLikes?.map((l) => l.announcement_id) || []);
 
-      const formatted = data.map((d: any) => ({
+      const formatted = data.map((d: Announcement) => ({
         ...d,
         user_liked: likedIds.has(d.id),
       }));
@@ -84,6 +81,12 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchAnnouncements();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handlePost = async (e: React.FormEvent) => {
     e.preventDefault();

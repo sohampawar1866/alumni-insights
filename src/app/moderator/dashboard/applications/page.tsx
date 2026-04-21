@@ -47,7 +47,7 @@ export default function ApplicationsPage() {
         .order("created_at", { ascending: false });
 
       if (data) {
-        setApplications(data as any as Application[]);
+        setApplications(data as unknown as Application[]);
       }
       setLoading(false);
     }

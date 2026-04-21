@@ -28,7 +28,15 @@ export default function AlumniDashboardPage() {
   const [bio, setBio] = useState("");
   const [mentorshipAvailable, setMentorshipAvailable] = useState(false);
   const [mentorshipPreferences, setMentorshipPreferences] = useState("");
-  const [contributionStats, setContributionStats] = useState<any>(null);
+  
+  type ContributionStats = {
+    tier: string;
+    completed_count: number;
+    avg_rating: number | string;
+    feedback_count: number;
+    acceptance_rate: number | string;
+  };
+  const [contributionStats, setContributionStats] = useState<ContributionStats | null>(null);
 
   useEffect(() => {
     async function load() {

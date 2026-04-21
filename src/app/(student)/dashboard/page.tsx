@@ -92,7 +92,7 @@ export default async function StudentDashboard() {
           <div>
             <h3 className="text-lg font-semibold text-blue-900">Are you working or interning?</h3>
             <p className="text-sm text-blue-700 mt-1 max-w-xl">
-              Since you're in your final year (or beyond), you can apply to have your profile listed in the Alumni Directory so juniors can reach out to you.
+              Since you&apos;re in your final year (or beyond), you can apply to have your profile listed in the Alumni Directory so juniors can reach out to you.
             </p>
           </div>
           <Link
