@@ -36,25 +36,34 @@ export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   // Paths that don't require auth
-  if (path === '/' || path.includes('/login') || path.includes('/api/auth') || path === '/unauthorized') {
-    return response;
-  }
-
   if (!user) {
+    if (path === '/' || path.includes('/login') || path.includes('/api/auth') || path === '/unauthorized') {
+      return response;
+    }
+    
     // Redirect unauthenticated users
     if (path.startsWith('/admin')) return NextResponse.redirect(new URL('/admin/login', request.url))
     if (path.startsWith('/moderator')) return NextResponse.redirect(new URL('/moderator/login', request.url))
     if (path.startsWith('/alumni')) return NextResponse.redirect(new URL('/alumni/login', request.url))
     return NextResponse.redirect(new URL('/login', request.url))
   }
+
   // Fetch the role
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
   const role = profile?.role || 'student'
 
-  // Restrict access based on role
-  if (path.startsWith('/admin') && role !== 'admin') return NextResponse.redirect(new URL('/unauthorized', request.url))
-  if (path.startsWith('/moderator') && role !== 'moderator') return NextResponse.redirect(new URL('/unauthorized', request.url))
-  if (path.startsWith('/alumni') && role !== 'alumni') return NextResponse.redirect(new URL('/unauthorized', request.url))
+  // Redirect authenticated users away from login pages
+  if (path === '/' || path.includes('/login')) {
+    if (role === 'admin') return NextResponse.redirect(new URL('/admin/dashboard', request.url))
+    if (role === 'moderator') return NextResponse.redirect(new URL('/moderator/dashboard', request.url))
+    if (role === 'alumni') return NextResponse.redirect(new URL('/alumni/dashboard', request.url))
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
+
+  // Enforce role-based access for dashboard paths
+  if (path.startsWith('/admin/dashboard') && role !== 'admin') return NextResponse.redirect(new URL('/unauthorized', request.url))
+  if (path.startsWith('/moderator/dashboard') && role !== 'moderator') return NextResponse.redirect(new URL('/unauthorized', request.url))
+  if (path.startsWith('/alumni/dashboard') && role !== 'alumni') return NextResponse.redirect(new URL('/unauthorized', request.url))
   if (path.startsWith('/dashboard') && role !== 'student') return NextResponse.redirect(new URL('/unauthorized', request.url))
 
   return response

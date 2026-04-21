@@ -24,7 +24,7 @@ export default async function StudentLayout({
     .single();
 
   // If the student hasn't completed their profile yet, show the form
-  const isProfileComplete = profile?.branch && profile?.graduation_year;
+  const isProfileComplete = profile?.role !== 'student' || (profile?.branch && profile?.graduation_year);
 
   if (!isProfileComplete) {
     return (
