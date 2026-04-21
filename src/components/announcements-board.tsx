@@ -144,7 +144,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
   };
 
   const handleFlag = async (id: string) => {
-    await supabase.from("announcements").update({ is_flagged: true }).eq("id", id);
+    await supabase.rpc("flag_announcement", { announcement_id: id });
     alert("Post flagged for moderator review.");
   };
 
