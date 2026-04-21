@@ -1,5 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
+import { FeedbackButton } from "@/components/feedback-button";
 
 export default async function MyRequestsPage() {
   const supabase = await createClient();
@@ -26,6 +27,14 @@ export default async function MyRequestsPage() {
     )
     .eq("student_id", user!.id)
     .order("created_at", { ascending: false });
+
+  // Fetch existing feedback so we know which completed requests already have it
+  const { data: feedbackData } = await supabase
+    .from("session_feedback")
+    .select("request_id")
+    .eq("student_id", user!.id);
+
+  const feedbackRequestIds = new Set(feedbackData?.map((f) => f.request_id) || []);
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10 space-y-8">
@@ -122,6 +131,20 @@ export default async function MyRequestsPage() {
                     >
                       Message on LinkedIn
                     </a>
+                  </div>
+                )}
+
+                {req.status === "completed" && alumni && (
+                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                    <p className="text-sm text-slate-600">
+                      ✅ Session completed
+                    </p>
+                    <FeedbackButton
+                      requestId={req.id}
+                      alumniId={alumni.id}
+                      alumniName={alumni.full_name || "Alumni"}
+                      hasFeedback={feedbackRequestIds.has(req.id)}
+                    />
                   </div>
                 )}
               </div>

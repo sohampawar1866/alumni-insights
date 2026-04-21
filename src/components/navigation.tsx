@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import { NotificationBell } from '@/components/notification-bell'
 
 export function Navigation() {
   const pathname = usePathname()
@@ -39,11 +40,14 @@ export function Navigation() {
           })}
         </nav>
       </div>
-      <form action="/api/auth/signout" method="POST">
-        <Button variant="outline" size="sm" type="submit">
-          Sign Out
-        </Button>
-      </form>
+      <div className="flex items-center gap-2">
+        <NotificationBell />
+        <form action="/api/auth/signout" method="POST">
+          <Button variant="outline" size="sm" type="submit">
+            Sign Out
+          </Button>
+        </form>
+      </div>
     </header>
   )
 }

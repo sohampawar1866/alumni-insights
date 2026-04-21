@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AlumniBadge } from "@/components/alumni-badge";
 
 const MENTORSHIP_SUGGESTIONS = [
   "Resume Review",
@@ -27,6 +28,7 @@ export default function AlumniDashboardPage() {
   const [bio, setBio] = useState("");
   const [mentorshipAvailable, setMentorshipAvailable] = useState(false);
   const [mentorshipPreferences, setMentorshipPreferences] = useState("");
+  const [contributionStats, setContributionStats] = useState<any>(null);
 
   useEffect(() => {
     async function load() {
@@ -52,6 +54,14 @@ export default function AlumniDashboardPage() {
         setMentorshipPreferences(data.mentorship_preferences || "");
       }
       setLoading(false);
+
+      // Fetch contribution stats
+      const { data: stats } = await supabase
+        .from("alumni_contribution_stats")
+        .select("*")
+        .eq("alumni_id", user.id)
+        .single();
+      if (stats) setContributionStats(stats);
     }
     load();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -136,6 +146,17 @@ export default function AlumniDashboardPage() {
           </p>
         )}
       </div>
+
+      {/* Contribution & Recognition */}
+      {contributionStats && (
+        <AlumniBadge
+          tier={contributionStats.tier}
+          completedCount={contributionStats.completed_count}
+          avgRating={Number(contributionStats.avg_rating)}
+          feedbackCount={contributionStats.feedback_count}
+          acceptanceRate={Number(contributionStats.acceptance_rate)}
+        />
+      )}
 
       <form
         onSubmit={handleSave}

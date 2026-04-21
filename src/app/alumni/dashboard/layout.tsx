@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 
 import { FirstLoginNudge } from "@/components/first-login-nudge";
+import { NotificationBell } from "@/components/notification-bell";
 
 export default async function AlumniLayout({
   children,
@@ -27,11 +28,14 @@ export default async function AlumniLayout({
   return (
     <div className="flex min-h-screen">
       <aside className="w-64 shrink-0 border-r border-slate-200 bg-white flex flex-col">
-        <div className="p-6 border-b border-slate-100">
-          <h2 className="font-bold text-lg text-slate-900">Alumni Portal</h2>
-          <p className="text-xs text-slate-500 mt-0.5 truncate">
-            {profile?.full_name || user.email}
-          </p>
+        <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+          <div>
+            <h2 className="font-bold text-lg text-slate-900">Alumni Portal</h2>
+            <p className="text-xs text-slate-500 mt-0.5 truncate">
+              {profile?.full_name || user.email}
+            </p>
+          </div>
+          <NotificationBell />
         </div>
 
         <nav className="flex-1 p-4 space-y-1">
@@ -41,6 +45,13 @@ export default async function AlumniLayout({
           >
             <span>👤</span>
             My Profile
+          </Link>
+          <Link
+            href="/alumni/dashboard/requests"
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
+          >
+            <span>💬</span>
+            Requests
           </Link>
           <Link
             href="/alumni/dashboard/settings"

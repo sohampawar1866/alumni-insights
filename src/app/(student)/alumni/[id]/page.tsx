@@ -2,6 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ConnectSection } from "./connect-section";
+import { AlumniBadge } from "@/components/alumni-badge";
 
 export default async function AlumniProfilePage({
   params,
@@ -33,6 +34,13 @@ export default async function AlumniProfilePage({
     .select("*", { count: "exact", head: true })
     .eq("alumni_id", id)
     .eq("status", "accepted");
+
+  // Fetch contribution stats for badges
+  const { data: stats } = await supabase
+    .from("alumni_contribution_stats")
+    .select("*")
+    .eq("alumni_id", id)
+    .single();
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-10 space-y-8">
@@ -116,6 +124,17 @@ export default async function AlumniProfilePage({
           </div>
         </div>
       </div>
+
+      {/* Contribution Badge */}
+      {stats && (
+        <AlumniBadge
+          tier={stats.tier}
+          completedCount={stats.completed_count}
+          avgRating={Number(stats.avg_rating)}
+          feedbackCount={stats.feedback_count}
+          acceptanceRate={Number(stats.acceptance_rate)}
+        />
+      )}
 
       {/* Bio / What I can help with */}
       {alumni.bio && (
