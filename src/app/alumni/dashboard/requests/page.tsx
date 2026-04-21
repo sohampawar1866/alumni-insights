@@ -196,15 +196,23 @@ function RequestCard({
       )}
 
       {readOnly && request.status === "accepted" && (
-        <div className="pt-2">
-          <Button
-            onClick={() => onUpdate(request.id, "completed")}
-            variant="outline"
-            size="sm"
-          >
-            Mark as Completed
-          </Button>
-          <p className="text-xs text-slate-400 mt-2">
+        <div className="pt-2 border-t border-slate-100 mt-4 space-y-4">
+          <div className="flex gap-3">
+            <Button
+              onClick={() => { window.location.href = `/alumni/dashboard/messages/${request.id}`; }}
+              className="bg-blue-600 hover:bg-blue-700 text-white text-sm h-9 px-4"
+            >
+              💬 Open Chat
+            </Button>
+            <Button
+              onClick={() => onUpdate(request.id, "completed")}
+              variant="outline"
+              className="text-sm h-9 px-4"
+            >
+              Mark as Completed
+            </Button>
+          </div>
+          <p className="text-xs text-slate-400">
             Once you have helped the student, mark this as completed to update
             your stats.
           </p>

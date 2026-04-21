@@ -15,6 +15,9 @@ type Announcement = {
   created_at: string;
   is_flagged: boolean;
   author_id: string;
+  target_branch: string | null;
+  target_batch: number | null;
+  target_city: string | null;
   profiles: {
     full_name: string;
     role: string;
@@ -43,8 +46,11 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
   const [expiresAt, setExpiresAt] = useState("");
   const [isPinned, setIsPinned] = useState(false);
   const [posting, setPosting] = useState(false);
-
-
+  
+  // Targeting State (Moderator Only)
+  const [targetBranch, setTargetBranch] = useState("");
+  const [targetBatch, setTargetBatch] = useState("");
+  const [targetCity, setTargetCity] = useState("");
 
   const fetchAnnouncements = async () => {
     setLoading(true);
@@ -72,7 +78,26 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
 
       const likedIds = new Set(userLikes?.map((l) => l.announcement_id) || []);
 
-      const formatted = data.map((d: Announcement) => ({
+      let filteredData = data as Announcement[];
+
+      if (currentUserRole === "alumni") {
+        const { data: userProfile } = await supabase
+          .from("profiles")
+          .select("branch, graduation_year, city")
+          .eq("id", currentUserId)
+          .single();
+
+        if (userProfile) {
+          filteredData = filteredData.filter(a => {
+            if (a.target_branch && a.target_branch.toLowerCase() !== userProfile.branch?.toLowerCase()) return false;
+            if (a.target_batch && a.target_batch !== userProfile.graduation_year) return false;
+            if (a.target_city && a.target_city.toLowerCase() !== userProfile.city?.toLowerCase()) return false;
+            return true;
+          });
+        }
+      }
+
+      const formatted = filteredData.map((d: Announcement) => ({
         ...d,
         user_liked: likedIds.has(d.id),
       }));
@@ -98,6 +123,9 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
       attachment_url: attachmentUrl || null,
       is_pinned: currentUserRole === "moderator" ? isPinned : false,
       expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
+      target_branch: targetBranch || null,
+      target_batch: targetBatch ? parseInt(targetBatch) : null,
+      target_city: targetCity || null,
     });
 
     if (!error) {
@@ -107,6 +135,9 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
       setAttachmentUrl("");
       setIsPinned(false);
       setExpiresAt("");
+      setTargetBranch("");
+      setTargetBatch("");
+      setTargetCity("");
       fetchAnnouncements();
     }
     setPosting(false);
@@ -203,6 +234,46 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
             />
             <p className="text-xs text-slate-400 text-right">{body.length}/1000</p>
           </div>
+
+          {currentUserRole === "moderator" && (
+            <div className="p-4 bg-white rounded-xl border border-blue-100 space-y-3">
+              <p className="text-xs font-bold tracking-wide uppercase text-blue-800">Target Audience (Optional)</p>
+              <div className="grid sm:grid-cols-3 gap-3">
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-slate-500">Branch</label>
+                  <select
+                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                    value={targetBranch}
+                    onChange={(e) => setTargetBranch(e.target.value)}
+                  >
+                    <option value="">All Branches</option>
+                    <option value="CSE">CSE</option>
+                    <option value="ECE">ECE</option>
+                  </select>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-slate-500">Batch (Grad Year)</label>
+                  <Input
+                    type="number"
+                    placeholder="e.g. 2020"
+                    value={targetBatch}
+                    onChange={(e) => setTargetBatch(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-slate-500">City</label>
+                  <Input
+                    type="text"
+                    placeholder="e.g. Bangalore"
+                    value={targetCity}
+                    onChange={(e) => setTargetCity(e.target.value)}
+                  />
+                </div>
+              </div>
+              <p className="text-[10px] text-slate-400">Leave fields empty to broadcast to everyone.</p>
+            </div>
+          )}
+
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="text-xs font-medium text-slate-500">Attachment / Link URL</label>
@@ -255,6 +326,12 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
             const canDelete = isAuthor || currentUserRole === "moderator";
             const likesCount = post.likes[0]?.count || 0;
 
+            const targets = [];
+            if (post.target_branch) targets.push(post.target_branch);
+            if (post.target_batch) targets.push(`Batch '${post.target_batch}`);
+            if (post.target_city) targets.push(post.target_city);
+            const targetString = targets.length > 0 ? targets.join(", ") : "Everyone";
+
             return (
               <div
                 key={post.id}
@@ -264,7 +341,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex flex-wrap items-center gap-2 mb-2">
                       {post.is_pinned && (
                         <span className="inline-flex items-center rounded-md bg-amber-100 px-2 py-1 text-xs font-medium text-amber-800">
                           📌 Pinned
@@ -279,6 +356,12 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
                           👤 Alumni — {post.profiles.full_name}, {post.profiles.role_title} at {post.profiles.company}
                         </span>
                       )}
+                      
+                      {currentUserRole === "moderator" && (
+                        <span className="inline-flex items-center text-xs font-medium text-purple-700 bg-purple-50 px-2 py-1 rounded-md border border-purple-100">
+                          🎯 Target: {targetString}
+                        </span>
+                      )}
                     </div>
                     <h3 className="text-lg font-bold text-slate-900">{post.title}</h3>
                     <p className="text-xs text-slate-500 mt-0.5">
@@ -289,7 +372,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
                   <div className="flex items-center gap-2 shrink-0">
                     {canDelete && (
                       <button
-                        onClick={() => handleDelete(post.id)}
+                         onClick={() => handleDelete(post.id)}
                         className="text-xs text-red-600 hover:underline p-1"
                       >
                         Delete

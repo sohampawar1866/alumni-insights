@@ -121,6 +121,11 @@ export default async function AlumniProfilePage({
                 ? `${acceptedRequests || 0} of ${totalRequests} accepted`
                 : "No requests yet"}
             </p>
+            {stats && stats.avg_response_hours > 0 && (
+              <p className="text-xs text-slate-500 mt-1">
+                Typically responds in {stats.avg_response_hours < 24 ? "< 24 hrs" : `${Math.round(stats.avg_response_hours / 24)} days`}
+              </p>
+            )}
           </div>
         </div>
       </div>

@@ -16,11 +16,14 @@ export default function AdminDashboardPage() {
   const [moderators, setModerators] = useState<Moderator[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Create form
+  // Forms state
   const [showForm, setShowForm] = useState(false);
+  const [editModId, setEditModId] = useState<string | null>(null);
+  
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
   const [formLoading, setFormLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -41,26 +44,53 @@ export default function AdminDashboardPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleCreate = async (e: React.FormEvent) => {
+  const openCreate = () => {
+    setEditModId(null);
+    setFullName("");
+    setEmail("");
+    setPassword("");
+    setShowForm(true);
+    setError(null);
+    setSuccess(null);
+  };
+
+  const openEdit = (mod: Moderator) => {
+    setEditModId(mod.id);
+    setFullName(mod.full_name || "");
+    setEmail(mod.email);
+    setPassword("");
+    setShowForm(true);
+    setError(null);
+    setSuccess(null);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormLoading(true);
     setError(null);
     setSuccess(null);
 
+    const action = editModId ? "edit" : "create";
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const payload: any = { action, full_name: fullName };
+    
+    if (password) payload.password = password;
+
+    if (action === "create") {
+      payload.email = email;
+    } else {
+      payload.moderator_id = editModId;
+    }
+
     const { data, error: fnError } = await supabase.functions.invoke(
       "manage-moderator",
-      {
-        body: { action: "create", full_name: fullName, email, password },
-      }
+      { body: payload }
     );
 
     if (fnError || data?.error) {
-      setError(data?.error || fnError?.message || "Failed to create moderator");
+      setError(data?.error || fnError?.message || `Failed to ${action} moderator`);
     } else {
-      setSuccess(`Moderator "${fullName}" created successfully.`);
-      setFullName("");
-      setEmail("");
-      setPassword("");
+      setSuccess(`Moderator "${fullName}" ${action}d successfully.`);
       setShowForm(false);
       fetchModerators();
     }
@@ -90,10 +120,10 @@ export default function AdminDashboardPage() {
             Manage Moderators
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Create, view, and remove moderator accounts.
+            Create, edit, and remove moderator accounts.
           </p>
         </div>
-        <Button onClick={() => setShowForm(!showForm)}>
+        <Button onClick={() => showForm ? setShowForm(false) : openCreate()}>
           {showForm ? "Cancel" : "+ Add Moderator"}
         </Button>
       </div>
@@ -107,14 +137,14 @@ export default function AdminDashboardPage() {
         </p>
       )}
 
-      {/* Create Form */}
+      {/* Create / Edit Form */}
       {showForm && (
         <form
-          onSubmit={handleCreate}
+          onSubmit={handleSubmit}
           className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
         >
           <h2 className="text-sm font-semibold text-slate-700">
-            New Moderator Account
+            {editModId ? "Edit Moderator Account" : "New Moderator Account"}
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-1">
@@ -135,6 +165,7 @@ export default function AdminDashboardPage() {
               <Input
                 required
                 type="email"
+                disabled={!!editModId}
                 placeholder="mehta@iiitn.ac.in"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -143,10 +174,10 @@ export default function AdminDashboardPage() {
           </div>
           <div className="space-y-1">
             <label className="text-xs font-medium text-slate-500">
-              Password
+              {editModId ? "New Password (Optional)" : "Password"}
             </label>
             <Input
-              required
+              required={!editModId}
               type="text"
               minLength={8}
               placeholder="At least 8 characters"
@@ -155,7 +186,7 @@ export default function AdminDashboardPage() {
             />
           </div>
           <Button type="submit" disabled={formLoading}>
-            {formLoading ? "Creating..." : "Create Moderator"}
+            {formLoading ? "Saving..." : editModId ? "Save Changes" : "Create Moderator"}
           </Button>
         </form>
       )}
@@ -183,14 +214,24 @@ export default function AdminDashboardPage() {
                   </p>
                   <p className="text-xs text-slate-500">{mod.email}</p>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                  onClick={() => handleDelete(mod.id, mod.full_name)}
-                >
-                  Delete
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-slate-600 hover:text-slate-900"
+                    onClick={() => openEdit(mod)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                    onClick={() => handleDelete(mod.id, mod.full_name)}
+                  >
+                    Delete
+                  </Button>
+                </div>
               </div>
             ))}
           </div>

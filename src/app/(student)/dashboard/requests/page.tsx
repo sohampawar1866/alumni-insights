@@ -118,19 +118,24 @@ export default async function MyRequestsPage() {
                   <p className="whitespace-pre-wrap">{req.message}</p>
                 </div>
 
-                {req.status === "accepted" && alumni?.linkedin_url && (
-                  <div className="pt-2 border-t border-slate-100">
-                    <p className="text-sm text-slate-600 mb-2">
-                      🎉 Request accepted! You can now reach out via LinkedIn:
-                    </p>
-                    <a
-                      href={alumni.linkedin_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                {req.status === "accepted" && alumni && (
+                  <div className="pt-2 border-t border-slate-100 flex items-center gap-3">
+                    <Link
+                      href={`/dashboard/messages/${req.id}`}
                       className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors"
                     >
-                      Message on LinkedIn
-                    </a>
+                      💬 Open Chat
+                    </Link>
+                    {alumni.linkedin_url && (
+                      <a
+                        href={alumni.linkedin_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center rounded-lg bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200 transition-colors"
+                      >
+                        Message on LinkedIn
+                      </a>
+                    )}
                   </div>
                 )}
 
