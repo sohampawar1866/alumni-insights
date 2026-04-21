@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Alumni Insights — IIIT Nagpur
+
+A full-stack alumni networking platform that connects IIIT Nagpur students with graduates working at top companies. Built with Next.js 16, Supabase, and Tailwind CSS.
+
+## Features
+
+- **🔍 Alumni Search** — Filter by company, role, branch, city, graduation year
+- **🤝 Connection Requests** — Structured request system with message templates
+- **⭐ Feedback & Ratings** — Students rate sessions; alumni earn gamified tiers
+- **🔔 Real-time Notifications** — Instant in-app alerts via Supabase Realtime
+- **📢 Announcements** — Community board with likes, pinning, flagging
+- **📝 Alumni Applications** — Students apply to be listed; moderators review
+- **📊 Analytics Dashboard** — Moderator insights on platform usage
+- **📁 Bulk Import** — CSV/JSON import for seeding alumni data
+- **🛡️ Role-Based Access** — Student, Alumni, Moderator, Admin roles with middleware guards
+
+## Tech Stack
+
+| Layer     | Technology                       |
+|-----------|----------------------------------|
+| Frontend  | Next.js 16 (App Router), React 19 |
+| Styling   | Tailwind CSS v4                  |
+| Backend   | Supabase (Auth, Postgres, Edge Functions, Realtime) |
+| Auth      | Google OAuth via Supabase        |
+| Hosting   | PWA-ready with `next-pwa`        |
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.local.example .env.local
+# Fill in NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/
+│   ├── (student)/       # Student routes (dashboard, search, requests, announcements)
+│   ├── alumni/          # Alumni routes (dashboard, profile, requests, settings)
+│   ├── moderator/       # Moderator routes (management, import, analytics, audit)
+│   ├── admin/           # Admin routes (user management)
+│   ├── api/auth/        # Auth callback and sign-out
+│   └── layout.tsx       # Root layout
+├── components/          # Shared components
+│   ├── ui/              # Base UI primitives (Button, Input)
+│   ├── alumni-badge.tsx  # Gamification tier badge
+│   ├── notification-bell.tsx # Real-time notification dropdown
+│   ├── feedback-modal.tsx    # Session rating modal
+│   └── announcements-board.tsx # Community announcements
+├── middleware.ts        # Auth guards & role-based routing
+├── utils/supabase/      # Supabase client helpers (server + client)
+└── lib/utils.ts         # Utility functions
+```
 
-## Learn More
+## Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Variable | Description |
+|----------|-------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous/public key |
