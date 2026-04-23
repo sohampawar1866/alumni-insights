@@ -110,14 +110,14 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-10">
+    <div className="max-w-6xl mx-auto px-4 sm:px-8 py-10 space-y-12">
       <Link
         href="/dashboard"
-        className="inline-flex items-center text-sm text-slate-500 hover:text-slate-700 transition-colors mb-4"
+        className="inline-flex items-center text-sm font-black uppercase text-foreground bg-secondary border-2 border-foreground px-3 py-1 shadow-[4px_4px_0px_var(--color-foreground)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_var(--color-foreground)] transition-all mb-4"
       >
-        ← Back to Dashboard
+        ← Back
       </Link>
-      <h1 className="text-3xl font-bold text-slate-900 tracking-tight mb-8">
+      <h1 className="text-5xl font-black text-foreground uppercase tracking-tighter mb-8 border-b-4 border-foreground pb-4">
         Alumni Directory
       </h1>
 
@@ -125,137 +125,141 @@ export default function SearchPage() {
         {/* Filter Sidebar */}
         <form
           onSubmit={handleSubmit}
-          className="lg:w-72 shrink-0 space-y-5 p-5 rounded-2xl border border-slate-200 bg-white shadow-sm h-fit lg:sticky lg:top-6"
+          className="lg:w-80 shrink-0 space-y-6 p-6 bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] h-fit lg:sticky lg:top-24"
         >
-          <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
-            Filters
-          </h2>
+          <div className="flex items-center justify-between border-b-2 border-foreground pb-2">
+            <h2 className="text-xl font-black uppercase tracking-tighter">
+              Filters
+            </h2>
+            <button type="button" onClick={clearFilters} className="text-xs font-bold uppercase text-muted-foreground hover:text-foreground">Clear All</button>
+          </div>
 
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-500">
+          <div className="space-y-2">
+            <label className="text-sm font-black uppercase tracking-wide">
               Company
             </label>
             <Input
               placeholder="e.g., Google"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
+              className="border-2 border-foreground rounded-none shadow-[4px_4px_0px_var(--color-foreground)]"
             />
           </div>
 
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-500">
+          <div className="space-y-2">
+            <label className="text-sm font-black uppercase tracking-wide">
               Role / Title
             </label>
             <Input
               placeholder="e.g., SDE"
               value={roleKeyword}
               onChange={(e) => setRoleKeyword(e.target.value)}
+              className="border-2 border-foreground rounded-none shadow-[4px_4px_0px_var(--color-foreground)]"
             />
           </div>
 
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-500">Branch</label>
+          <div className="space-y-2">
+            <label className="text-sm font-black uppercase tracking-wide">Branch</label>
             <Input
               placeholder="e.g., CSE"
               value={branch}
               onChange={(e) => setBranch(e.target.value)}
+              className="border-2 border-foreground rounded-none shadow-[4px_4px_0px_var(--color-foreground)]"
             />
           </div>
 
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-500">City</label>
+          <div className="space-y-2">
+            <label className="text-sm font-black uppercase tracking-wide">City</label>
             <Input
               placeholder="e.g., Bangalore"
               value={city}
               onChange={(e) => setCity(e.target.value)}
+              className="border-2 border-foreground rounded-none shadow-[4px_4px_0px_var(--color-foreground)]"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-slate-500">
-                Year from
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-black uppercase tracking-wide">
+                From Year
               </label>
               <Input
                 type="number"
                 placeholder="2020"
                 value={yearFrom}
                 onChange={(e) => setYearFrom(e.target.value)}
+                className="border-2 border-foreground rounded-none shadow-[4px_4px_0px_var(--color-foreground)]"
               />
             </div>
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-slate-500">
-                Year to
+            <div className="space-y-2">
+              <label className="text-sm font-black uppercase tracking-wide">
+                To Year
               </label>
               <Input
                 type="number"
                 placeholder="2025"
                 value={yearTo}
                 onChange={(e) => setYearTo(e.target.value)}
+                className="border-2 border-foreground rounded-none shadow-[4px_4px_0px_var(--color-foreground)]"
               />
             </div>
           </div>
 
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-500">
+          <div className="space-y-2">
+            <label className="text-sm font-black uppercase tracking-wide">
               Employment Type
             </label>
             <select
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              className="flex h-12 w-full border-2 border-foreground bg-background px-4 py-2 text-base font-bold shadow-[4px_4px_0px_var(--color-foreground)] transition-colors focus-visible:bg-secondary focus-visible:outline-none cursor-pointer"
               value={empType}
               onChange={(e) =>
                 setEmpType(e.target.value as "" | "Intern" | "Full-time")
               }
             >
-              <option value="">All</option>
+              <option value="">All Types</option>
               <option value="Full-time">Full-time</option>
               <option value="Intern">Intern</option>
             </select>
           </div>
 
-          <label className="flex items-center gap-2 cursor-pointer">
+          <label className="flex items-center gap-3 cursor-pointer bg-muted border-2 border-foreground p-3 hover:bg-secondary transition-colors">
             <input
               type="checkbox"
-              className="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+              className="w-5 h-5 border-2 border-foreground appearance-none checked:bg-primary checked:border-foreground relative checked:after:content-['✔'] checked:after:absolute checked:after:text-foreground checked:after:text-xs checked:after:font-black checked:after:left-[2px] checked:after:top-0"
               checked={mentorshipOnly}
               onChange={(e) => setMentorshipOnly(e.target.checked)}
             />
-            <span className="text-sm text-slate-600">
-              Open to mentorship only
+            <span className="text-sm font-black uppercase">
+              Mentor Only
             </span>
           </label>
 
-          <div className="flex gap-2 pt-1">
-            <Button type="submit" className="flex-1">
-              Search
-            </Button>
-            <Button type="button" variant="outline" onClick={clearFilters}>
-              Clear
-            </Button>
-          </div>
+          <Button type="submit" className="w-full text-lg h-14 bg-primary shadow-[8px_8px_0px_var(--color-foreground)] hover:shadow-[4px_4px_0px_var(--color-foreground)] hover:translate-y-1 hover:translate-x-1">
+            SEARCH DATABASE
+          </Button>
         </form>
 
         {/* Results Grid */}
         <div className="flex-1">
           {loading ? (
             <div className="flex items-center justify-center py-20">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600" />
+              <div className="h-16 w-16 bg-primary border-4 border-foreground animate-spin shadow-[8px_8px_0px_var(--color-foreground)]" />
             </div>
           ) : results.length === 0 ? (
-            <div className="text-center py-20">
-              <p className="text-lg text-slate-400">
-                No alumni found matching your filters.
+            <div className="text-center py-20 bg-background border-4 border-foreground border-dashed shadow-[8px_8px_0px_var(--color-foreground)]">
+              <p className="text-2xl font-black uppercase tracking-tighter text-foreground mb-2">
+                No Results Found
               </p>
-              <p className="text-sm text-slate-400 mt-1">
-                Try broadening your search criteria.
+              <p className="text-sm font-bold uppercase text-muted-foreground">
+                Try loosening your filters.
               </p>
             </div>
           ) : (
             <>
-              <p className="text-sm text-slate-500 mb-4">
-                {results.length} alumni found
+              <p className="text-lg font-black uppercase tracking-wide text-foreground mb-4 border-b-4 border-foreground w-fit pr-4 pb-1">
+                {results.length} Profile{results.length === 1 ? '' : 's'} Found
               </p>
-              <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
+              <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {results.map((alumni) => (
                   <AlumniCard key={alumni.id} {...alumni} />
                 ))}

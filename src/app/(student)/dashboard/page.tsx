@@ -36,73 +36,107 @@ export default async function StudentDashboard() {
   const isEligibleForAlumni = profile?.graduation_year && (profile.graduation_year - currentAcademicYear <= 1);
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-10 space-y-8">
-      {/* Welcome */}
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
-          Hey, {firstName} 👋
+    <div className="max-w-6xl mx-auto px-4 sm:px-8 py-10 space-y-12">
+      {/* Welcome Section */}
+      <div className="bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] p-8 sm:p-12 relative overflow-hidden">
+        <div className="absolute -right-10 -top-10 w-40 h-40 bg-primary rounded-full border-4 border-foreground" />
+        <div className="absolute right-20 -bottom-10 w-24 h-24 bg-secondary rounded-none border-4 border-foreground rotate-12" />
+        
+        <h1 className="font-heading text-5xl sm:text-7xl font-black uppercase tracking-tighter text-foreground relative z-10">
+          Welcome back,<br /> <span className="text-primary" style={{ textShadow: "4px 4px 0px var(--color-foreground)" }}>{firstName}!</span>
         </h1>
-        <p className="mt-1 text-slate-500">
+        <p className="mt-4 text-xl font-bold uppercase tracking-wide text-foreground/80 relative z-10 bg-white inline-block px-3 py-1 border-2 border-foreground">
           {profile?.branch} · Class of {profile?.graduation_year}
         </p>
-      </div>
 
-      {/* Stats + Quick Actions */}
-      <div className="grid sm:grid-cols-2 gap-4">
-        {/* Requests Remaining Card */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="text-sm font-medium text-slate-500 mb-1">
-            Connection Requests
-          </p>
-          <div className="flex items-baseline gap-1">
-            <span className="text-4xl font-bold text-slate-900">
-              {remaining}
-            </span>
-            <span className="text-sm text-slate-400">/ {weeklyLimit} this week</span>
-          </div>
-          <div className="mt-3 h-2 rounded-full bg-slate-100 overflow-hidden">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-500"
-              style={{ width: `${(remaining / weeklyLimit) * 100}%` }}
-            />
-          </div>
-        </div>
-
-        {/* Search CTA Card */}
-        <Link
-          href="/search"
-          className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-md hover:border-blue-200 flex flex-col justify-between"
-        >
-          <div>
-            <p className="text-sm font-medium text-slate-500 mb-1">
-              Alumni Directory
-            </p>
-            <p className="text-lg font-semibold text-slate-900 group-hover:text-blue-700 transition-colors">
-              Search & discover alumni →
-            </p>
-            <p className="mt-1 text-sm text-slate-400">
-              Filter by company, role, branch, city, and more.
-            </p>
-          </div>
-        </Link>
-      </div>
-
-      {isEligibleForAlumni && (
-        <div className="rounded-2xl border border-blue-100 bg-blue-50/50 p-6 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h3 className="text-lg font-semibold text-blue-900">Are you working or interning?</h3>
-            <p className="text-sm text-blue-700 mt-1 max-w-xl">
-              Since you&apos;re in your final year (or beyond), you can apply to have your profile listed in the Alumni Directory so juniors can reach out to you.
-            </p>
-          </div>
+        <div className="mt-8 relative z-10">
           <Link
-            href="/dashboard/apply"
-            className="shrink-0 bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+            href="/search"
+            className="inline-flex items-center justify-center bg-primary text-foreground border-2 border-foreground font-black uppercase tracking-widest px-8 py-4 text-lg shadow-[4px_4px_0px_var(--color-foreground)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
           >
-            Apply as Alumni
+            Find Alumni →
           </Link>
         </div>
-      )}
+      </div>
+
+      {/* Two Column Layout (Main Feed & Sidebar) */}
+      <div className="grid lg:grid-cols-3 gap-8">
+        
+        {/* Left Column (Main Feed) */}
+        <div className="lg:col-span-2 space-y-6">
+          <h2 className="text-2xl font-black uppercase tracking-tighter border-b-4 border-foreground pb-2">Your Dashboard</h2>
+          
+          <div className="grid sm:grid-cols-2 gap-6">
+            {/* Requests Remaining Card */}
+            <div className="bg-background border-4 border-foreground shadow-[6px_6px_0px_var(--color-foreground)] p-6 relative">
+              <div className="absolute top-0 right-0 bg-secondary border-b-4 border-l-4 border-foreground px-3 py-1 font-black text-sm uppercase">Weekly Limit</div>
+              <p className="text-sm font-black uppercase tracking-widest text-foreground mt-4 mb-2">
+                Connection Requests
+              </p>
+              <div className="flex items-baseline gap-2">
+                <span className="text-6xl font-black text-foreground tracking-tighter">
+                  {remaining}
+                </span>
+                <span className="text-lg font-bold text-foreground/60 uppercase">/ {weeklyLimit} left</span>
+              </div>
+              <div className="mt-6 h-4 border-2 border-foreground bg-muted overflow-hidden w-full">
+                <div
+                  className="h-full bg-primary border-r-2 border-foreground transition-all duration-500"
+                  style={{ width: `${(remaining / weeklyLimit) * 100}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="border-4 border-foreground bg-muted shadow-[6px_6px_0px_var(--color-foreground)] p-6 flex flex-col justify-center">
+              <h3 className="text-xl font-black uppercase tracking-tighter mb-4">Quick Links</h3>
+              <div className="space-y-3">
+                <Link href="/dashboard/requests" className="block w-full bg-background border-2 border-foreground px-4 py-3 font-bold uppercase text-sm hover:bg-secondary hover:translate-x-1 hover:-translate-y-1 hover:shadow-[4px_4px_0px_var(--color-foreground)] transition-all">
+                  View Pending Requests
+                </Link>
+                <Link href="/dashboard/messages" className="block w-full bg-background border-2 border-foreground px-4 py-3 font-bold uppercase text-sm hover:bg-secondary hover:translate-x-1 hover:-translate-y-1 hover:shadow-[4px_4px_0px_var(--color-foreground)] transition-all">
+                  Open Messages
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column (Sidebar) */}
+        <div className="space-y-6">
+          <h2 className="text-2xl font-black uppercase tracking-tighter border-b-4 border-foreground pb-2">Announcements</h2>
+          
+          <div className="bg-background border-4 border-foreground shadow-[6px_6px_0px_var(--color-foreground)] p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-4 h-4 bg-primary border-2 border-foreground rounded-full animate-pulse" />
+              <h3 className="text-lg font-black uppercase tracking-wide">Live Feed</h3>
+            </div>
+            <p className="text-sm font-bold text-foreground/70 uppercase">
+              Check the announcements page for upcoming AMAs and placement talks by alumni.
+            </p>
+            <Link href="/announcements" className="mt-6 inline-block text-sm font-black uppercase text-secondary-foreground border-b-2 border-foreground hover:bg-secondary transition-colors">
+              View All →
+            </Link>
+          </div>
+
+          {isEligibleForAlumni && (
+            <div className="bg-primary border-4 border-foreground shadow-[6px_6px_0px_var(--color-foreground)] p-6 relative overflow-hidden mt-8">
+              <div className="absolute right-0 top-0 w-16 h-16 bg-secondary border-b-4 border-l-4 border-foreground rounded-bl-full" />
+              <h3 className="text-xl font-black uppercase tracking-tighter mb-2">Graduating?</h3>
+              <p className="text-sm font-bold text-foreground/90 uppercase tracking-wide mb-6">
+                Apply to have your profile listed in the Alumni Directory.
+              </p>
+              <Link
+                href="/dashboard/apply"
+                className="block w-full text-center bg-background text-foreground border-2 border-foreground font-black uppercase px-4 py-3 shadow-[4px_4px_0px_var(--color-foreground)] hover:bg-secondary transition-all"
+              >
+                Apply as Alumni
+              </Link>
+            </div>
+          )}
+        </div>
+
+      </div>
     </div>
   );
 }

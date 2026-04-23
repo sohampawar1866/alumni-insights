@@ -48,19 +48,19 @@ export function ConnectDialog({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
-      <div className="w-full max-w-md rounded-2xl bg-white shadow-xl">
-        <div className="p-6 border-b border-slate-100">
-          <h2 className="text-xl font-bold text-slate-900">
-            Connect with {alumniName}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-sm p-4">
+      <div className="w-full max-w-md bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)]">
+        <div className="p-6 border-b-4 border-foreground bg-primary">
+          <h2 className="text-2xl font-black uppercase tracking-tighter text-background">
+            CONNECT // {alumniName.split(' ')[0]}
           </h2>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm font-bold uppercase tracking-wider text-background mt-2">
             Send a brief message explaining what you need help with.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <div className="space-y-3">
+        <form onSubmit={handleSubmit} className="p-6 space-y-6 bg-background">
+          <div className="space-y-4">
             <div className="flex flex-wrap gap-2">
               {TEMPLATES.map((t, i) => {
                 const label = t.split(":")[0];
@@ -69,15 +69,15 @@ export function ConnectDialog({
                     key={i}
                     type="button"
                     onClick={() => setMessage(t.split(": ")[1])}
-                    className="text-xs px-2.5 py-1.5 rounded-full border border-slate-200 bg-slate-50 text-slate-600 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-colors"
+                    className="text-xs font-black uppercase tracking-wider px-3 py-1 bg-muted border-2 border-foreground hover:bg-secondary hover:-translate-y-0.5 hover:shadow-[2px_2px_0px_var(--color-foreground)] transition-all"
                   >
                     {label}
                   </button>
                 );
               })}
             </div>
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-slate-700">Message</label>
+            <div className="space-y-2">
+              <label className="text-sm font-black uppercase tracking-wide text-foreground">PITCH / MESSAGE</label>
               <textarea
                 required
                 maxLength={200}
@@ -85,32 +85,39 @@ export function ConnectDialog({
                 placeholder="Hi! I'm currently a junior in CSE and would love to get your advice..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring resize-none"
+                className="flex w-full border-2 border-foreground p-3 text-sm font-medium shadow-[4px_4px_0px_var(--color-foreground)] focus-visible:outline-none focus:bg-secondary transition-colors resize-none mb-1"
               />
-              <div className="flex justify-between text-xs text-slate-400">
-                <span>Keep it professional and concise.</span>
+              <div className="flex justify-between text-xs font-bold uppercase text-muted-foreground mt-2">
+                <span>KEEP IT PROFESSIONAL.</span>
                 <span>{message.length}/200</span>
               </div>
             </div>
           </div>
 
           {error && (
-            <p className="text-sm text-red-600 bg-red-50 rounded-lg p-3">
-              {error}
-            </p>
+            <div className="bg-[#ff3366] border-2 border-foreground p-3 shadow-[4px_4px_0px_var(--color-foreground)]">
+              <p className="text-sm font-black text-background uppercase">
+                ERROR: {error}
+              </p>
+            </div>
           )}
 
-          <div className="flex justify-end gap-3 pt-2">
+          <div className="flex justify-end gap-4 pt-4 border-t-2 border-foreground border-dashed">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
               disabled={loading}
+              className="border-2 border-foreground"
             >
-              Cancel
+              CANCEL
             </Button>
-            <Button type="submit" disabled={loading || !message.trim()}>
-              {loading ? "Sending..." : "Send Request"}
+            <Button 
+              type="submit" 
+              disabled={loading || !message.trim()}
+              className="bg-primary text-background shadow-[4px_4px_0px_var(--color-foreground)] hover:shadow-[2px_2px_0px_var(--color-foreground)] hover:translate-x-[2px] hover:translate-y-[2px]"
+            >
+              {loading ? "SENDING..." : "DISPATCH REQUEST"}
             </Button>
           </div>
         </form>

@@ -81,21 +81,20 @@ export default function AlumniManagementPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-10 space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Add Alumni</h1>
-        <p className="text-sm text-slate-500 mt-1">
-          Create a single alumni account. Credentials will be shown after
-          creation for you to share.
+      <div className="border-l-8 border-primary pl-4">
+        <h1 className="font-heading text-4xl font-black uppercase tracking-tight text-foreground">Add Alumni</h1>
+        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground mt-2">
+          Create a single alumni account. Credentials will be shown after creation.
         </p>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+        className="space-y-6 bg-white border-4 border-foreground p-8 shadow-[8px_8px_0px_#000]"
       >
-        <div className="grid sm:grid-cols-2 gap-4">
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-500">
+        <div className="grid sm:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <label className="text-xs font-black uppercase tracking-wider text-foreground">
               Full Name
             </label>
             <Input
@@ -103,32 +102,35 @@ export default function AlumniManagementPage() {
               placeholder="Arjun Sharma"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
+              className="border-2 border-foreground rounded-none shadow-[2px_2px_0px_#000] focus-visible:ring-0 focus-visible:border-primary"
             />
           </div>
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-500">Email</label>
+          <div className="space-y-2">
+            <label className="text-xs font-black uppercase tracking-wider text-foreground">Email</label>
             <Input
               required
               type="email"
               placeholder="arjun@gmail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className="border-2 border-foreground rounded-none shadow-[2px_2px_0px_#000] focus-visible:ring-0 focus-visible:border-primary"
             />
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-4">
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-500">Branch</label>
+        <div className="grid sm:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <label className="text-xs font-black uppercase tracking-wider text-foreground">Branch</label>
             <Input
               required
               placeholder="CSE"
               value={branch}
               onChange={(e) => setBranch(e.target.value)}
+              className="border-2 border-foreground rounded-none shadow-[2px_2px_0px_#000] focus-visible:ring-0 focus-visible:border-primary"
             />
           </div>
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-500">
+          <div className="space-y-2">
+            <label className="text-xs font-black uppercase tracking-wider text-foreground">
               Graduation Year
             </label>
             <Input
@@ -137,12 +139,13 @@ export default function AlumniManagementPage() {
               placeholder="2023"
               value={graduationYear}
               onChange={(e) => setGraduationYear(e.target.value)}
+              className="border-2 border-foreground rounded-none shadow-[2px_2px_0px_#000] focus-visible:ring-0 focus-visible:border-primary"
             />
           </div>
         </div>
 
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-slate-500">
+        <div className="space-y-2">
+          <label className="text-xs font-black uppercase tracking-wider text-foreground">
             Temporary Password
           </label>
           <Input
@@ -152,50 +155,53 @@ export default function AlumniManagementPage() {
             minLength={8}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="border-2 border-foreground rounded-none shadow-[2px_2px_0px_#000] focus-visible:ring-0 focus-visible:border-primary"
           />
         </div>
 
         {error && (
-          <p className="text-sm text-red-600 bg-red-50 rounded-lg p-3">
+          <p className="text-sm font-bold uppercase tracking-tight text-white bg-destructive border-2 border-foreground p-3 shadow-[4px_4px_0px_#000]">
             {error}
           </p>
         )}
 
-        <Button type="submit" disabled={loading} className="w-full">
-          {loading ? "Creating..." : "Create Alumni Account"}
+        <Button 
+          type="submit" 
+          disabled={loading} 
+          className="w-full font-black uppercase tracking-wider border-2 border-foreground rounded-none shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all"
+        >
+          {loading ? "Creating..." : "Create Alumni"}
         </Button>
       </form>
 
       {/* Credential Card */}
       {credential && (
-        <div className="rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-6 shadow-sm space-y-3">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-emerald-800">
-              ✅ Account Created
+        <div className="space-y-4 border-4 border-foreground bg-primary p-6 shadow-[8px_8px_0px_#000]">
+          <div className="flex items-start justify-between sm:items-center flex-col sm:flex-row gap-4">
+            <h3 className="text-lg font-black uppercase tracking-tight text-foreground">
+              ACCESS GRANTED
             </h3>
             <Button
-              variant="outline"
-              size="sm"
               onClick={copyCredentials}
-              className="text-xs"
+              className="text-xs font-black uppercase tracking-wider border-2 border-foreground bg-white text-foreground hover:bg-muted shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all rounded-none"
             >
-              {copied ? "Copied!" : "Copy Credentials"}
+              {copied ? "COPIED TO CLIPBOARD!" : "COPY CREDENTIALS"}
             </Button>
           </div>
-          <div className="space-y-1 text-sm text-emerald-900">
+          <div className="space-y-2 text-sm font-bold text-foreground bg-white border-2 border-foreground p-4">
             <p>
-              <span className="font-medium">Name:</span> {credential.name}
+              <span className="opacity-50 inline-block w-24">NAME:</span> {credential.name}
             </p>
             <p>
-              <span className="font-medium">Email:</span> {credential.email}
+              <span className="opacity-50 inline-block w-24">EMAIL:</span> {credential.email}
             </p>
             <p>
-              <span className="font-medium">Password:</span>{" "}
+              <span className="opacity-50 inline-block w-24">PASSWORD:</span>{" "}
               {credential.password}
             </p>
           </div>
-          <p className="text-xs text-emerald-600">
-            Share these credentials with the alumnus via WhatsApp or email.
+          <p className="text-xs font-bold uppercase tracking-wider text-foreground">
+            Share these credentials securely via WhatsApp or email.
           </p>
         </div>
       )}

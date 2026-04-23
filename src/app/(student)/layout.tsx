@@ -28,9 +28,9 @@ export default async function StudentLayout({
 
   if (!isProfileComplete) {
     return (
-      <div className="flex flex-col min-h-screen">
+      <div className="ai-shell flex min-h-screen flex-col">
         <Navigation />
-        <main className="flex flex-1 items-center justify-center p-6 bg-slate-50">
+        <main className="ai-shell-main flex flex-1 items-center justify-center p-6">
           <ProfileForm initialData={profile} />
         </main>
       </div>
@@ -38,9 +38,9 @@ export default async function StudentLayout({
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="ai-shell flex min-h-screen flex-col">
       <Navigation />
-      <main className="flex-1 bg-slate-50">{children}</main>
+      <main className="ai-shell-main flex-1">{children}</main>
     </div>
   );
 }

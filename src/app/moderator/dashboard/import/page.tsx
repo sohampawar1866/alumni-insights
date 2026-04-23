@@ -117,27 +117,27 @@ export default function BulkImportPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-10 space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Bulk CSV Import</h1>
-        <p className="text-sm text-slate-500 mt-1">
+      <div className="border-l-8 border-secondary pl-4">
+        <h1 className="font-heading text-4xl font-black uppercase tracking-tight text-foreground">Bulk CSV Import</h1>
+        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground mt-2">
           Upload a CSV file with alumni data. Required columns:{" "}
-          <code className="text-xs bg-slate-100 px-1.5 py-0.5 rounded">
+          <code className="text-xs bg-foreground text-white px-1.5 py-0.5 rounded-none font-black ml-1">
             name
           </code>
           ,{" "}
-          <code className="text-xs bg-slate-100 px-1.5 py-0.5 rounded">
+          <code className="text-xs bg-foreground text-white px-1.5 py-0.5 rounded-none font-black ml-1">
             email
           </code>
           . Optional:{" "}
-          <code className="text-xs bg-slate-100 px-1.5 py-0.5 rounded">
+          <code className="text-xs bg-muted text-foreground border-2 border-foreground px-1.5 py-0.5 rounded-none font-black ml-1">
             branch
           </code>
           ,{" "}
-          <code className="text-xs bg-slate-100 px-1.5 py-0.5 rounded">
+          <code className="text-xs bg-muted text-foreground border-2 border-foreground px-1.5 py-0.5 rounded-none font-black ml-1">
             graduation_year
           </code>
           ,{" "}
-          <code className="text-xs bg-slate-100 px-1.5 py-0.5 rounded">
+          <code className="text-xs bg-muted text-foreground border-2 border-foreground px-1.5 py-0.5 rounded-none font-black ml-1">
             password
           </code>
           .
@@ -146,10 +146,10 @@ export default function BulkImportPage() {
 
       <form
         onSubmit={handleImport}
-        className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+        className="space-y-6 border-4 border-foreground bg-white p-8 shadow-[8px_8px_0px_#000]"
       >
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-slate-500">
+        <div className="space-y-2">
+          <label className="text-xs font-black uppercase tracking-wider text-foreground">
             CSV File
           </label>
           <input
@@ -157,43 +157,45 @@ export default function BulkImportPage() {
             accept=".csv"
             required
             onChange={(e) => setFile(e.target.files?.[0] || null)}
-            className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-colors cursor-pointer"
+            className="block w-full text-sm font-bold text-foreground border-2 border-foreground p-2 shadow-[2px_2px_0px_#000] focus-visible:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-none file:border-2 file:border-foreground file:text-xs file:font-black file:uppercase file:tracking-wider file:bg-primary file:text-foreground hover:file:bg-primary/80 transition-colors cursor-pointer"
           />
         </div>
 
         {error && (
-          <p className="text-sm text-red-600 bg-red-50 rounded-lg p-3">
+          <p className="text-sm font-bold uppercase tracking-tight text-white bg-destructive border-2 border-foreground p-3 shadow-[4px_4px_0px_#000]">
             {error}
           </p>
         )}
 
-        <Button type="submit" disabled={loading || !file} className="w-full">
+        <Button 
+          type="submit" 
+          disabled={loading || !file} 
+          className="w-full font-black uppercase tracking-wider border-2 border-foreground rounded-none shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all"
+        >
           {loading ? "Importing..." : "Import Alumni"}
         </Button>
       </form>
 
       {/* Results */}
       {result && (
-        <div className="space-y-4">
+        <div className="space-y-6">
           {/* Success summary */}
           {result.success.length > 0 && (
-            <div className="rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-6 shadow-sm space-y-3">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-emerald-800">
+            <div className="border-4 border-foreground bg-primary p-6 shadow-[8px_8px_0px_#000] space-y-4">
+              <div className="flex items-start justify-between sm:items-center flex-col sm:flex-row gap-4 border-b-4 border-foreground pb-4">
+                <h3 className="text-xl font-black uppercase tracking-tight text-foreground">
                   ✅ {result.success.length} accounts created
                 </h3>
                 <Button
-                  variant="outline"
-                  size="sm"
                   onClick={downloadCredentialCSV}
-                  className="text-xs"
+                  className="text-xs font-black uppercase tracking-wider border-2 border-foreground bg-white text-foreground hover:bg-muted shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all rounded-none"
                 >
                   Download Credential CSV
                 </Button>
               </div>
-              <div className="max-h-48 overflow-y-auto space-y-1">
+              <div className="max-h-48 overflow-y-auto space-y-2 pr-2">
                 {result.success.map((r, i) => (
-                  <p key={i} className="text-xs text-emerald-700">
+                  <p key={i} className="text-sm font-bold uppercase tracking-wider text-foreground bg-white border-2 border-foreground p-2 shadow-[2px_2px_0px_#000]">
                     {r.name} — {r.email}
                   </p>
                 ))}
@@ -203,13 +205,13 @@ export default function BulkImportPage() {
 
           {/* Error summary */}
           {result.errors.length > 0 && (
-            <div className="rounded-2xl border-2 border-red-200 bg-red-50 p-6 shadow-sm space-y-2">
-              <h3 className="text-sm font-semibold text-red-800">
+            <div className="border-4 border-foreground bg-destructive text-white p-6 shadow-[8px_8px_0px_#000] space-y-4">
+              <h3 className="text-xl font-black uppercase tracking-tight pb-4 border-b-4 border-foreground">
                 ⚠️ {result.errors.length} rows failed
               </h3>
-              <div className="max-h-48 overflow-y-auto space-y-1">
+              <div className="max-h-48 overflow-y-auto space-y-2 pr-2">
                 {result.errors.map((err, i) => (
-                  <p key={i} className="text-xs text-red-700">
+                  <p key={i} className="text-sm font-bold uppercase tracking-wider bg-white text-foreground border-2 border-foreground p-2 shadow-[2px_2px_0px_#000]">
                     Row {err.row}: {err.message}
                   </p>
                 ))}

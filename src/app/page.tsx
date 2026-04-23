@@ -4,7 +4,7 @@ export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="relative flex flex-1 flex-col items-center justify-center px-6 py-24 text-center overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-900">
+      <section className="relative flex flex-1 flex-col items-center justify-center overflow-hidden bg-blue-950 px-6 py-24 text-center">
         {/* Decorative blurred circles */}
         <div className="absolute top-[-120px] left-[-80px] w-[400px] h-[400px] rounded-full bg-blue-500/20 blur-3xl pointer-events-none" />
         <div className="absolute bottom-[-80px] right-[-60px] w-[350px] h-[350px] rounded-full bg-indigo-400/15 blur-3xl pointer-events-none" />
@@ -17,7 +17,7 @@ export default function LandingPage() {
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-tight">
             Connect with alumni who{" "}
-            <span className="bg-gradient-to-r from-blue-300 to-indigo-300 bg-clip-text text-transparent">
+            <span className="text-blue-200">
               get it
             </span>
           </h1>
@@ -51,7 +51,7 @@ export default function LandingPage() {
             How it works
           </h2>
           <div className="grid sm:grid-cols-3 gap-8">
-            <div className="group text-center space-y-3 p-6 rounded-2xl transition-all hover:bg-slate-50">
+            <div className="group text-center space-y-3 p-6 rounded-2xl transition-all hover:bg-blue-50/60">
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-2xl group-hover:scale-110 transition-transform">
                 🔍
               </div>
@@ -61,7 +61,7 @@ export default function LandingPage() {
                 need to talk to.
               </p>
             </div>
-            <div className="group text-center space-y-3 p-6 rounded-2xl transition-all hover:bg-slate-50">
+            <div className="group text-center space-y-3 p-6 rounded-2xl transition-all hover:bg-blue-50/60">
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-2xl group-hover:scale-110 transition-transform">
                 🤝
               </div>
@@ -71,7 +71,7 @@ export default function LandingPage() {
                 exactly what you need.
               </p>
             </div>
-            <div className="group text-center space-y-3 p-6 rounded-2xl transition-all hover:bg-slate-50">
+            <div className="group text-center space-y-3 p-6 rounded-2xl transition-all hover:bg-blue-50/60">
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50 text-2xl group-hover:scale-110 transition-transform">
                 🚀
               </div>
@@ -86,7 +86,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-6 border-t border-slate-100 bg-slate-50">
+      <footer className="py-8 px-6 border-t border-blue-100/70 bg-blue-50/60">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
           <span>© {new Date().getFullYear()} Alumni Insights · IIIT Nagpur</span>
           <div className="flex gap-6">

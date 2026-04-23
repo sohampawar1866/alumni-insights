@@ -91,7 +91,7 @@ export default function ApplyAlumniPage() {
 
       <form
         onSubmit={handleSubmit}
-        className="space-y-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+        className="space-y-5 rounded-2xl border border-blue-100/80 bg-white p-6 shadow-sm"
       >
         <div className="grid sm:grid-cols-2 gap-4">
           <div className="space-y-1">

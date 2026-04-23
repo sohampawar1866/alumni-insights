@@ -33,37 +33,39 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-      <div className="p-8 bg-white rounded-lg shadow-md max-w-sm w-full">
-        <h1 className="text-2xl font-bold mb-2 text-center">Admin Portal</h1>
-        <p className="mb-6 text-sm text-gray-600 text-center">Platform administration login.</p>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
+      <div className="p-8 bg-white border-4 border-foreground shadow-[8px_8px_0px_#000] max-w-sm w-full">
+        <h1 className="text-2xl font-black mb-2 text-center uppercase tracking-tight">Admin Portal</h1>
+        <p className="mb-6 text-sm font-bold text-muted-foreground text-center uppercase tracking-wider">Platform Administration</p>
         
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="email">Email</label>
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div className="space-y-2">
+            <label className="block text-xs font-black uppercase tracking-wider" htmlFor="email">Email</label>
             <Input 
               id="email" 
               type="email" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className="border-2 border-foreground rounded-none shadow-[2px_2px_0px_#000] focus-visible:ring-0 focus-visible:border-primary"
               required 
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="password">Password</label>
+          <div className="space-y-2">
+            <label className="block text-xs font-black uppercase tracking-wider" htmlFor="password">Password</label>
             <Input 
               id="password" 
               type="password" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="border-2 border-foreground rounded-none shadow-[2px_2px_0px_#000] focus-visible:ring-0 focus-visible:border-primary"
               required 
             />
           </div>
           
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          {error && <p className="text-destructive font-bold text-sm text-center uppercase tracking-tight bg-destructive/10 border-2 border-destructive p-2">{error}</p>}
           
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign In'}
+          <Button type="submit" className="w-full font-black uppercase tracking-wider border-2 border-foreground rounded-none shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all" size="lg" disabled={loading}>
+            {loading ? 'Authenticating...' : 'Sign In'}
           </Button>
         </form>
       </div>

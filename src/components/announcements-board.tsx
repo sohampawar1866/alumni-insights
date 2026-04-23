@@ -185,7 +185,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-100/80 border-t-blue-600" />
       </div>
     );
   }
@@ -209,7 +209,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
       {showNewPost && (
         <form
           onSubmit={handlePost}
-          className="rounded-2xl border border-blue-200 bg-blue-50/30 p-6 shadow-sm space-y-4"
+          className="ai-card space-y-4 p-6"
         >
           <div className="space-y-1">
             <label className="text-xs font-medium text-slate-500">Title</label>
@@ -236,7 +236,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
           </div>
 
           {currentUserRole === "moderator" && (
-            <div className="p-4 bg-white rounded-xl border border-blue-100 space-y-3">
+            <div className="ai-card-soft space-y-3 p-4">
               <p className="text-xs font-bold tracking-wide uppercase text-blue-800">Target Audience (Optional)</p>
               <div className="grid sm:grid-cols-3 gap-3">
                 <div className="space-y-1">
@@ -317,7 +317,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
 
       <div className="space-y-4">
         {announcements.length === 0 ? (
-          <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
+          <div className="ai-card-soft p-10 text-center">
             <p className="text-sm text-slate-500">No announcements yet.</p>
           </div>
         ) : (
@@ -335,8 +335,8 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
             return (
               <div
                 key={post.id}
-                className={`rounded-2xl border bg-white p-5 shadow-sm space-y-4 ${
-                  post.is_pinned ? "border-amber-200 bg-amber-50/30" : "border-slate-200"
+                className={`ai-card-soft space-y-4 p-5 ${
+                  post.is_pinned ? "border-amber-200 bg-amber-50/40" : ""
                 }`}
               >
                 <div className="flex items-start justify-between gap-4">
@@ -406,13 +406,13 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
                   </div>
                 )}
 
-                <div className="border-t border-slate-100 pt-3 flex items-center justify-between">
+                <div className="border-t border-blue-100/70 pt-3 flex items-center justify-between">
                   <button
                     onClick={() => toggleLike(post.id, !!post.user_liked)}
                     className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
                       post.user_liked
                         ? "bg-blue-100 text-blue-700"
-                        : "bg-slate-50 text-slate-600 hover:bg-slate-100"
+                        : "bg-blue-50/60 text-slate-600 hover:bg-blue-100"
                     }`}
                   >
                     <span>{post.user_liked ? "👍 Liked" : "👍 Like"}</span>

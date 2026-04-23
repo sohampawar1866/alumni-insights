@@ -26,53 +26,53 @@ export default async function AlumniLayout({
   if (profile?.role !== "alumni") redirect("/unauthorized");
 
   return (
-    <div className="flex min-h-screen">
-      <aside className="w-64 shrink-0 border-r border-slate-200 bg-white flex flex-col">
-        <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+    <div className="ai-shell flex min-h-screen">
+      <aside className="ai-sidebar flex w-72 shrink-0 flex-col">
+        <div className="flex items-center justify-between border-b border-blue-100/80 p-6">
           <div>
-            <h2 className="font-bold text-lg text-slate-900">Alumni Portal</h2>
-            <p className="text-xs text-slate-500 mt-0.5 truncate">
+            <h2 className="font-heading text-lg font-bold ai-heading-accent">Alumni Portal</h2>
+            <p className="mt-0.5 truncate text-xs text-slate-500">
               {profile?.full_name || user.email}
             </p>
           </div>
           <NotificationBell />
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 space-y-1 p-4">
           <Link
             href="/alumni/dashboard"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
+            className="ai-sidebar-link"
           >
             <span>👤</span>
             My Profile
           </Link>
           <Link
             href="/alumni/dashboard/requests"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
+            className="ai-sidebar-link"
           >
             <span>💬</span>
             Requests
           </Link>
           <Link
             href="/alumni/dashboard/settings"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
+            className="ai-sidebar-link"
           >
             <span>⚙️</span>
             Settings
           </Link>
           <Link
             href="/alumni/dashboard/announcements"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
+            className="ai-sidebar-link"
           >
             <span>📢</span>
             Announcements
           </Link>
         </nav>
-        <div className="p-4 border-t border-slate-100">
+        <div className="border-t border-blue-100/80 p-4">
           <form action="/api/auth/signout" method="POST">
             <button
               type="submit"
-              className="w-full text-left text-sm text-slate-500 hover:text-slate-700 transition-colors"
+              className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-slate-500 transition-colors hover:bg-blue-50 hover:text-blue-700"
             >
               Sign Out
             </button>
@@ -80,7 +80,7 @@ export default async function AlumniLayout({
         </div>
       </aside>
 
-      <main className="flex-1 bg-slate-50 overflow-auto">
+      <main className="ai-shell-main flex-1 overflow-auto">
         {children}
         <FirstLoginNudge />
       </main>

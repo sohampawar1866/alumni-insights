@@ -26,52 +26,52 @@ export function AlumniCard({
   return (
     <Link
       href={`/alumni/${id}`}
-      className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-blue-200 hover:-translate-y-0.5"
+      className="group flex flex-col justify-between p-6 bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] transition-all hover:shadow-[4px_4px_0px_var(--color-foreground)] hover:translate-x-1 hover:translate-y-1"
     >
       {/* Header */}
-      <div className="space-y-1">
-        <div className="flex items-center justify-between">
-          <h3 className="font-semibold text-slate-900 group-hover:text-blue-700 transition-colors truncate">
-            {full_name || "Alumni"}
+      <div className="space-y-2 mb-6">
+        <div className="flex items-start justify-between">
+          <h3 className="text-xl font-black uppercase tracking-tighter text-foreground group-hover:bg-primary group-hover:text-background w-fit transition-colors line-clamp-2">
+            {full_name || "ALUMNI"}
           </h3>
           {mentorship_available && (
-            <span className="shrink-0 ml-2 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              Open
+            <span className="shrink-0 ml-3 inline-flex items-center gap-1 border-2 border-foreground bg-[#00e559] px-2 py-1 text-xs font-black uppercase text-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
+              <span className="inline-block w-2 h-2 bg-foreground" />
+              MENTOR
             </span>
           )}
         </div>
-        <p className="text-sm text-slate-600 truncate">
-          {role_title || "—"} {company ? `at ${company}` : ""}
+        <p className="text-base font-bold text-muted-foreground uppercase tracking-wide line-clamp-2">
+          {role_title || "—"} {company ? `// ${company}` : ""}
         </p>
       </div>
 
       {/* Tags */}
-      <div className="mt-4 flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-2 mt-auto">
         {emp_type && (
           <span
-            className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ${
+            className={`inline-flex items-center border-2 border-foreground px-2 py-1 text-xs font-black uppercase shadow-[2px_2px_0px_var(--color-foreground)] ${
               emp_type === "Intern"
-                ? "bg-amber-50 text-amber-700"
-                : "bg-blue-50 text-blue-700"
+                ? "bg-[#fdc800] text-foreground"
+                : "bg-primary text-background"
             }`}
           >
             {emp_type}
           </span>
         )}
         {branch && (
-          <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+          <span className="inline-flex items-center border-2 border-foreground bg-muted px-2 py-1 text-xs font-black uppercase text-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
             {branch}
           </span>
         )}
         {graduation_year && (
-          <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
-            {graduation_year}
+          <span className="inline-flex items-center border-2 border-foreground bg-muted px-2 py-1 text-xs font-black uppercase text-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
+            &apos;{String(graduation_year).slice(-2)}
           </span>
         )}
         {city && (
-          <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
-            📍 {city}
+          <span className="inline-flex items-center border-2 border-foreground bg-muted px-2 py-1 text-xs font-black uppercase text-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
+            {city}
           </span>
         )}
       </div>

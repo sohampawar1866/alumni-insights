@@ -46,39 +46,42 @@ export default async function AlumniProfilePage({
     <div className="max-w-3xl mx-auto px-6 py-10 space-y-8">
       {/* Back Link */}
       <Link
-        href="/search"
-        className="inline-flex items-center text-sm text-slate-500 hover:text-slate-700 transition-colors"
+        href="/dashboard/search"
+        className="inline-flex items-center text-sm font-black uppercase text-foreground bg-primary border-2 border-foreground px-4 py-2 hover:shadow-[4px_4px_0px_var(--color-foreground)] hover:-translate-y-1 transition-all"
       >
-        ← Back to search
+        ← BACK TO SEARCH
       </Link>
 
       {/* Profile Header */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-slate-900">
+      <div className="bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] p-8 space-y-6 relative overflow-hidden">
+        {/* Background Decorative Elements */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-40 h-40 bg-[#fdc800]/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 relative z-10">
+          <div className="space-y-2">
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tighter text-foreground break-words max-w-full">
                 {alumni.full_name || "Alumni"}
               </h1>
               {alumni.mentorship_available && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
-                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  Open to Mentorship
+                <span className="inline-flex items-center gap-1 border-2 border-foreground bg-[#00e559] px-3 py-1 text-xs sm:text-sm font-black uppercase text-foreground shadow-[4px_4px_0px_var(--color-foreground)] whitespace-nowrap">
+                  <span className="inline-block w-2 h-2 bg-foreground" />
+                  MENTOR
                 </span>
               )}
             </div>
-            <p className="text-lg text-slate-600">
-              {alumni.role_title || "—"}{" "}
-              {alumni.company ? `at ${alumni.company}` : ""}
+            <p className="text-xl sm:text-2xl font-bold text-muted-foreground uppercase tracking-wide">
+              {alumni.role_title || "—"} {alumni.company ? `// ${alumni.company}` : ""}
             </p>
           </div>
 
           {alumni.emp_type && (
             <span
-              className={`self-start inline-flex items-center rounded-lg px-3 py-1 text-sm font-medium ${
+              className={`self-start inline-flex items-center border-2 border-foreground px-4 py-2 text-sm font-black uppercase shadow-[4px_4px_0px_var(--color-foreground)] whitespace-nowrap ${
                 alumni.emp_type === "Intern"
-                  ? "bg-amber-50 text-amber-700 border border-amber-200"
-                  : "bg-blue-50 text-blue-700 border border-blue-200"
+                  ? "bg-[#fdc800] text-foreground"
+                  : "bg-primary text-background"
               }`}
             >
               {alumni.emp_type}
@@ -87,45 +90,47 @@ export default async function AlumniProfilePage({
         </div>
 
         {/* Info Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-slate-100">
-          <div>
-            <p className="text-xs font-medium text-slate-400 uppercase tracking-wide">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-6 border-t-4 border-foreground relative z-10">
+          <div className="flex flex-col">
+            <p className="text-xs font-black text-muted-foreground uppercase tracking-wider mb-1">
               Branch
             </p>
-            <p className="text-sm text-slate-700 mt-0.5">
+            <p className="text-base sm:text-lg font-bold text-foreground bg-muted border-2 border-foreground p-2 shadow-[2px_2px_0px_var(--color-foreground)] w-fit">
               {alumni.branch || "—"}
             </p>
           </div>
-          <div>
-            <p className="text-xs font-medium text-slate-400 uppercase tracking-wide">
+          <div className="flex flex-col">
+            <p className="text-xs font-black text-muted-foreground uppercase tracking-wider mb-1">
               Graduation
             </p>
-            <p className="text-sm text-slate-700 mt-0.5">
-              {alumni.graduation_year || "—"}
+            <p className="text-base sm:text-lg font-bold text-foreground bg-muted border-2 border-foreground p-2 shadow-[2px_2px_0px_var(--color-foreground)] w-fit">
+              &apos;{String(alumni.graduation_year || "—").slice(-2)}
             </p>
           </div>
-          <div>
-            <p className="text-xs font-medium text-slate-400 uppercase tracking-wide">
+          <div className="flex flex-col">
+            <p className="text-xs font-black text-muted-foreground uppercase tracking-wider mb-1">
               City
             </p>
-            <p className="text-sm text-slate-700 mt-0.5">
+            <p className="text-base sm:text-lg font-bold text-foreground bg-muted border-2 border-foreground p-2 shadow-[2px_2px_0px_var(--color-foreground)] w-fit">
               {alumni.city || "—"}
             </p>
           </div>
-          <div>
-            <p className="text-xs font-medium text-slate-400 uppercase tracking-wide">
+          <div className="flex flex-col">
+            <p className="text-xs font-black text-muted-foreground uppercase tracking-wider mb-1">
               Response
             </p>
-            <p className="text-sm text-slate-700 mt-0.5">
-              {totalRequests && totalRequests > 0
-                ? `${acceptedRequests || 0} of ${totalRequests} accepted`
-                : "No requests yet"}
-            </p>
-            {stats && stats.avg_response_hours > 0 && (
-              <p className="text-xs text-slate-500 mt-1">
-                Typically responds in {stats.avg_response_hours < 24 ? "< 24 hrs" : `${Math.round(stats.avg_response_hours / 24)} days`}
+            <div className="flex flex-col gap-1">
+              <p className="text-sm font-bold text-foreground bg-muted border-2 border-foreground p-2 shadow-[2px_2px_0px_var(--color-foreground)] w-fit">
+                {totalRequests && totalRequests > 0
+                  ? `${acceptedRequests || 0}/${totalRequests} ACCPT`
+                  : "N/A"}
               </p>
-            )}
+              {stats && stats.avg_response_hours > 0 && (
+                <p className="text-xs font-bold text-muted-foreground uppercase">
+                  ~{stats.avg_response_hours < 24 ? "<24 HR" : `${Math.round(stats.avg_response_hours / 24)} DAY`}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -143,21 +148,25 @@ export default async function AlumniProfilePage({
 
       {/* Bio / What I can help with */}
       {alumni.bio && (
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide mb-2">
-            What I can help with
+        <div className="bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] p-6">
+          <h2 className="text-lg font-black text-foreground uppercase tracking-widest mb-4 border-b-2 border-foreground pb-2 inline-block">
+            What I Can Help With
           </h2>
-          <p className="text-slate-600 leading-relaxed">{alumni.bio}</p>
+          <p className="text-base text-foreground font-medium leading-relaxed font-mono">
+            {alumni.bio}
+          </p>
         </div>
       )}
 
       {/* Mentorship Preferences */}
       {alumni.mentorship_preferences && (
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide mb-2">
+        <div className="bg-[#fdc800]/20 border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] p-6">
+          <h2 className="text-lg font-black text-foreground uppercase tracking-widest mb-4 border-b-2 border-foreground pb-2 inline-block">
             Mentorship Preferences
           </h2>
-          <p className="text-slate-600">{alumni.mentorship_preferences}</p>
+          <p className="text-base text-foreground font-medium leading-relaxed font-mono">
+            {alumni.mentorship_preferences}
+          </p>
         </div>
       )}
 
@@ -167,18 +176,17 @@ export default async function AlumniProfilePage({
           href={alumni.linkedin_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-black uppercase text-background bg-[#0A66C2] border-2 border-foreground px-6 py-3 shadow-[4px_4px_0px_var(--color-foreground)] hover:shadow-[2px_2px_0px_var(--color-foreground)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
         >
-          View LinkedIn Profile →
+           LINKEDIN PROFILE →
         </a>
       )}
 
       {/* Connect Button */}
-      <div className="pt-4">
+      <div className="pt-8 pb-12 border-t-4 border-foreground border-dashed mt-8">
         <ConnectSection alumniId={alumni.id} alumniName={alumni.full_name || "Alumni"} />
-        <p className="text-xs text-slate-400 mt-2">
-          You can send a connection request with a short note explaining your
-          ask.
+        <p className="text-xs font-bold text-muted-foreground uppercase mt-4 max-w-md">
+          SEND A CONNECTION REQUEST WITH A SHORT NOTE EXPLAINING YOUR ASK.
         </p>
       </div>
     </div>

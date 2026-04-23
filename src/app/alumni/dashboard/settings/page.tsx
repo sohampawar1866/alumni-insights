@@ -56,7 +56,7 @@ export default function AlumniSettingsPage() {
 
       <form
         onSubmit={handleChangePassword}
-        className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+        className="space-y-4 rounded-2xl border border-blue-100/80 bg-white p-6 shadow-sm"
       >
         <h2 className="text-sm font-semibold text-slate-700">
           Change Password

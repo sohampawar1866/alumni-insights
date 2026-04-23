@@ -100,21 +100,21 @@ export function ChatThread({ requestId, currentUserId, otherUserName }: Props) {
   if (loading) {
     return (
       <div className="flex h-[400px] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-100/80 border-t-blue-600" />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-[600px] border border-slate-200 rounded-2xl bg-white overflow-hidden shadow-sm">
-      <div className="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+    <div className="ai-card flex h-[600px] flex-col overflow-hidden">
+      <div className="flex items-center justify-between border-b border-blue-100/70 bg-blue-50/60 p-4">
         <div>
           <h2 className="font-semibold text-slate-900">Chat with {otherUserName}</h2>
           <p className="text-xs text-slate-500">Messages are auto-archived after 30 days of inactivity.</p>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/50">
+      <div className="flex-1 space-y-4 overflow-y-auto bg-blue-50/35 p-6">
         {messages.length === 0 ? (
           <div className="text-center text-slate-500 mt-10">
             <p>No messages yet.</p>
@@ -130,7 +130,7 @@ export function ChatThread({ requestId, currentUserId, otherUserName }: Props) {
                   className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm shadow-sm ${
                     isMe
                       ? "bg-blue-600 text-white rounded-tr-sm"
-                      : "bg-white border border-slate-200 text-slate-800 rounded-tl-sm"
+                      : "bg-white border border-blue-100/80 text-slate-800 rounded-tl-sm"
                   }`}
                 >
                   <p className="whitespace-pre-wrap">{msg.content}</p>
@@ -145,7 +145,7 @@ export function ChatThread({ requestId, currentUserId, otherUserName }: Props) {
         <div ref={bottomRef} />
       </div>
 
-      <form onSubmit={handleSend} className="p-4 border-t border-slate-100 bg-white flex gap-2">
+      <form onSubmit={handleSend} className="p-4 border-t border-blue-100/70 bg-white flex gap-2">
         <textarea
           required
           rows={1}
@@ -158,7 +158,7 @@ export function ChatThread({ requestId, currentUserId, otherUserName }: Props) {
               handleSend(e);
             }
           }}
-          className="flex-1 resize-none rounded-xl border border-slate-200 p-3 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 min-h-[44px] max-h-[120px]"
+          className="flex-1 min-h-[44px] max-h-[120px] resize-none rounded-xl border border-blue-100/80 bg-white/95 p-3 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500"
         />
         <Button type="submit" disabled={!newMessage.trim()} className="self-end px-6">
           Send

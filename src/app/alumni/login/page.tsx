@@ -33,37 +33,45 @@ export default function AlumniLoginPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-      <div className="p-8 bg-white rounded-lg shadow-md max-w-sm w-full">
-        <h1 className="text-2xl font-bold mb-2 text-center">Alumni Portal</h1>
-        <p className="mb-6 text-sm text-gray-600 text-center">Sign in with the credentials provided by the moderator.</p>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4 relative">
+      <div className="absolute top-0 left-0 w-full h-8 bg-secondary border-b-4 border-foreground" />
+      <div className="p-8 bg-background border-4 border-foreground shadow-[12px_12px_0px_var(--color-foreground)] max-w-sm w-full relative z-10 mt-4">
         
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="email">Email</label>
+        <div className="absolute -top-6 right-4 rotate-3 bg-primary border-2 border-foreground px-4 py-1 font-black text-xs uppercase">
+          ALUMNI ACCESS ONLY
+        </div>
+
+        <h1 className="text-3xl font-black mb-2 text-center uppercase tracking-tighter mt-2">Alumni Portal</h1>
+        <p className="mb-6 text-sm font-bold text-muted-foreground uppercase text-center">Sign in with the credentials provided by the moderator.</p>
+        
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div className="space-y-2">
+            <label className="block text-sm font-black uppercase tracking-wide" htmlFor="email">Email Address</label>
             <Input 
               id="email" 
               type="email" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required 
+              className="text-lg font-mono focus-visible:bg-secondary"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="password">Password</label>
+          <div className="space-y-2">
+            <label className="block text-sm font-black uppercase tracking-wide" htmlFor="password">Passcode</label>
             <Input 
               id="password" 
               type="password" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required 
+              className="text-lg font-mono focus-visible:bg-secondary"
             />
           </div>
           
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          {error && <div className="bg-destructive text-white p-3 border-2 border-foreground font-bold text-center uppercase tracking-wide text-xs">{error}</div>}
           
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign In'}
+          <Button type="submit" className="w-full h-14 text-lg mt-8 shadow-[8px_8px_0px_var(--color-foreground)] hover:shadow-[4px_4px_0px_var(--color-foreground)]" disabled={loading}>
+            {loading ? 'Authenticating...' : 'Enter Platform'}
           </Button>
         </form>
       </div>

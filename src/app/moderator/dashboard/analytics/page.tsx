@@ -76,15 +76,15 @@ export default async function AnalyticsPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-10 space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Analytics</h1>
-        <p className="text-sm text-slate-500 mt-1">
+      <div className="border-l-8 border-[var(--color-primary)] pl-4">
+        <h1 className="font-heading text-4xl font-black uppercase tracking-tight text-foreground">Analytics</h1>
+        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground mt-2">
           Alumni distribution and platform activity.
         </p>
       </div>
 
       {/* Top-level stats */}
-      <div className="grid sm:grid-cols-3 gap-4">
+      <div className="grid sm:grid-cols-3 gap-6">
         <StatCard label="Total Alumni" value={totalAlumni || 0} />
         <StatCard label="Active Alumni (90d)" value={activeAlumniCount} />
         <StatCard label="Completed Sessions" value={completedSessions || 0} />
@@ -102,9 +102,9 @@ export default async function AnalyticsPage() {
 
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <p className="text-sm font-medium text-slate-500">{label}</p>
-      <p className="text-3xl font-bold text-slate-900 mt-1">{value}</p>
+    <div className="border-4 border-foreground bg-white p-6 shadow-[8px_8px_0px_#000] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[10px_10px_0px_#000] transition-all">
+      <p className="text-sm font-black uppercase tracking-wider text-foreground">{label}</p>
+      <p className="text-5xl font-black text-foreground mt-2">{value}</p>
     </div>
   );
 }
@@ -117,20 +117,20 @@ function BreakdownCard({
   data: [string, number][];
 }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <h3 className="text-sm font-semibold text-slate-700 uppercase tracking-wide mb-4">
+    <div className="border-4 border-foreground bg-white p-6 shadow-[8px_8px_0px_#000]">
+      <h3 className="text-lg font-black text-foreground bg-secondary border-2 border-foreground px-3 py-1 inline-block uppercase tracking-tight mb-6">
         {title}
       </h3>
       {data.length === 0 ? (
-        <p className="text-sm text-slate-400">No data yet</p>
+        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">No data yet</p>
       ) : (
-        <div className="space-y-2.5">
+        <div className="space-y-3">
           {data.map(([name, count]) => (
-            <div key={name} className="flex items-center justify-between">
-              <span className="text-sm text-slate-600 truncate mr-2">
+            <div key={name} className="flex items-center justify-between border-b-2 border-foreground pb-2 last:border-0 last:pb-0">
+              <span className="text-sm font-bold uppercase tracking-wider text-foreground truncate mr-2">
                 {name}
               </span>
-              <span className="shrink-0 text-xs font-medium text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">
+              <span className="shrink-0 text-xs font-black text-foreground bg-primary border-2 border-foreground px-2 py-0.5 shadow-[2px_2px_0px_#000]">
                 {count}
               </span>
             </div>
