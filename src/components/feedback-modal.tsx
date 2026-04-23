@@ -63,67 +63,80 @@ export function FeedbackModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5 animate-in fade-in zoom-in-95 duration-200">
-        <div>
-          <h2 className="text-lg font-bold text-slate-900">
-            How was your session?
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-sm p-4">
+      <div className="w-full max-w-md bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)]">
+        <div className="p-6 border-b-4 border-foreground bg-[#fdc800]">
+          <h2 className="text-2xl font-black uppercase tracking-tighter text-foreground">
+            RATE SESSION
           </h2>
-          <p className="text-sm text-slate-500 mt-1">
-            Leave feedback for <span className="font-medium text-slate-700">{alumniName}</span>
+          <p className="text-sm font-bold uppercase tracking-wider text-foreground mt-2">
+            Leave feedback for {alumniName.split(' ')[0]}
           </p>
         </div>
 
-        {/* Star Rating */}
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-slate-500">Rating</label>
-          <div className="flex gap-1">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <button
-                key={star}
-                type="button"
-                onClick={() => setRating(star)}
-                onMouseEnter={() => setHoveredRating(star)}
-                onMouseLeave={() => setHoveredRating(0)}
-                className="text-3xl transition-transform hover:scale-110 focus:outline-none"
-              >
-                {star <= (hoveredRating || rating) ? "⭐" : "☆"}
-              </button>
-            ))}
+        <div className="p-6 space-y-6 bg-background">
+          {/* Star Rating */}
+          <div className="space-y-2">
+            <label className="block text-sm font-black uppercase tracking-wide text-foreground">SESSION RATING</label>
+            <div className="flex gap-2">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => setRating(star)}
+                  onMouseEnter={() => setHoveredRating(star)}
+                  onMouseLeave={() => setHoveredRating(0)}
+                  className="text-4xl transition-transform hover:-translate-y-1 hover:scale-110 focus:outline-none drop-shadow-[2px_2px_0px_var(--color-foreground)] grayscale-[0.5] hover:grayscale-0"
+                >
+                  {star <= (hoveredRating || rating) ? "⭐" : "☆"}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Comment */}
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-slate-500">
-            Comment (optional)
-          </label>
-          <textarea
-            maxLength={500}
-            rows={3}
-            placeholder="What was most helpful about this session?"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            className="flex w-full rounded-md border border-input bg-white px-3 py-2 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring resize-none"
-          />
-          <p className="text-xs text-slate-400 text-right">
-            {comment.length}/500
-          </p>
-        </div>
+          {/* Comment */}
+          <div className="space-y-2">
+            <label className="block text-sm font-black uppercase tracking-wide text-foreground">
+              DEBRIEF / COMMENTS (OPTIONAL)
+            </label>
+            <textarea
+              maxLength={500}
+              rows={3}
+              placeholder="What was most helpful about this session?"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              className="flex w-full border-2 border-foreground p-3 text-sm font-medium shadow-[4px_4px_0px_var(--color-foreground)] focus-visible:outline-none focus:bg-secondary transition-colors resize-none mb-1"
+            />
+            <p className="text-xs font-bold uppercase text-muted-foreground text-right w-full mt-2">
+              {comment.length}/500
+            </p>
+          </div>
 
-        {error && (
-          <p className="text-sm text-red-600 bg-red-50 rounded-lg p-3">
-            {error}
-          </p>
-        )}
+          {error && (
+            <div className="bg-[#ff3366] border-2 border-foreground p-3 shadow-[4px_4px_0px_var(--color-foreground)]">
+              <p className="text-sm font-black text-background uppercase">
+                ERROR: {error}
+              </p>
+            </div>
+          )}
 
-        <div className="flex gap-3 justify-end">
-          <Button variant="outline" onClick={onClose} disabled={submitting}>
-            Skip
-          </Button>
-          <Button onClick={handleSubmit} disabled={submitting || rating === 0}>
-            {submitting ? "Submitting..." : "Submit Feedback"}
-          </Button>
+          <div className="flex justify-end gap-4 pt-4 border-t-2 border-foreground border-dashed">
+            <Button 
+              variant="outline" 
+              onClick={onClose} 
+              disabled={submitting}
+              className="border-2 border-foreground"
+            >
+              SKIP DEBRIEF
+            </Button>
+            <Button 
+              onClick={handleSubmit} 
+              disabled={submitting || rating === 0}
+              className="bg-primary text-background shadow-[4px_4px_0px_var(--color-foreground)] hover:shadow-[2px_2px_0px_var(--color-foreground)] hover:translate-x-[2px] hover:translate-y-[2px]"
+            >
+              {submitting ? "UPLOADING..." : "SUBMIT LOG"}
+            </Button>
+          </div>
         </div>
       </div>
     </div>

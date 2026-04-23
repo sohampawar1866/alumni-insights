@@ -96,11 +96,11 @@ export function NotificationBell() {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className="relative p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+        className="relative p-2 border-2 border-foreground bg-background shadow-[2px_2px_0px_var(--color-foreground)] transition-transform hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_var(--color-foreground)] focus:outline-none"
         aria-label="Notifications"
       >
         <svg
-          className="w-5 h-5"
+          className="w-5 h-5 text-foreground"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -108,55 +108,55 @@ export function NotificationBell() {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth={2}
+            strokeWidth={3}
             d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
           />
         </svg>
         {unreadCount > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">
+          <span className="absolute -top-1.5 -right-1.5 h-5 w-5 border-2 border-foreground bg-[#ff3366] text-background text-[10px] font-black flex items-center justify-center">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-80 max-h-96 overflow-auto bg-white rounded-xl shadow-xl border border-slate-200 z-50">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
-            <h3 className="text-sm font-bold text-slate-900">Notifications</h3>
+        <div className="absolute right-0 z-50 mt-4 max-h-96 w-80 bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] overflow-auto">
+          <div className="flex items-center justify-between px-4 py-3 border-b-4 border-foreground bg-[#fdc800]">
+            <h3 className="text-sm font-black uppercase tracking-wider text-foreground">UPDATES</h3>
             {unreadCount > 0 && (
               <button
                 onClick={markAllRead}
-                className="text-xs text-blue-600 hover:underline"
+                className="text-xs font-bold uppercase text-foreground hover:bg-foreground hover:text-background px-2 py-1 transition-colors border-2 border-transparent hover:border-foreground"
               >
-                Mark all read
+                CLEAR ALERTS
               </button>
             )}
           </div>
 
           {notifications.length === 0 ? (
-            <div className="p-6 text-center text-sm text-slate-400">
-              No notifications yet
+            <div className="p-6 text-center text-sm font-bold uppercase text-muted-foreground bg-background">
+              SILENCE. GO BUILD SOMETHING.
             </div>
           ) : (
-            <div className="divide-y divide-slate-50">
+            <div className="divide-y-2 divide-foreground bg-background">
               {notifications.map((n) => {
                 const inner = (
                   <div
-                    className={`px-4 py-3 flex gap-3 transition-colors hover:bg-slate-50 cursor-pointer ${
-                      !n.is_read ? "bg-blue-50/40" : ""
+                    className={`px-4 py-3 flex gap-3 transition-colors hover:bg-secondary cursor-pointer ${
+                      !n.is_read ? "bg-[#ff3366]/10" : ""
                     }`}
                   >
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-slate-900 truncate">
+                      <p className="text-sm font-black text-foreground uppercase tracking-wide truncate">
                         {n.title}
                       </p>
                       {n.body && (
-                        <p className="text-xs text-slate-500 mt-0.5 line-clamp-2">
+                        <p className="text-xs font-semibold text-muted-foreground mt-1 line-clamp-2">
                           {n.body}
                         </p>
                       )}
                     </div>
-                    <span className="text-[10px] text-slate-400 shrink-0 pt-0.5">
+                    <span className="text-[10px] font-bold text-foreground bg-secondary border-2 border-foreground px-1.5 h-fit shrink-0 py-0.5 whitespace-nowrap">
                       {formatTime(n.created_at)}
                     </span>
                   </div>

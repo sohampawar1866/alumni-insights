@@ -37,32 +37,35 @@ export default async function MyRequestsPage() {
   const feedbackRequestIds = new Set(feedbackData?.map((f) => f.request_id) || []);
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-10 space-y-8">
-      <Link
-        href="/dashboard"
-        className="inline-flex items-center text-sm text-slate-500 hover:text-slate-700 transition-colors"
-      >
-        ← Back to Dashboard
-      </Link>
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">My Requests</h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Track your connection requests to alumni.
-          </p>
-        </div>
-        <Link
-          href="/search"
-          className="text-sm font-medium text-blue-600 hover:text-blue-700"
+    <div className="max-w-4xl mx-auto p-4 md:p-8 space-y-8">
+      <div className="mb-8">
+        <Link 
+          href="/dashboard" 
+          className="inline-block text-sm font-black uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors group mb-6"
         >
-          Find more alumni &rarr;
+          <span className="inline-block transition-transform group-hover:-translate-x-1">←</span> BACK TO MISSION CONTROL
         </Link>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <h1 className="text-5xl font-black uppercase tracking-tighter text-foreground mb-2">MY ACTIVE COMMS</h1>
+            <p className="text-xl font-bold uppercase tracking-wider text-muted-foreground">
+              TRACK YOUR CONNECTION REQUESTS AND MENTORSHIP STATUS.
+            </p>
+          </div>
+          <Link
+            href="/search"
+            className="flex-shrink-0 bg-[#fdc800] text-foreground text-sm font-black uppercase tracking-wider px-6 py-3 border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all hover:shadow-[2px_2px_0px_var(--color-foreground)] inline-flex items-center gap-2"
+          >
+            DISCOVER TARGETS <span aria-hidden="true">&rarr;</span>
+          </Link>
+        </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         {!requests || requests.length === 0 ? (
-          <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
-            <p className="text-slate-500">You haven&apos;t sent any requests yet.</p>
+          <div className="border-4 border-foreground bg-background p-12 text-center shadow-[8px_8px_0px_var(--color-foreground)]">
+            <p className="text-2xl font-black uppercase text-foreground mb-2">NO ACTIVE COMMS</p>
+            <p className="font-bold text-muted-foreground uppercase">YOU HAVEN&apos;T SENT ANY REQUESTS YET. GET TO IT.</p>
           </div>
         ) : (
           requests.map((req) => {
@@ -77,81 +80,86 @@ export default async function MyRequestsPage() {
             return (
               <div
                 key={req.id}
-                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4"
+                className="border-4 border-foreground bg-background shadow-[8px_8px_0px_var(--color-foreground)] overflow-hidden"
               >
-                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                <div className="p-6 border-b-4 border-foreground bg-[#f4f4f4] flex flex-col md:flex-row justify-between gap-4">
                   <div>
-                    <h3 className="font-semibold text-slate-900">
-                      {alumni?.full_name || "Unknown Alumni"}
+                    <h3 className="text-2xl font-black uppercase text-foreground">
+                      {alumni?.full_name || "UNKNOWN ALUMNI"}
                     </h3>
-                    <p className="text-sm text-slate-600 mt-0.5">
+                    <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground mt-1">
                       {alumni?.role_title || "—"}{" "}
-                      {alumni?.company ? `at ${alumni.company}` : ""}
+                      {alumni?.company ? `AT ${alumni.company}` : ""}
                     </p>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span
-                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                  <div className="flex items-center gap-4">
+                    <div
+                      className={`px-3 py-1.5 border-4 border-foreground text-sm font-black uppercase shadow-[2px_2px_0px_var(--color-foreground)] ${
                         req.status === "accepted"
-                          ? "bg-emerald-50 text-emerald-700"
+                          ? "bg-[#00ff66] text-foreground"
                           : req.status === "declined"
-                          ? "bg-red-50 text-red-700"
+                          ? "bg-[#ff3366] text-foreground"
                           : req.status === "completed"
-                          ? "bg-blue-50 text-blue-700"
-                          : "bg-amber-50 text-amber-700"
+                          ? "bg-[#00ffff] text-foreground"
+                          : "bg-[#fdc800] text-foreground animate-pulse"
                       }`}
                     >
-                      {req.status.charAt(0).toUpperCase() + req.status.slice(1)}
-                    </span>
-                    <time className="text-xs text-slate-400">
-                      {new Date(req.created_at).toLocaleDateString("en-IN", {
+                      {req.status}
+                    </div>
+                    <time className="text-sm font-bold uppercase text-muted-foreground border-2 border-foreground px-2 py-1 bg-background">
+                      {new Date(req.created_at).toLocaleDateString("en-US", {
                         month: "short",
-                        day: "numeric",
-                        year: "numeric",
+                        day: "2-digit",
                       })}
                     </time>
                   </div>
                 </div>
 
-                <div className="bg-slate-50 rounded-lg p-4 text-sm text-slate-600">
-                  <p className="font-medium text-slate-900 mb-1">Your message:</p>
-                  <p className="whitespace-pre-wrap">{req.message}</p>
-                </div>
+                <div className="p-6 bg-background">
+                  <div className="mb-6">
+                    <p className="text-sm font-black uppercase text-foreground mb-2">YOUR TRANSMISSION:</p>
+                    <div className="bg-secondary border-2 border-foreground p-4 shadow-[4px_4px_0px_var(--color-foreground)]">
+                      <p className="whitespace-pre-wrap font-medium text-foreground">{req.message}</p>
+                    </div>
+                  </div>
 
-                {req.status === "accepted" && alumni && (
-                  <div className="pt-2 border-t border-slate-100 flex items-center gap-3">
-                    <Link
-                      href={`/dashboard/messages/${req.id}`}
-                      className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors"
-                    >
-                      💬 Open Chat
-                    </Link>
-                    {alumni.linkedin_url && (
-                      <a
-                        href={alumni.linkedin_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center rounded-lg bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200 transition-colors"
+                  {req.status === "accepted" && alumni && (
+                    <div className="pt-6 border-t-4 border-foreground border-dashed flex flex-wrap items-center gap-4">
+                      <Link
+                        href={`/dashboard/messages/${req.id}`}
+                        className="bg-primary text-background text-sm font-black uppercase tracking-wider px-6 py-3 border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all hover:shadow-[2px_2px_0px_var(--color-foreground)] inline-flex items-center gap-2"
                       >
-                        Message on LinkedIn
-                      </a>
-                    )}
-                  </div>
-                )}
+                        <span className="text-xl">💬</span> ENTER SECURE CHAT
+                      </Link>
+                      {alumni.linkedin_url && (
+                        <a
+                          href={alumni.linkedin_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="bg-background text-foreground text-sm font-black uppercase tracking-wider px-6 py-3 border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all hover:shadow-[2px_2px_0px_var(--color-foreground)] hover:bg-[#0077b5] hover:text-white"
+                        >
+                          LINKEDIN TARGET
+                        </a>
+                      )}
+                    </div>
+                  )}
 
-                {req.status === "completed" && alumni && (
-                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-                    <p className="text-sm text-slate-600">
-                      ✅ Session completed
-                    </p>
-                    <FeedbackButton
-                      requestId={req.id}
-                      alumniId={alumni.id}
-                      alumniName={alumni.full_name || "Alumni"}
-                      hasFeedback={feedbackRequestIds.has(req.id)}
-                    />
-                  </div>
-                )}
+                  {req.status === "completed" && alumni && (
+                    <div className="pt-6 border-t-4 border-foreground border-dashed flex flex-wrap items-center justify-between gap-4">
+                      <div className="bg-[#00ff66] border-4 border-foreground px-4 py-2 shadow-[2px_2px_0px_var(--color-foreground)]">
+                         <p className="text-sm font-black uppercase text-foreground tracking-wider">
+                           ✅ MISSION ACCOMPLISHED
+                         </p>
+                      </div>
+                      <FeedbackButton
+                        requestId={req.id}
+                        alumniId={alumni.id}
+                        alumniName={alumni.full_name || "ALUMNI"}
+                        hasFeedback={feedbackRequestIds.has(req.id)}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             );
           })
