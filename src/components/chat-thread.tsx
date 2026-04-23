@@ -99,43 +99,43 @@ export function ChatThread({ requestId, currentUserId, otherUserName }: Props) {
 
   if (loading) {
     return (
-      <div className="flex h-[400px] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-100/80 border-t-blue-600" />
+      <div className="flex h-[400px] items-center justify-center font-sans">
+        <div className="h-12 w-12 animate-spin border-4 border-foreground border-t-primary shadow-[4px_4px_0px_var(--color-foreground)]" />
       </div>
     );
   }
 
   return (
-    <div className="ai-card flex h-[600px] flex-col overflow-hidden">
-      <div className="flex items-center justify-between border-b border-blue-100/70 bg-blue-50/60 p-4">
+    <div className="bg-white border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] flex h-[600px] flex-col overflow-hidden font-sans">
+      <div className="flex items-center justify-between border-b-4 border-foreground bg-secondary p-6">
         <div>
-          <h2 className="font-semibold text-slate-900">Chat with {otherUserName}</h2>
-          <p className="text-xs text-slate-500">Messages are auto-archived after 30 days of inactivity.</p>
+          <h2 className="text-xl font-black uppercase tracking-tight text-foreground">Chat with {otherUserName}</h2>
+          <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mt-1">Messages are auto-archived after 30 days of inactivity.</p>
         </div>
       </div>
 
-      <div className="flex-1 space-y-4 overflow-y-auto bg-blue-50/35 p-6">
+      <div className="flex-1 space-y-6 overflow-y-auto bg-muted/30 p-6">
         {messages.length === 0 ? (
-          <div className="text-center text-slate-500 mt-10">
-            <p>No messages yet.</p>
-            <p className="text-sm">Send a message to start the conversation!</p>
+          <div className="text-center mt-10 border-4 border-foreground border-dashed p-8 bg-white shadow-[4px_4px_0px_var(--color-foreground)]">
+            <p className="text-lg font-black uppercase tracking-tight text-foreground">No messages yet.</p>
+            <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground mt-2">Send a message to start the conversation!</p>
           </div>
         ) : (
           messages.map((msg) => {
             const isMe = msg.sender_id === currentUserId;
             return (
               <div key={msg.id} className={`flex flex-col ${isMe ? "items-end" : "items-start"}`}>
-                <span className="text-[10px] text-slate-400 mb-1 px-1">{msg.profiles.full_name}</span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1 px-1">{msg.profiles.full_name}</span>
                 <div
-                  className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm shadow-sm ${
+                  className={`max-w-[80%] border-4 border-foreground px-4 py-3 text-base font-bold shadow-[4px_4px_0px_var(--color-foreground)] transition-transform hover:-translate-y-1 hover:shadow-[6px_6px_0px_var(--color-foreground)] ${
                     isMe
-                      ? "bg-blue-600 text-white rounded-tr-sm"
-                      : "bg-white border border-blue-100/80 text-slate-800 rounded-tl-sm"
+                      ? "bg-primary text-background rounded-none"
+                      : "bg-white text-foreground rounded-none"
                   }`}
                 >
                   <p className="whitespace-pre-wrap">{msg.content}</p>
                 </div>
-                <span className="text-[10px] text-slate-400 mt-1 px-1">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-2 px-1">
                   {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
@@ -145,11 +145,11 @@ export function ChatThread({ requestId, currentUserId, otherUserName }: Props) {
         <div ref={bottomRef} />
       </div>
 
-      <form onSubmit={handleSend} className="p-4 border-t border-blue-100/70 bg-white flex gap-2">
+      <form onSubmit={handleSend} className="p-4 border-t-4 border-foreground bg-white flex gap-4">
         <textarea
           required
           rows={1}
-          placeholder="Type a message..."
+          placeholder="TYPE A MESSAGE..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyDown={(e) => {
@@ -158,10 +158,14 @@ export function ChatThread({ requestId, currentUserId, otherUserName }: Props) {
               handleSend(e);
             }
           }}
-          className="flex-1 min-h-[44px] max-h-[120px] resize-none rounded-xl border border-blue-100/80 bg-white/95 p-3 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500"
+          className="flex-1 min-h-[56px] max-h-[120px] resize-none border-4 border-foreground bg-white p-4 text-base font-bold shadow-[4px_4px_0px_var(--color-foreground)] focus-visible:outline-none focus:bg-secondary transition-colors rounded-none"
         />
-        <Button type="submit" disabled={!newMessage.trim()} className="self-end px-6">
-          Send
+        <Button 
+          type="submit" 
+          disabled={!newMessage.trim()} 
+          className="self-end px-8 h-[56px] bg-foreground text-background border-4 border-transparent shadow-[4px_4px_0px_var(--color-primary)] text-lg font-black uppercase tracking-widest hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-primary)] transition-all rounded-none"
+        >
+          SEND
         </Button>
       </form>
     </div>
