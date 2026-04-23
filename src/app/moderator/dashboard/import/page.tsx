@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 type ImportResult = {
   success: { name: string; email: string; password: string }[];
@@ -18,17 +19,29 @@ export default function BulkImportPage() {
 
   const handleImport = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file) return;
+    if (!file) {
+      toast.error("No Data Source detected", {
+        description: "Please attach a CSV file before dispatching."
+      });
+      return;
+    }
 
     setLoading(true);
     setError(null);
     setResult(null);
+    
+    toast.info("Import Active", {
+      description: "Dispatching records to the mainframe..."
+    });
 
     const text = await file.text();
     const lines = text.trim().split("\n");
 
     if (lines.length < 2) {
       setError("CSV must have a header row and at least one data row.");
+      toast.error("Format Error", {
+        description: "CSV must have a header row and at least one data row."
+      });
       setLoading(false);
       return;
     }

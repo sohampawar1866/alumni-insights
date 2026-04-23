@@ -20,15 +20,31 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background border-t-[8px] border-primary">
-      <div className="p-8 bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] max-w-sm w-full text-center relative">
-        <div className="absolute -top-4 -left-4 bg-secondary border-2 border-foreground px-3 py-1 font-bold text-sm transform -rotate-2">
-          Secure
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background border-t-8 border-foreground font-sans relative overflow-hidden">
+      {/* Decorative Grid Background */}
+      <div className="absolute inset-0 pointer-events-none opacity-20 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+
+      <div className="p-10 bg-white border-8 border-foreground shadow-[16px_16px_0px_var(--color-foreground)] max-w-md w-full text-center relative z-10 transition-all hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[20px_20px_0px_var(--color-foreground)]">
+        <div className="absolute -top-6 -left-6 bg-[#fdc800] border-4 border-foreground px-4 py-1 font-black text-sm uppercase tracking-widest shadow-[4px_4px_0px_var(--color-foreground)] -rotate-6">
+          <span className="inline-block w-2 h-2 bg-foreground mr-2 animate-pulse" />
+          STUDENT PORTAL
         </div>
-        <h1 className="text-4xl font-black mb-4 uppercase tracking-tighter mt-4">Alumni Insights</h1>
-        <p className="mb-8 font-bold text-muted-foreground uppercase text-sm tracking-wide">Sign in with your IIIT Nagpur student account to continue.</p>
-        <Button onClick={handleLogin} className="w-full h-14 text-lg">
-          Sign In with Google
+        
+        <h1 className="text-4xl sm:text-5xl font-black mb-6 uppercase tracking-tighter text-foreground leading-tight mt-6">
+          ALUMNI<br />INSIGHTS
+        </h1>
+        
+        <div className="mb-8 border-t-4 border-b-4 border-dashed border-foreground py-4 bg-muted">
+          <p className="font-bold text-foreground uppercase text-xs tracking-wider">
+            Access strictly restricted to <span className="bg-primary text-background px-1">@iiitn.ac.in</span> institutional accounts.
+          </p>
+        </div>
+        
+        <Button 
+          onClick={handleLogin} 
+          className="w-full h-16 text-lg font-black uppercase tracking-widest bg-primary text-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] transition-all hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[12px_12px_0px_var(--color-foreground)]"
+        >
+          AUTH WITH GOOGLE
         </Button>
       </div>
     </div>
