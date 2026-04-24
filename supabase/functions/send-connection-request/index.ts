@@ -50,15 +50,15 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    // Verify caller is a student
+    // Verify caller is a student or alumni
     const { data: profile } = await supabase
       .from("profiles")
       .select("roles")
       .eq("id", student.id)
       .single();
 
-    if (!profile || !profile.roles?.includes("student")) {
-      return new Response(JSON.stringify({ error: "Only students can send connection requests" }), {
+    if (!profile || (!profile.roles?.includes("student") && !profile.roles?.includes("alumni"))) {
+      return new Response(JSON.stringify({ error: "Only students and alumni can send connection requests" }), {
         status: 403,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
