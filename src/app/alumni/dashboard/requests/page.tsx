@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
+import { MessageSquare } from "lucide-react";
 
 type Request = {
   id: string;
@@ -211,7 +212,7 @@ function RequestCard({
                 onClick={() => { window.location.href = `/alumni/dashboard/messages/${request.id}`; }}
                 className="bg-primary text-background text-sm font-black uppercase tracking-wider px-6 py-3 border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all hover:shadow-[2px_2px_0px_var(--color-foreground)]"
               >
-                💬 OPEN SECURE CHAT
+                <MessageSquare className="w-5 h-5" strokeWidth={2.5} /> OPEN SECURE CHAT
               </Button>
               <Button
                 onClick={() => onUpdate(request.id, "completed")}

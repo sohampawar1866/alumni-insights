@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ConnectDialog } from "@/components/connect-dialog";
+import { CheckCircle } from "lucide-react";
 
 export function ConnectSection({
   alumniId,
@@ -18,7 +19,7 @@ export function ConnectSection({
     return (
       <div className="inline-block border-4 border-foreground bg-primary p-4 shadow-[4px_4px_0px_var(--color-foreground)]">
         <p className="text-sm font-black uppercase tracking-wider text-foreground">
-          ✅ Request sent successfully!
+          <CheckCircle className="w-4 h-4 inline-block mr-1" strokeWidth={2.5} /> Request sent successfully!
         </p>
         <p className="text-xs font-bold uppercase tracking-wider text-foreground mt-1">
           You can track the status in your dashboard.

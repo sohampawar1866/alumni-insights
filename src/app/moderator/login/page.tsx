@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { ArrowLeft } from 'lucide-react'
 
 export default function ModeratorLoginPage() {
   const [email, setEmail] = useState('')
@@ -87,7 +88,7 @@ export default function ModeratorLoginPage() {
         </form>
         <div className="mt-6 text-center">
           <Link href="/" className="text-sm font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground hover:underline transition-all">
-            ← Back to Landing Page
+            <ArrowLeft className="w-4 h-4 inline-block mr-1" strokeWidth={2.5} /> Back to Landing Page
           </Link>
         </div>
       </div>

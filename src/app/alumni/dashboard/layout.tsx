@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { User, MessageSquare, Settings, Megaphone, Menu } from "lucide-react";
 
 import { FirstLoginNudge } from "@/components/first-login-nudge";
 import { NotificationBell } from "@/components/notification-bell";
@@ -45,7 +46,7 @@ export default async function AlumniLayout({
               <NotificationBell />
             </div>
             <label htmlFor="alumni-menu" className="md:hidden p-2 border-2 border-foreground bg-white text-foreground shadow-[2px_2px_0px_#000] cursor-pointer hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#000] transition-all">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="peer-checked:hidden"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+              <Menu className="w-6 h-6" strokeWidth={3} />
             </label>
           </div>
         </div>
@@ -57,28 +58,28 @@ export default async function AlumniLayout({
               className="flex items-center justify-between px-4 py-3 bg-muted border-4 border-foreground font-black uppercase tracking-widest text-foreground shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:bg-secondary hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
             >
               <span>My Profile</span>
-              <span className="text-xl">👤</span>
+              <User className="w-5 h-5" strokeWidth={2.5} />
             </Link>
             <Link
               href="/alumni/dashboard/requests"
               className="flex items-center justify-between px-4 py-3 bg-muted border-4 border-foreground font-black uppercase tracking-widest text-foreground shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:bg-secondary hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
             >
               <span>Requests</span>
-              <span className="text-xl">💬</span>
+              <MessageSquare className="w-5 h-5" strokeWidth={2.5} />
             </Link>
             <Link
               href="/alumni/dashboard/settings"
               className="flex items-center justify-between px-4 py-3 bg-muted border-4 border-foreground font-black uppercase tracking-widest text-foreground shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:bg-secondary hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
             >
               <span>Settings</span>
-              <span className="text-xl">⚙️</span>
+              <Settings className="w-5 h-5" strokeWidth={2.5} />
             </Link>
             <Link
               href="/alumni/dashboard/announcements"
               className="flex items-center justify-between px-4 py-3 bg-muted border-4 border-foreground font-black uppercase tracking-widest text-foreground shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:bg-secondary hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
             >
               <span>Noticeboard</span>
-              <span className="text-xl">📢</span>
+              <Megaphone className="w-5 h-5" strokeWidth={2.5} />
             </Link>
           </nav>
           

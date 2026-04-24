@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 
 export default function ApplyAlumniPage() {
   const supabase = createClient();
@@ -83,7 +84,7 @@ export default function ApplyAlumniPage() {
           href="/dashboard"
           className="inline-flex items-center text-sm font-black uppercase tracking-widest text-background bg-foreground px-3 py-1 mb-6 hover:-translate-y-1 hover:shadow-[4px_4px_0px_var(--color-primary)] transition-all border-2 border-transparent"
         >
-          ← BACK TO DASHBOARD
+          <ArrowLeft className="w-4 h-4 inline-block mr-1" strokeWidth={2.5} /> BACK TO DASHBOARD
         </Link>
         <h1 className="text-4xl font-black uppercase tracking-tighter text-foreground mb-2">Apply as Alumni</h1>
         <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">

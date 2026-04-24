@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AlumniCard } from "@/components/alumni-card";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 type Alumni = {
   id: string;
@@ -115,7 +116,7 @@ export default function SearchPage() {
         href="/dashboard"
         className="inline-flex items-center text-sm font-black uppercase text-foreground bg-secondary border-2 border-foreground px-3 py-1 shadow-[4px_4px_0px_var(--color-foreground)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_var(--color-foreground)] transition-all mb-4"
       >
-        ← Back
+        <ArrowLeft className="w-4 h-4 inline-block mr-1" strokeWidth={2.5} /> Back
       </Link>
       <h1 className="text-5xl font-black text-foreground uppercase tracking-tighter mb-8 border-b-4 border-foreground pb-4">
         Alumni Directory

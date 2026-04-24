@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Pin, School, User, Crosshair, Link2, ThumbsUp, Trash2, Flag } from "lucide-react";
 
 type Announcement = {
   id: string;
@@ -52,12 +53,11 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
   const [targetBatch, setTargetBatch] = useState("");
   const [targetCity, setTargetCity] = useState("");
 
-  const fetchAnnouncements = async () => {
+  const fetchAnnouncements = useCallback(async () => {
     setLoading(true);
     // Fetch announcements that are not expired
     const now = new Date().toISOString();
     
-    // In a real app we'd also want to fetch the likes and whether the current user liked it
     const { data } = await supabase
       .from("announcements")
       .select(`
@@ -105,13 +105,11 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
       setAnnouncements(formatted);
     }
     setLoading(false);
-  };
+  }, [supabase, currentUserId, currentUserRole]);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchAnnouncements();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchAnnouncements]);
 
   const handlePost = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -357,23 +355,23 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
                   <div>
                     <div className="flex flex-wrap items-center gap-3 mb-3">
                       {post.is_pinned && (
-                        <span className="inline-flex items-center border-2 border-foreground bg-secondary px-3 py-1 text-xs font-black uppercase tracking-widest text-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
-                          📌 PINNED
+                        <span className="inline-flex items-center gap-1.5 border-2 border-foreground bg-secondary px-3 py-1 text-xs font-black uppercase tracking-widest text-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
+                          <Pin className="w-3.5 h-3.5" strokeWidth={2.5} /> PINNED
                         </span>
                       )}
                       {post.profiles.roles?.includes("moderator") ? (
-                        <span className="inline-flex items-center border-2 border-foreground bg-primary/20 px-3 py-1 text-xs font-black uppercase tracking-widest text-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
-                          🏫 OFFICIAL — {post.profiles.full_name} · PLACEMENT CELL
+                        <span className="inline-flex items-center gap-1.5 border-2 border-foreground bg-primary/20 px-3 py-1 text-xs font-black uppercase tracking-widest text-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
+                          <School className="w-3.5 h-3.5" strokeWidth={2.5} /> OFFICIAL — {post.profiles.full_name} · PLACEMENT CELL
                         </span>
                       ) : (
-                        <span className="inline-flex items-center border-2 border-foreground bg-muted px-3 py-1 text-xs font-black uppercase tracking-widest text-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
-                          👤 ALUMNI — {post.profiles.full_name}, {post.profiles.role_title} AT {post.profiles.company}
+                        <span className="inline-flex items-center gap-1.5 border-2 border-foreground bg-muted px-3 py-1 text-xs font-black uppercase tracking-widest text-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
+                          <User className="w-3.5 h-3.5" strokeWidth={2.5} /> ALUMNI — {post.profiles.full_name}, {post.profiles.role_title} AT {post.profiles.company}
                         </span>
                       )}
                       
                       {currentUserRole === "moderator" && (
-                        <span className="inline-flex items-center border-2 border-foreground bg-destructive/10 px-3 py-1 text-xs font-black uppercase tracking-widest text-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
-                          🎯 TARGET: {targetString}
+                        <span className="inline-flex items-center gap-1.5 border-2 border-foreground bg-destructive/10 px-3 py-1 text-xs font-black uppercase tracking-widest text-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
+                          <Crosshair className="w-3.5 h-3.5" strokeWidth={2.5} /> TARGET: {targetString}
                         </span>
                       )}
                     </div>
@@ -387,17 +385,17 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
                     {canDelete && (
                       <button
                          onClick={() => handleDelete(post.id)}
-                        className="text-xs font-black uppercase tracking-widest text-background bg-destructive border-2 border-foreground px-3 py-1.5 shadow-[2px_2px_0px_var(--color-foreground)] hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_var(--color-foreground)] transition-all"
+                        className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-background bg-destructive border-2 border-foreground px-3 py-1.5 shadow-[2px_2px_0px_var(--color-foreground)] hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_var(--color-foreground)] transition-all"
                       >
-                        DELETE
+                        <Trash2 className="w-3.5 h-3.5" strokeWidth={2.5} /> DELETE
                       </button>
                     )}
                     {currentUserRole === "student" && !isAuthor && (
                       <button
                         onClick={() => handleFlag(post.id)}
-                        className="text-xs font-black uppercase tracking-widest text-foreground bg-muted border-2 border-foreground px-3 py-1.5 shadow-[2px_2px_0px_var(--color-foreground)] hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_var(--color-foreground)] transition-all"
+                        className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-foreground bg-muted border-2 border-foreground px-3 py-1.5 shadow-[2px_2px_0px_var(--color-foreground)] hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_var(--color-foreground)] transition-all"
                       >
-                        FLAG
+                        <Flag className="w-3.5 h-3.5" strokeWidth={2.5} /> FLAG
                       </button>
                     )}
                   </div>
@@ -413,9 +411,9 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
                       href={post.attachment_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center text-sm font-black uppercase tracking-widest text-background bg-foreground px-4 py-2 border-2 border-foreground shadow-[4px_4px_0px_var(--color-primary)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_var(--color-primary)] transition-all rounded-none"
+                      className="inline-flex items-center gap-1.5 text-sm font-black uppercase tracking-widest text-background bg-foreground px-4 py-2 border-2 border-foreground shadow-[4px_4px_0px_var(--color-primary)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_var(--color-primary)] transition-all rounded-none"
                     >
-                      🔗 VIEW ATTACHMENT / LINK
+                      <Link2 className="w-4 h-4" strokeWidth={2.5} /> VIEW ATTACHMENT / LINK
                     </a>
                   </div>
                 )}
@@ -429,7 +427,8 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
                         : "bg-white text-foreground hover:bg-muted"
                     }`}
                   >
-                    <span>{post.user_liked ? "👍 LIKED" : "👍 LIKE"}</span>
+                    <ThumbsUp className={`w-4 h-4 ${post.user_liked ? "fill-current" : ""}`} strokeWidth={2.5} />
+                    <span>{post.user_liked ? "LIKED" : "LIKE"}</span>
                     {likesCount > 0 && <span className="ml-2 px-2 py-0.5 bg-foreground text-background text-xs">{likesCount}</span>}
                   </button>
                 </div>

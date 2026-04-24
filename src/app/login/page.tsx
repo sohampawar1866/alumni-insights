@@ -3,6 +3,7 @@
 import { createClient } from '@/utils/supabase/client'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { ArrowLeft } from 'lucide-react'
 
 export default function LoginPage() {
   const supabase = createClient()
@@ -49,7 +50,7 @@ export default function LoginPage() {
         </Button>
         <div className="mt-6 text-center">
           <Link href="/" className="text-sm font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground hover:underline transition-all">
-            ← Back to Landing Page
+            <ArrowLeft className="w-4 h-4 inline-block mr-1" strokeWidth={2.5} /> Back to Landing Page
           </Link>
         </div>
       </div>

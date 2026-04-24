@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CheckCircle } from "lucide-react";
 
 export default function AlumniSettingsPage() {
   const supabase = createClient();
@@ -99,7 +100,7 @@ export default function AlumniSettingsPage() {
 
         {success && (
           <div className="border-4 border-foreground bg-primary text-foreground p-4 shadow-[4px_4px_0px_var(--color-foreground)]">
-            <p className="text-sm font-black uppercase tracking-widest">✅ Password updated successfully.</p>
+            <p className="text-sm font-black uppercase tracking-widest flex items-center gap-1.5"><CheckCircle className="w-4 h-4" strokeWidth={2.5} /> Password updated successfully.</p>
           </div>
         )}
 

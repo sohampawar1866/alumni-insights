@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { FeedbackButton } from "@/components/feedback-button";
+import { ArrowLeft, ArrowRight, MessageSquare, CheckCircle } from "lucide-react";
 
 export default async function MyRequestsPage() {
   const supabase = await createClient();
@@ -43,7 +44,7 @@ export default async function MyRequestsPage() {
           href="/dashboard" 
           className="inline-block text-sm font-black uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors group mb-6"
         >
-          <span className="inline-block transition-transform group-hover:-translate-x-1">←</span> BACK TO MISSION CONTROL
+          <ArrowLeft className="w-4 h-4 inline-block transition-transform group-hover:-translate-x-1" strokeWidth={2.5} /> BACK TO MISSION CONTROL
         </Link>
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
@@ -56,7 +57,7 @@ export default async function MyRequestsPage() {
             href="/search"
             className="flex-shrink-0 bg-[#fdc800] text-foreground text-sm font-black uppercase tracking-wider px-6 py-3 border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all hover:shadow-[2px_2px_0px_var(--color-foreground)] inline-flex items-center gap-2"
           >
-            DISCOVER TARGETS <span aria-hidden="true">&rarr;</span>
+            DISCOVER TARGETS <ArrowRight className="w-4 h-4 inline-block" strokeWidth={2.5} />
           </Link>
         </div>
       </div>
@@ -129,7 +130,7 @@ export default async function MyRequestsPage() {
                         href={`/dashboard/messages/${req.id}`}
                         className="bg-primary text-background text-sm font-black uppercase tracking-wider px-6 py-3 border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all hover:shadow-[2px_2px_0px_var(--color-foreground)] inline-flex items-center gap-2"
                       >
-                        <span className="text-xl">💬</span> ENTER SECURE CHAT
+                        <MessageSquare className="w-5 h-5" strokeWidth={2.5} /> ENTER SECURE CHAT
                       </Link>
                       {alumni.linkedin_url && (
                         <a
@@ -147,8 +148,8 @@ export default async function MyRequestsPage() {
                   {req.status === "completed" && alumni && (
                     <div className="pt-6 border-t-4 border-foreground border-dashed flex flex-wrap items-center justify-between gap-4">
                       <div className="bg-[#00ff66] border-4 border-foreground px-4 py-2 shadow-[2px_2px_0px_var(--color-foreground)]">
-                         <p className="text-sm font-black uppercase text-foreground tracking-wider">
-                           ✅ MISSION ACCOMPLISHED
+                         <p className="text-sm font-black uppercase text-foreground tracking-wider flex items-center gap-1.5">
+                           <CheckCircle className="w-4 h-4" strokeWidth={2.5} /> MISSION ACCOMPLISHED
                          </p>
                       </div>
                       <FeedbackButton

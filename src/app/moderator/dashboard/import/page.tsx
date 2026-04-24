@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { CheckCircle, AlertTriangle } from "lucide-react";
 
 type ImportResult = {
   success: { name: string; email: string; password: string }[];
@@ -197,7 +198,7 @@ export default function BulkImportPage() {
             <div className="border-4 border-foreground bg-primary p-6 shadow-[8px_8px_0px_#000] space-y-4">
               <div className="flex items-start justify-between sm:items-center flex-col sm:flex-row gap-4 border-b-4 border-foreground pb-4">
                 <h3 className="text-xl font-black uppercase tracking-tight text-foreground">
-                  ✅ {result.success.length} accounts created
+                  <CheckCircle className="w-5 h-5 inline-block mr-1" strokeWidth={2.5} /> {result.success.length} accounts created
                 </h3>
                 <Button
                   onClick={downloadCredentialCSV}
@@ -220,7 +221,7 @@ export default function BulkImportPage() {
           {result.errors.length > 0 && (
             <div className="border-4 border-foreground bg-destructive text-white p-6 shadow-[8px_8px_0px_#000] space-y-4">
               <h3 className="text-xl font-black uppercase tracking-tight pb-4 border-b-4 border-foreground">
-                ⚠️ {result.errors.length} rows failed
+                <AlertTriangle className="w-5 h-5 inline-block mr-1" strokeWidth={2.5} /> {result.errors.length} rows failed
               </h3>
               <div className="max-h-48 overflow-y-auto space-y-2 pr-2">
                 {result.errors.map((err, i) => (

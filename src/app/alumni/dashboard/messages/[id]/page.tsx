@@ -2,6 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { ChatThread } from "@/components/chat-thread";
+import { ArrowLeft } from "lucide-react";
 
 export default async function AlumniMessagePage({
   params,
@@ -51,7 +52,7 @@ export default async function AlumniMessagePage({
         href="/alumni/dashboard/requests"
         className="inline-flex items-center text-xs font-black uppercase tracking-widest text-background bg-foreground px-3 py-2 border-2 border-foreground hover:bg-primary hover:text-foreground transition-colors"
       >
-        ← Back to Requests
+        <ArrowLeft className="w-4 h-4 inline-block mr-1" strokeWidth={2.5} /> Back to Requests
       </Link>
       
       <ChatThread 

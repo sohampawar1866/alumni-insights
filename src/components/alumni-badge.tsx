@@ -1,43 +1,46 @@
 "use client";
 
+import { Gem, Award, Medal, Trophy, Sprout } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
 const tierConfig: Record<
   string,
-  { label: string; color: string; bg: string; border: string; icon: string }
+  { label: string; color: string; bg: string; border: string; Icon: LucideIcon }
 > = {
   Platinum: {
     label: "PLATINUM",
     color: "text-foreground",
     bg: "bg-[#00ffff]",
     border: "border-foreground",
-    icon: "💎",
+    Icon: Gem,
   },
   Gold: {
     label: "GOLD",
     color: "text-foreground",
     bg: "bg-[#fdc800]",
     border: "border-foreground",
-    icon: "🥇",
+    Icon: Trophy,
   },
   Silver: {
     label: "SILVER",
     color: "text-foreground",
     bg: "bg-[#e5e5e5]",
     border: "border-foreground",
-    icon: "🥈",
+    Icon: Award,
   },
   Bronze: {
     label: "BRONZE",
     color: "text-foreground",
     bg: "bg-[#ff9900]",
     border: "border-foreground",
-    icon: "🥉",
+    Icon: Medal,
   },
   New: {
     label: "NEWBIE",
     color: "text-foreground",
     bg: "bg-[#00ff66]",
     border: "border-foreground",
-    icon: "🌱",
+    Icon: Sprout,
   },
 };
 
@@ -59,13 +62,14 @@ export function AlumniBadge({
   compact = false,
 }: Props) {
   const config = tierConfig[tier] || tierConfig.New;
+  const { Icon } = config;
 
   if (compact) {
     return (
       <span
         className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black uppercase tracking-wider border-2 shadow-[2px_2px_0px_var(--color-foreground)] ${config.bg} ${config.color} ${config.border}`}
       >
-        <span className="text-sm">{config.icon}</span> {config.label}
+        <Icon className="w-4 h-4" strokeWidth={2.5} /> {config.label}
       </span>
     );
   }
@@ -75,7 +79,9 @@ export function AlumniBadge({
       className={`border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] bg-background p-6 space-y-4`}
     >
       <div className={`flex items-center gap-4 p-3 border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] ${config.bg}`}>
-        <span className="text-4xl bg-background rounded-full p-2 border-4 border-foreground">{config.icon}</span>
+        <span className="bg-background rounded-full p-2 border-4 border-foreground flex items-center justify-center">
+          <Icon className="w-8 h-8" strokeWidth={2.5} />
+        </span>
         <div>
           <p className={`text-xl font-black uppercase tracking-tighter ${config.color}`}>
             {config.label} OPERATIVE

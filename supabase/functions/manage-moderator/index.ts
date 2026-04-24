@@ -4,13 +4,24 @@
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-};
+const ALLOWED_ORIGINS = [
+  Deno.env.get("SITE_URL") || "",
+  "http://localhost:3000",
+].filter(Boolean);
+
+function getCorsHeaders(req: Request) {
+  const origin = req.headers.get("Origin") || "";
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type",
+  };
+}
 
 Deno.serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
+
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -74,24 +85,18 @@ Deno.serve(async (req) => {
         );
       }
 
-      // Check if user already exists
-      const { data: existingUsers } = await supabaseAdmin.auth.admin.listUsers();
-      const existingUser = existingUsers?.users?.find(
-        (u) => u.email?.toLowerCase() === email.toLowerCase()
-      );
+      // --- OPTIMIZED: Look up user by email in profiles table instead of listUsers() ---
+      const { data: existingProfile } = await supabaseAdmin
+        .from("profiles")
+        .select("id, roles, full_name")
+        .eq("email", email.toLowerCase())
+        .single();
 
       let userId: string;
 
-      if (existingUser) {
-        userId = existingUser.id;
-
-        const { data: existingProfile } = await supabaseAdmin
-          .from("profiles")
-          .select("roles, full_name")
-          .eq("id", userId)
-          .single();
-
-        const currentRoles: string[] = existingProfile?.roles || [];
+      if (existingProfile) {
+        userId = existingProfile.id;
+        const currentRoles: string[] = existingProfile.roles || [];
 
         if (currentRoles.includes("moderator")) {
           return new Response(
@@ -105,7 +110,7 @@ Deno.serve(async (req) => {
           .from("profiles")
           .update({
             roles: [...currentRoles, "moderator"],
-            full_name: full_name || existingProfile?.full_name,
+            full_name: full_name || existingProfile.full_name,
           })
           .eq("id", userId);
 
@@ -121,6 +126,12 @@ Deno.serve(async (req) => {
           });
 
         if (createError || !newUser?.user) {
+          if (createError?.message?.includes("already been registered")) {
+            return new Response(
+              JSON.stringify({ error: "A user with this email exists in auth but has no profile. Contact admin." }),
+              { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            );
+          }
           return new Response(
             JSON.stringify({ error: createError?.message || "Failed to create user." }),
             { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }

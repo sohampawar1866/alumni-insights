@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Search, Handshake, Rocket } from "lucide-react";
 
 export default function LandingPage() {
   return (
@@ -51,7 +52,7 @@ export default function LandingPage() {
           <div className="grid sm:grid-cols-3 gap-8">
             <div className="group text-center space-y-4 p-8 bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] transition-all hover:-translate-y-2 hover:-translate-x-2 hover:shadow-[16px_16px_0px_var(--color-foreground)]">
               <div className="mx-auto flex h-20 w-20 items-center justify-center bg-[#fdc800] border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] text-4xl group-hover:scale-110 transition-transform -rotate-3">
-                🔍
+                <Search className="w-10 h-10 text-foreground" strokeWidth={2.5} />
               </div>
               <h3 className="text-xl font-black uppercase tracking-tight text-foreground bg-accent inline-block px-2">Search Alumni</h3>
               <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground leading-relaxed mt-2">
@@ -61,7 +62,7 @@ export default function LandingPage() {
             
             <div className="group text-center space-y-4 p-8 bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] transition-all hover:-translate-y-2 hover:-translate-x-2 hover:shadow-[16px_16px_0px_var(--color-foreground)]">
               <div className="mx-auto flex h-20 w-20 items-center justify-center bg-primary border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] text-4xl group-hover:scale-110 transition-transform rotate-3">
-                🤝
+                <Handshake className="w-10 h-10 text-foreground" strokeWidth={2.5} />
               </div>
               <h3 className="text-xl font-black uppercase tracking-tight text-foreground bg-accent inline-block px-2">Connect</h3>
               <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground leading-relaxed mt-2">
@@ -71,7 +72,7 @@ export default function LandingPage() {
             
             <div className="group text-center space-y-4 p-8 bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] transition-all hover:-translate-y-2 hover:-translate-x-2 hover:shadow-[16px_16px_0px_var(--color-foreground)]">
               <div className="mx-auto flex h-20 w-20 items-center justify-center bg-[#00e559] border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] text-4xl group-hover:scale-110 transition-transform -rotate-3">
-                🚀
+                <Rocket className="w-10 h-10 text-foreground" strokeWidth={2.5} />
               </div>
               <h3 className="text-xl font-black uppercase tracking-tight text-foreground bg-accent inline-block px-2">Grow</h3>
               <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground leading-relaxed mt-2">

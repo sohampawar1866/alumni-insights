@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
+import { ArrowRight } from "lucide-react";
 
 export default async function StudentDashboard() {
   const supabase = await createClient();
@@ -54,7 +55,7 @@ export default async function StudentDashboard() {
             href="/search"
             className="inline-flex items-center justify-center bg-primary text-foreground border-2 border-foreground font-black uppercase tracking-widest px-8 py-4 text-lg shadow-[4px_4px_0px_var(--color-foreground)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
           >
-            Find Alumni →
+            Find Alumni <ArrowRight className="w-5 h-5 inline-block" strokeWidth={2.5} />
           </Link>
         </div>
       </div>
@@ -115,7 +116,7 @@ export default async function StudentDashboard() {
               Check the announcements page for upcoming AMAs and placement talks by alumni.
             </p>
             <Link href="/announcements" className="mt-6 inline-block text-sm font-black uppercase text-secondary-foreground border-b-2 border-foreground hover:bg-secondary transition-colors">
-              View All →
+              View All <ArrowRight className="w-4 h-4 inline-block" strokeWidth={2.5} />
             </Link>
           </div>
 

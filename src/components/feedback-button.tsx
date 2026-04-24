@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { FeedbackModal } from "@/components/feedback-modal";
+import { CheckCircle, Star } from "lucide-react";
 
 type Props = {
   requestId: string;
@@ -21,8 +22,8 @@ export function FeedbackButton({
 
   if (submitted) {
     return (
-      <span className="inline-flex items-center gap-1 text-sm text-emerald-600 font-medium">
-        ✅ Feedback submitted
+      <span className="inline-flex items-center gap-1.5 text-sm text-emerald-600 font-medium">
+        <CheckCircle className="w-4 h-4" strokeWidth={2.5} /> Feedback submitted
       </span>
     );
   }
@@ -31,9 +32,9 @@ export function FeedbackButton({
     <>
       <button
         onClick={() => setShowModal(true)}
-        className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
       >
-        ⭐ Leave Feedback
+        <Star className="w-4 h-4" strokeWidth={2.5} /> Leave Feedback
       </button>
       {showModal && (
         <FeedbackModal

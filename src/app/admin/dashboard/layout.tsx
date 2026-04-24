@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { Users, Menu } from "lucide-react";
 
 export default async function AdminLayout({
   children,
@@ -32,7 +33,7 @@ export default async function AdminLayout({
             <p className="mt-1 text-xs font-bold uppercase tracking-wider text-foreground">Platform Administration</p>
           </div>
           <label htmlFor="admin-menu" className="md:hidden p-2 border-2 border-foreground bg-white shadow-[2px_2px_0px_#000] cursor-pointer hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#000] transition-all">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="peer-checked:hidden"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            <Menu className="w-6 h-6" strokeWidth={3} />
           </label>
         </div>
 
@@ -42,7 +43,7 @@ export default async function AdminLayout({
               href="/admin/dashboard"
               className="flex items-center gap-3 px-4 py-3 text-sm font-black uppercase tracking-wider border-2 border-transparent hover:border-foreground hover:bg-accent/20 hover:shadow-[4px_4px_0px_#000] transition-all"
             >
-              <span className="text-lg">👥</span>
+              <Users className="w-5 h-5" strokeWidth={2.5} />
               Manage Moderators
             </Link>
           </nav>

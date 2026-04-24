@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ConnectSection } from "./connect-section";
 import { AlumniBadge } from "@/components/alumni-badge";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 
 export default async function AlumniProfilePage({
   params,
@@ -49,7 +50,7 @@ export default async function AlumniProfilePage({
         href="/dashboard/search"
         className="inline-flex items-center text-sm font-black uppercase text-foreground bg-primary border-2 border-foreground px-4 py-2 hover:shadow-[4px_4px_0px_var(--color-foreground)] hover:-translate-y-1 transition-all"
       >
-        ← BACK TO SEARCH
+        <ArrowLeft className="w-4 h-4 inline-block mr-1" strokeWidth={2.5} /> BACK TO SEARCH
       </Link>
 
       {/* Profile Header */}
@@ -178,7 +179,7 @@ export default async function AlumniProfilePage({
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 text-sm font-black uppercase text-background bg-[#0A66C2] border-2 border-foreground px-6 py-3 shadow-[4px_4px_0px_var(--color-foreground)] hover:shadow-[2px_2px_0px_var(--color-foreground)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
         >
-           LINKEDIN PROFILE →
+           LINKEDIN PROFILE <ExternalLink className="w-4 h-4 inline-block" strokeWidth={2.5} />
         </a>
       )}
 

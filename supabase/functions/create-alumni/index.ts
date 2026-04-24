@@ -4,13 +4,24 @@
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-};
+const ALLOWED_ORIGINS = [
+  Deno.env.get("SITE_URL") || "",
+  "http://localhost:3000",
+].filter(Boolean);
+
+function getCorsHeaders(req: Request) {
+  const origin = req.headers.get("Origin") || "";
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type",
+  };
+}
 
 Deno.serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
+
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -66,25 +77,20 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Check if a user with this email already exists in auth.users
-    const { data: existingUsers } = await supabaseAdmin.auth.admin.listUsers();
-    const existingUser = existingUsers?.users?.find(
-      (u) => u.email?.toLowerCase() === email.toLowerCase()
-    );
+    // --- OPTIMIZED: Look up user by email directly instead of listing all users ---
+    // First check the profiles table (covers existing users with profiles)
+    const { data: existingProfile } = await supabaseAdmin
+      .from("profiles")
+      .select("id, roles, full_name, branch, graduation_year")
+      .eq("email", email.toLowerCase())
+      .single();
 
     let userId: string;
 
-    if (existingUser) {
-      // User already exists in auth — just add the alumni role to their profile
-      userId = existingUser.id;
-
-      const { data: existingProfile } = await supabaseAdmin
-        .from("profiles")
-        .select("roles, full_name, branch, graduation_year")
-        .eq("id", userId)
-        .single();
-
-      const currentRoles: string[] = existingProfile?.roles || [];
+    if (existingProfile) {
+      // User already exists with a profile
+      userId = existingProfile.id;
+      const currentRoles: string[] = existingProfile.roles || [];
 
       if (currentRoles.includes("alumni")) {
         return new Response(
@@ -93,18 +99,18 @@ Deno.serve(async (req) => {
         );
       }
 
-      // Append the alumni role and update profile fields (don't overwrite existing values with empty ones)
+      // Append the alumni role and update profile fields
       await supabaseAdmin
         .from("profiles")
         .update({
           roles: [...currentRoles, "alumni"],
-          full_name: full_name || existingProfile?.full_name,
-          branch: branch || existingProfile?.branch || null,
-          graduation_year: graduation_year || existingProfile?.graduation_year || null,
+          full_name: full_name || existingProfile.full_name,
+          branch: branch || existingProfile.branch || null,
+          graduation_year: graduation_year || existingProfile.graduation_year || null,
         })
         .eq("id", userId);
     } else {
-      // Create new auth user
+      // No existing profile - create new auth user
       const { data: newUser, error: createError } =
         await supabaseAdmin.auth.admin.createUser({
           email,
@@ -113,6 +119,13 @@ Deno.serve(async (req) => {
         });
 
       if (createError || !newUser?.user) {
+        // Check if it's a duplicate email error (user exists in auth but no profile)
+        if (createError?.message?.includes("already been registered")) {
+          return new Response(
+            JSON.stringify({ error: "A user with this email already exists in auth. Contact admin." }),
+            { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
         return new Response(
           JSON.stringify({
             error: createError?.message || "Failed to create auth user.",

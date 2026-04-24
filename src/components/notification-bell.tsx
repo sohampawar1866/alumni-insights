@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import Link from "next/link";
+import { Bell } from "lucide-react";
 
 type Notification = {
   id: string;
@@ -22,8 +23,6 @@ export function NotificationBell() {
 
   const unreadCount = notifications.filter((n) => !n.is_read).length;
 
-
-
   // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -35,7 +34,7 @@ export function NotificationBell() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const fetchNotifications = async () => {
+  const fetchNotifications = useCallback(async () => {
     const { data } = await supabase
       .from("notifications")
       .select("*")
@@ -43,15 +42,16 @@ export function NotificationBell() {
       .limit(20);
 
     if (data) setNotifications(data);
-  };
+  }, [supabase]);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchNotifications();
 
-    // Real-time subscription
+    // Real-time subscription — use a unique channel name to avoid conflicts
+    // and subscribe BEFORE adding listeners to prevent the
+    // "cannot add postgres_changes callbacks after subscribe()" error.
     const channel = supabase
-      .channel("notifications")
+      .channel("notif_realtime_" + Math.random().toString(36).slice(2, 8))
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "notifications" },
@@ -59,13 +59,20 @@ export function NotificationBell() {
           setNotifications((prev) => [payload.new as Notification, ...prev]);
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        if (status === "CHANNEL_ERROR") {
+          console.warn("Notification channel error — polling fallback active.");
+        }
+      });
+
+    // Polling fallback every 30 seconds in case realtime is unavailable
+    const pollInterval = setInterval(fetchNotifications, 30000);
 
     return () => {
+      clearInterval(pollInterval);
       supabase.removeChannel(channel);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [supabase, fetchNotifications]);
 
 
   const markAllRead = async () => {
@@ -81,7 +88,6 @@ export function NotificationBell() {
   };
 
   const formatTime = (dateStr: string) => {
-    // eslint-disable-next-line react-hooks/purity
     const diff = Date.now() - new Date(dateStr).getTime();
     const mins = Math.floor(diff / 60000);
     if (mins < 1) return "now";
@@ -99,19 +105,7 @@ export function NotificationBell() {
         className="relative p-2 border-2 border-foreground bg-background shadow-[2px_2px_0px_var(--color-foreground)] transition-transform hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_var(--color-foreground)] focus:outline-none"
         aria-label="Notifications"
       >
-        <svg
-          className="w-5 h-5 text-foreground"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={3}
-            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-          />
-        </svg>
+        <Bell className="w-5 h-5 text-foreground" strokeWidth={3} />
         {unreadCount > 0 && (
           <span className="absolute -top-1.5 -right-1.5 h-5 w-5 border-2 border-foreground bg-[#ff3366] text-background text-[10px] font-black flex items-center justify-center">
             {unreadCount > 9 ? "9+" : unreadCount}

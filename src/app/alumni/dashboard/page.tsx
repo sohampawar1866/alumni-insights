@@ -5,6 +5,7 @@ import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AlumniBadge } from "@/components/alumni-badge";
+import { Check } from "lucide-react";
 
 const MENTORSHIP_SUGGESTIONS = [
   "Resume Review",
@@ -324,7 +325,7 @@ export default function AlumniDashboardPage() {
           </Button>
           {saved && (
             <span className="text-sm font-black uppercase tracking-widest text-primary bg-primary/10 border-2 border-primary px-4 py-2 mt-1 -rotate-2">
-              ✓ CHANGES SAVED
+              <Check className="w-4 h-4 inline-block mr-1" strokeWidth={3} /> CHANGES SAVED
             </span>
           )}
         </div>

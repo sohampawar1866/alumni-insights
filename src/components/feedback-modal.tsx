@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Star } from "lucide-react";
 
 type Props = {
   requestId: string;
@@ -86,9 +87,16 @@ export function FeedbackModal({
                   onClick={() => setRating(star)}
                   onMouseEnter={() => setHoveredRating(star)}
                   onMouseLeave={() => setHoveredRating(0)}
-                  className="text-4xl transition-transform hover:-translate-y-1 hover:scale-110 focus:outline-none drop-shadow-[2px_2px_0px_var(--color-foreground)] grayscale-[0.5] hover:grayscale-0"
+                  className="transition-transform hover:-translate-y-1 hover:scale-110 focus:outline-none"
                 >
-                  {star <= (hoveredRating || rating) ? "⭐" : "☆"}
+                  <Star
+                    className={`w-9 h-9 transition-colors ${
+                      star <= (hoveredRating || rating)
+                        ? "fill-[#fdc800] text-foreground"
+                        : "fill-none text-foreground/30"
+                    }`}
+                    strokeWidth={2.5}
+                  />
                 </button>
               ))}
             </div>

@@ -1,6 +1,8 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { UserPlus, FolderUp, FileText, ClipboardList, BarChart3, Megaphone, Menu } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 export default async function ModeratorLayout({
   children,
@@ -34,18 +36,18 @@ export default async function ModeratorLayout({
             </p>
           </div>
           <label htmlFor="mod-menu" className="md:hidden shrink-0 ml-4 p-2 border-2 border-foreground bg-white shadow-[2px_2px_0px_#000] cursor-pointer hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#000] transition-all">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="peer-checked:hidden"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            <Menu className="w-6 h-6" strokeWidth={3} />
           </label>
         </div>
 
         <div className="hidden peer-checked:flex md:flex flex-col flex-1">
           <nav className="flex-1 space-y-2 p-4">
-            <SidebarLink href="/moderator/dashboard" label="Add Alumni" icon="👤" />
-            <SidebarLink href="/moderator/dashboard/import" label="Bulk Import" icon="📁" />
-            <SidebarLink href="/moderator/dashboard/applications" label="Applications" icon="📝" />
-            <SidebarLink href="/moderator/dashboard/audit" label="Audit Log" icon="📋" />
-            <SidebarLink href="/moderator/dashboard/analytics" label="Analytics" icon="📊" />
-            <SidebarLink href="/moderator/dashboard/announcements" label="Outreach" icon="📢" />
+            <SidebarLink href="/moderator/dashboard" label="Add Alumni" Icon={UserPlus} />
+            <SidebarLink href="/moderator/dashboard/import" label="Bulk Import" Icon={FolderUp} />
+            <SidebarLink href="/moderator/dashboard/applications" label="Applications" Icon={FileText} />
+            <SidebarLink href="/moderator/dashboard/audit" label="Audit Log" Icon={ClipboardList} />
+            <SidebarLink href="/moderator/dashboard/analytics" label="Analytics" Icon={BarChart3} />
+            <SidebarLink href="/moderator/dashboard/announcements" label="Outreach" Icon={Megaphone} />
           </nav>
 
           <div className="border-t-4 border-foreground p-4 bg-muted">
@@ -74,18 +76,18 @@ export default async function ModeratorLayout({
 function SidebarLink({
   href,
   label,
-  icon,
+  Icon,
 }: {
   href: string;
   label: string;
-  icon: string;
+  Icon: LucideIcon;
 }) {
   return (
     <Link
       href={href}
       className="flex items-center gap-3 px-4 py-3 text-sm font-black uppercase tracking-wider border-2 border-transparent hover:border-foreground hover:bg-primary/20 hover:shadow-[4px_4px_0px_#000] transition-all"
     >
-      <span className="text-lg">{icon}</span>
+      <Icon className="w-5 h-5" strokeWidth={2.5} />
       {label}
     </Link>
   );
