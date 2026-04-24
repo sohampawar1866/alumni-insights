@@ -54,7 +54,7 @@ Deno.serve(async (req: Request) => {
 
     if (!profile || (!profile.roles?.includes("student") && !profile.roles?.includes("alumni"))) {
       return new Response(JSON.stringify({ error: "Only students and alumni can send connection requests" }), {
-        status: 403,
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -63,7 +63,14 @@ Deno.serve(async (req: Request) => {
 
     if (!alumni_id || !message) {
       return new Response(JSON.stringify({ error: "Missing alumni_id or message" }), {
-        status: 400,
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (student.id === alumni_id) {
+      return new Response(JSON.stringify({ error: "You cannot connect with yourself" }), {
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -86,7 +93,7 @@ Deno.serve(async (req: Request) => {
 
     if (requestsSentThisWeek && requestsSentThisWeek >= weeklyLimit) {
       return new Response(JSON.stringify({ error: "Weekly request limit reached. Please try again next week." }), {
-        status: 429,
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -100,14 +107,14 @@ Deno.serve(async (req: Request) => {
 
     if (!alumniProfile || !alumniProfile.roles?.includes("alumni")) {
       return new Response(JSON.stringify({ error: "Target user is not an alumni" }), {
-        status: 400,
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     if (!alumniProfile.mentorship_available) {
       return new Response(JSON.stringify({ error: "This alumni is not currently open to mentorship requests" }), {
-        status: 400,
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -122,7 +129,7 @@ Deno.serve(async (req: Request) => {
 
     if (existingRequests && existingRequests.length > 0) {
       return new Response(JSON.stringify({ error: "You already have an active or pending request with this alumni" }), {
-        status: 400,
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -139,7 +146,7 @@ Deno.serve(async (req: Request) => {
 
     if (insertError) {
       return new Response(JSON.stringify({ error: insertError.message }), {
-        status: 400,
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
