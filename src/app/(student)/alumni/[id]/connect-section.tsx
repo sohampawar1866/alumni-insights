@@ -16,11 +16,11 @@ export function ConnectSection({
 
   if (success) {
     return (
-      <div className="rounded-xl border-2 border-emerald-200 bg-emerald-50 p-4 inline-block">
-        <p className="text-sm font-medium text-emerald-800">
+      <div className="inline-block border-4 border-foreground bg-primary p-4 shadow-[4px_4px_0px_var(--color-foreground)]">
+        <p className="text-sm font-black uppercase tracking-wider text-foreground">
           ✅ Request sent successfully!
         </p>
-        <p className="text-xs text-emerald-600 mt-1">
+        <p className="text-xs font-bold uppercase tracking-wider text-foreground mt-1">
           You can track the status in your dashboard.
         </p>
       </div>

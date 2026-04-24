@@ -46,24 +46,24 @@ export default function AlumniSettingsPage() {
   };
 
   return (
-    <div className="max-w-lg mx-auto px-6 py-10 space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Settings</h1>
-        <p className="text-sm text-slate-500 mt-1">
+    <div className="max-w-2xl mx-auto px-6 py-10 space-y-8">
+      <div className="border-l-8 border-primary pl-4">
+        <h1 className="text-4xl font-black uppercase tracking-tighter text-foreground">Settings</h1>
+        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground mt-2">
           Update your account password.
         </p>
       </div>
 
       <form
         onSubmit={handleChangePassword}
-        className="space-y-4 rounded-2xl border border-blue-100/80 bg-white p-6 shadow-sm"
+        className="space-y-6 border-4 border-foreground bg-white p-8 shadow-[8px_8px_0px_var(--color-foreground)]"
       >
-        <h2 className="text-sm font-semibold text-slate-700">
+        <h2 className="text-sm font-black uppercase tracking-wider text-foreground border-b-4 border-foreground pb-3">
           Change Password
         </h2>
 
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-slate-500">
+        <div className="space-y-2">
+          <label className="text-xs font-black uppercase tracking-wider text-foreground">
             New Password
           </label>
           <Input
@@ -73,11 +73,12 @@ export default function AlumniSettingsPage() {
             placeholder="At least 8 characters"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
+            className="border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] rounded-none focus-visible:ring-0 focus-visible:border-primary text-base font-bold h-12"
           />
         </div>
 
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-slate-500">
+        <div className="space-y-2">
+          <label className="text-xs font-black uppercase tracking-wider text-foreground">
             Confirm New Password
           </label>
           <Input
@@ -86,24 +87,31 @@ export default function AlumniSettingsPage() {
             placeholder="Re-enter password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            className="border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] rounded-none focus-visible:ring-0 focus-visible:border-primary text-base font-bold h-12"
           />
         </div>
 
         {error && (
-          <p className="text-sm text-red-600 bg-red-50 rounded-lg p-3">
-            {error}
-          </p>
+          <div className="border-4 border-foreground bg-destructive text-background p-4 shadow-[4px_4px_0px_var(--color-foreground)]">
+            <p className="text-sm font-black uppercase tracking-widest">{error}</p>
+          </div>
         )}
 
         {success && (
-          <p className="text-sm text-emerald-700 bg-emerald-50 rounded-lg p-3">
-            ✅ Password updated successfully.
-          </p>
+          <div className="border-4 border-foreground bg-primary text-foreground p-4 shadow-[4px_4px_0px_var(--color-foreground)]">
+            <p className="text-sm font-black uppercase tracking-widest">✅ Password updated successfully.</p>
+          </div>
         )}
 
-        <Button type="submit" disabled={loading}>
-          {loading ? "Updating..." : "Update Password"}
-        </Button>
+        <div className="pt-2">
+          <Button
+            type="submit"
+            disabled={loading}
+            className="h-14 px-10 bg-secondary text-foreground border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] text-lg font-black uppercase tracking-widest hover:-translate-y-1 hover:translate-x-1 hover:shadow-[12px_12px_0px_var(--color-foreground)] transition-all rounded-none"
+          >
+            {loading ? "UPDATING..." : "UPDATE PASSWORD"}
+          </Button>
+        </div>
       </form>
     </div>
   );

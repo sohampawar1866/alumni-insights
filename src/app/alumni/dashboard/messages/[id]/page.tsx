@@ -30,12 +30,14 @@ export default async function AlumniMessagePage({
   // Optionally, we could allow chat even if it's "completed", but usually chat happens when "accepted".
   if (request.status !== "accepted" && request.status !== "completed") {
     return (
-      <div className="max-w-4xl mx-auto px-6 py-20 text-center space-y-4">
-        <h1 className="text-2xl font-bold text-slate-900">Chat Unavailable</h1>
-        <p className="text-slate-500">You can only chat on accepted or completed requests.</p>
-        <Link href="/alumni/dashboard/requests" className="text-blue-600 hover:underline">
-          Return to Incoming Requests
-        </Link>
+      <div className="max-w-4xl mx-auto px-6 py-20 text-center space-y-6">
+        <div className="inline-block border-4 border-foreground bg-white p-8 shadow-[8px_8px_0px_var(--color-foreground)]">
+          <h1 className="text-3xl font-black uppercase tracking-wider text-foreground">Chat Unavailable</h1>
+          <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground mt-3">You can only chat on accepted or completed requests.</p>
+          <Link href="/alumni/dashboard/requests" className="inline-block mt-5 text-xs font-black uppercase tracking-widest text-background bg-foreground px-4 py-2 border-2 border-foreground hover:bg-primary hover:text-foreground transition-colors">
+            Return to Incoming Requests
+          </Link>
+        </div>
       </div>
     );
   }
@@ -47,7 +49,7 @@ export default async function AlumniMessagePage({
     <div className="max-w-4xl mx-auto px-6 py-10 space-y-6">
       <Link
         href="/alumni/dashboard/requests"
-        className="inline-flex items-center text-sm text-slate-500 hover:text-slate-700 transition-colors"
+        className="inline-flex items-center text-xs font-black uppercase tracking-widest text-background bg-foreground px-3 py-2 border-2 border-foreground hover:bg-primary hover:text-foreground transition-colors"
       >
         ← Back to Requests
       </Link>

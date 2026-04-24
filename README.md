@@ -57,7 +57,7 @@ src/
 │   ├── notification-bell.tsx # Real-time notification dropdown
 │   ├── feedback-modal.tsx    # Session rating modal
 │   └── announcements-board.tsx # Community announcements
-├── middleware.ts        # Auth guards & role-based routing
+├── proxy.ts             # Auth guards & role-based routing
 ├── utils/supabase/      # Supabase client helpers (server + client)
 └── lib/utils.ts         # Utility functions
 ```
@@ -68,3 +68,5 @@ src/
 |----------|-------------|
 | `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous/public key |
+| `STUDENT_WEEKLY_REQUEST_LIMIT` | Per-student weekly request cap |
+| `NEXT_PUBLIC_CURRENT_ACADEMIC_YEAR` | Active academic year used in eligibility checks |

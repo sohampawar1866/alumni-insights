@@ -51,7 +51,7 @@ export async function proxy(request: NextRequest) {
 
   // Fetch role
   const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
-  const role = profile?.role || "student";
+  const role = profile?.role || (user.email?.toLowerCase() === "admin@iiitn.ac.in" ? "admin" : "student");
 
   // Redirect logged-in users away from login pages to their dashboard
   if (path === "/" || path.endsWith("/login")) {

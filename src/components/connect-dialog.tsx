@@ -48,7 +48,7 @@ export function ConnectDialog({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/80 backdrop-blur-sm p-4">
       <div className="w-full max-w-md bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)]">
         <div className="p-6 border-b-4 border-foreground bg-primary">
           <h2 className="text-2xl font-black uppercase tracking-tighter text-background">
@@ -95,7 +95,7 @@ export function ConnectDialog({
           </div>
 
           {error && (
-            <div className="bg-[#ff3366] border-2 border-foreground p-3 shadow-[4px_4px_0px_var(--color-foreground)]">
+            <div className="bg-destructive border-2 border-foreground p-3 shadow-[4px_4px_0px_var(--color-foreground)]">
               <p className="text-sm font-black text-background uppercase">
                 ERROR: {error}
               </p>
