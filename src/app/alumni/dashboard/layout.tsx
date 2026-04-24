@@ -27,12 +27,12 @@ export default async function AlumniLayout({
   if (!profile?.roles?.includes("alumni")) redirect("/unauthorized");
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-background font-sans relative overflow-hidden">
+    <div className="flex flex-col md:flex-row h-[100dvh] bg-background font-sans relative overflow-hidden">
       {/* Decorative Grid Background */}
       <div className="absolute inset-0 pointer-events-none opacity-20 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
 
       {/* Sidebar */}
-      <aside className="w-full md:w-72 shrink-0 flex flex-col bg-white border-b-8 md:border-b-0 md:border-r-8 border-foreground relative z-20 shadow-[8px_0px_0px_var(--color-foreground)]">
+      <aside className="w-full md:w-72 shrink-0 flex flex-col bg-white border-b-8 md:border-b-0 md:border-r-8 border-foreground relative z-20 shadow-[8px_0px_0px_var(--color-foreground)] md:overflow-y-auto">
         <input type="checkbox" id="alumni-menu" className="peer hidden" />
         <div className="p-6 border-b-4 border-foreground bg-primary text-background flex items-center justify-between">
           <div className="min-w-0 pr-4">

@@ -17,6 +17,16 @@ export const metadata: Metadata = {
   title: "Alumni Insights — IIIT Nagpur",
   description:
     "Discover and connect with IIIT Nagpur alumni for career guidance, mentorship, and networking.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Alumni Insights",
+  },
+};
+
+export const viewport = {
+  themeColor: "#000000",
 };
 
 export default function RootLayout({

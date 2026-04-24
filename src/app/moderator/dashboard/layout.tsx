@@ -25,8 +25,8 @@ export default async function ModeratorLayout({
   if (!profile?.roles?.includes("moderator")) redirect("/unauthorized");
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-background">
-      <aside className="w-full md:w-72 shrink-0 flex flex-col border-b-4 md:border-b-0 md:border-r-4 border-foreground bg-white">
+    <div className="flex flex-col md:flex-row h-[100dvh] bg-background">
+      <aside className="w-full md:w-72 shrink-0 flex flex-col border-b-4 md:border-b-0 md:border-r-4 border-foreground bg-white md:overflow-y-auto">
         <input type="checkbox" id="mod-menu" className="peer hidden" />
         <div className="border-b-4 border-foreground p-6 bg-secondary flex justify-between items-center">
           <div className="min-w-0">

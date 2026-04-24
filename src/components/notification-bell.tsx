@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { createClient } from "@/utils/supabase/client";
 import Link from "next/link";
 import { Bell } from "lucide-react";
@@ -20,13 +21,17 @@ export function NotificationBell() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const unreadCount = notifications.filter((n) => !n.is_read).length;
 
   // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
+      if (
+        ref.current && !ref.current.contains(e.target as Node) &&
+        (!dropdownRef.current || !dropdownRef.current.contains(e.target as Node))
+      ) {
         setOpen(false);
       }
     }
@@ -115,9 +120,16 @@ export function NotificationBell() {
         )}
       </button>
 
-      {open && (
-        <div className="absolute right-0 z-50 mt-4 max-h-96 w-[calc(100vw-2rem)] max-w-sm sm:w-80 bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] overflow-auto">
-          <div className="flex items-center justify-between px-4 py-3 border-b-4 border-foreground bg-[#fdc800]">
+      {open && typeof document !== "undefined" && createPortal(
+        <div 
+          ref={dropdownRef}
+          className="fixed z-[9999] max-h-96 w-[calc(100vw-2rem)] max-w-sm sm:w-80 bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] flex flex-col overflow-hidden"
+          style={{ 
+            top: ref.current ? ref.current.getBoundingClientRect().bottom + 8 : 0, 
+            right: ref.current ? window.innerWidth - ref.current.getBoundingClientRect().right : 16 
+          }}
+        >
+          <div className="flex items-center justify-between px-4 py-3 border-b-4 border-foreground bg-[#fdc800] shrink-0">
             <h3 className="text-sm font-black uppercase tracking-wider text-foreground">UPDATES</h3>
             {unreadCount > 0 && (
               <button
@@ -134,7 +146,7 @@ export function NotificationBell() {
               SILENCE. GO BUILD SOMETHING.
             </div>
           ) : (
-            <div className="divide-y-2 divide-foreground bg-background">
+            <div className="divide-y-2 divide-foreground bg-background overflow-y-auto flex-1">
               {notifications.map((n) => {
                 const inner = (
                   <div
@@ -168,7 +180,8 @@ export function NotificationBell() {
               })}
             </div>
           )}
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

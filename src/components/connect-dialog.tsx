@@ -61,23 +61,26 @@ export function ConnectDialog({
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6 bg-background">
           <div className="space-y-4">
-            <div className="flex flex-wrap gap-2">
-              {TEMPLATES.map((t, i) => {
-                const label = t.split(":")[0];
-                return (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => setMessage(t.split(": ")[1])}
-                    className="text-xs font-black uppercase tracking-wider px-3 py-1 bg-muted border-2 border-foreground hover:bg-secondary hover:-translate-y-0.5 hover:shadow-[2px_2px_0px_var(--color-foreground)] transition-all"
-                  >
-                    {label}
-                  </button>
-                );
-              })}
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">QUICK TEMPLATES (OPTIONAL)</label>
+              <div className="flex flex-wrap gap-2">
+                {TEMPLATES.map((t, i) => {
+                  const label = t.split(":")[0];
+                  return (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setMessage(t.split(": ")[1])}
+                      className="text-xs font-black uppercase tracking-wider px-3 py-1 bg-muted border-2 border-foreground hover:bg-secondary hover:-translate-y-0.5 hover:shadow-[2px_2px_0px_var(--color-foreground)] transition-all"
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-black uppercase tracking-wide text-foreground">PITCH / MESSAGE</label>
+              <label className="text-sm font-black uppercase tracking-wide text-foreground">PITCH / CUSTOM MESSAGE</label>
               <textarea
                 required
                 maxLength={200}
