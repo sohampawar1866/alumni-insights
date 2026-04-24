@@ -31,7 +31,7 @@ export default function LandingPage() {
               href="/login"
               className="group inline-flex h-14 items-center justify-center bg-primary border-4 border-foreground px-8 text-sm font-black uppercase tracking-widest text-background shadow-[8px_8px_0px_var(--color-foreground)] transition-all hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[12px_12px_0px_var(--color-foreground)]"
             >
-              Sign In with Google
+              Student Login
             </Link>
             <Link
               href="/alumni/login"
