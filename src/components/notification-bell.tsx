@@ -124,10 +124,17 @@ export function NotificationBell() {
         <div 
           ref={dropdownRef}
           className="fixed z-[9999] max-h-96 w-[calc(100vw-2rem)] max-w-sm sm:w-80 bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] flex flex-col overflow-hidden"
-          style={{ 
-            top: ref.current ? ref.current.getBoundingClientRect().bottom + 8 : 0, 
-            right: ref.current ? window.innerWidth - ref.current.getBoundingClientRect().right : 16 
-          }}
+          style={(() => {
+            if (!ref.current) return { top: 0, left: 16 };
+            const rect = ref.current.getBoundingClientRect();
+            const isLeftHalf = rect.left < window.innerWidth / 2;
+            return {
+              top: rect.bottom + 8,
+              ...(isLeftHalf
+                ? { left: Math.max(8, rect.left) }
+                : { right: Math.max(8, window.innerWidth - rect.right) }),
+            };
+          })()}
         >
           <div className="flex items-center justify-between px-4 py-3 border-b-4 border-foreground bg-[#fdc800] shrink-0">
             <h3 className="text-sm font-black uppercase tracking-wider text-foreground">UPDATES</h3>
