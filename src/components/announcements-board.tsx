@@ -108,6 +108,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
   }, [supabase, currentUserId, currentUserRole]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchAnnouncements();
   }, [fetchAnnouncements]);
 

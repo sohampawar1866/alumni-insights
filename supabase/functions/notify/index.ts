@@ -12,11 +12,7 @@ Deno.serve(async (req: Request) => {
 
     // Handle connection request status changes
     if (type === "UPDATE" && record?.status && old_record?.status !== record.status) {
-      const { data: student } = await supabase
-        .from("profiles")
-        .select("full_name")
-        .eq("id", record.student_id)
-        .single();
+
 
       const { data: alumni } = await supabase
         .from("profiles")
@@ -24,7 +20,6 @@ Deno.serve(async (req: Request) => {
         .eq("id", record.alumni_id)
         .single();
 
-      const studentName = student?.full_name || "A student";
       const alumniName = alumni?.full_name || "An alumni";
 
       if (record.status === "accepted") {
@@ -84,7 +79,7 @@ Deno.serve(async (req: Request) => {
       await supabase.from("notifications").insert({
         user_id: record.alumni_id,
         type: "feedback_received",
-        title: `${student?.full_name || "A student"} rated you ${record.rating}/5 ⭐`,
+        title: `${student?.full_name || "A student"} rated you ${record.rating}/5 stars`,
         body: record.comment?.substring(0, 100) || null,
         link: "/alumni/dashboard",
       });

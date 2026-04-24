@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AlumniCard } from "@/components/alumni-card";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Check } from "lucide-react";
 
 type Alumni = {
   id: string;
@@ -224,12 +224,15 @@ export default function SearchPage() {
           </div>
 
           <label className="flex items-center gap-3 cursor-pointer bg-muted border-2 border-foreground p-3 hover:bg-secondary transition-colors">
-            <input
-              type="checkbox"
-              className="w-5 h-5 border-2 border-foreground appearance-none checked:bg-primary checked:border-foreground relative checked:after:content-['✔'] checked:after:absolute checked:after:text-foreground checked:after:text-xs checked:after:font-black checked:after:left-[2px] checked:after:top-0"
-              checked={mentorshipOnly}
-              onChange={(e) => setMentorshipOnly(e.target.checked)}
-            />
+            <div className="relative flex items-center justify-center w-5 h-5">
+              <input
+                type="checkbox"
+                className="peer w-5 h-5 border-2 border-foreground appearance-none checked:bg-primary checked:border-foreground cursor-pointer absolute inset-0 m-0"
+                checked={mentorshipOnly}
+                onChange={(e) => setMentorshipOnly(e.target.checked)}
+              />
+              <Check className="w-3.5 h-3.5 text-foreground opacity-0 peer-checked:opacity-100 pointer-events-none z-10" strokeWidth={4} />
+            </div>
             <span className="text-sm font-black uppercase">
               Mentor Only
             </span>

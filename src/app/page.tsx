@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Search, Handshake, Rocket } from "lucide-react";
+import { Search, Handshake, Rocket, Copyright } from "lucide-react";
 
 export default function LandingPage() {
   return (
@@ -86,7 +86,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="py-8 px-6 bg-background border-t-8 border-foreground z-10">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-black uppercase tracking-widest text-foreground">
-          <span className="bg-muted px-4 py-2 border-2 border-foreground">© {new Date().getFullYear()} Alumni Insights · IIIT Nagpur</span>
+          <span className="bg-muted px-4 py-2 border-2 border-foreground flex items-center gap-1"><Copyright className="w-3.5 h-3.5" strokeWidth={3} /> {new Date().getFullYear()} Alumni Insights · IIIT Nagpur</span>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/moderator/login" className="bg-white px-4 py-2 border-2 border-foreground hover:bg-accent hover:text-foreground transition-colors shadow-[2px_2px_0px_var(--color-foreground)]">
               Moderator Login

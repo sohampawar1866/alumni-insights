@@ -45,6 +45,7 @@ export function NotificationBell() {
   }, [supabase]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchNotifications();
 
     // Real-time subscription — use a unique channel name to avoid conflicts
@@ -88,6 +89,7 @@ export function NotificationBell() {
   };
 
   const formatTime = (dateStr: string) => {
+    // eslint-disable-next-line react-hooks/purity
     const diff = Date.now() - new Date(dateStr).getTime();
     const mins = Math.floor(diff / 60000);
     if (mins < 1) return "now";

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Check } from "lucide-react";
 
 export default function ApplyAlumniPage() {
   const supabase = createClient();
@@ -67,7 +67,7 @@ export default function ApplyAlumniPage() {
   if (success) {
     return (
       <div className="max-w-2xl mx-auto px-6 py-20 text-center space-y-6 font-sans">
-        <div className="w-24 h-24 bg-primary text-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] flex items-center justify-center mx-auto text-5xl font-black -rotate-6">✓</div>
+        <div className="w-24 h-24 bg-primary text-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] flex items-center justify-center mx-auto text-5xl font-black -rotate-6"><Check className="w-12 h-12" strokeWidth={4} /></div>
         <div className="border-4 border-foreground bg-white p-8 shadow-[8px_8px_0px_var(--color-foreground)] space-y-4 inline-block mt-8">
           <h1 className="text-3xl font-black uppercase tracking-tighter text-foreground">Application Submitted</h1>
           <p className="text-base font-bold uppercase tracking-wider text-muted-foreground">Your application to be listed in the alumni directory has been sent to the placement cell for review.</p>
