@@ -56,11 +56,11 @@ export function NotificationBell() {
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "notifications" },
-        (payload) => {
+        (payload: any) => {
           setNotifications((prev) => [payload.new as Notification, ...prev]);
         }
       )
-      .subscribe((status) => {
+      .subscribe((status: string) => {
         if (status === "CHANNEL_ERROR") {
           console.warn("Notification channel error — polling fallback active.");
         }

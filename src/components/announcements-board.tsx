@@ -76,7 +76,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
         .select("announcement_id")
         .eq("user_id", currentUserId);
 
-      const likedIds = new Set(userLikes?.map((l) => l.announcement_id) || []);
+      const likedIds = new Set(userLikes?.map((l: { announcement_id: string }) => l.announcement_id) || []);
 
       let filteredData = data as Announcement[];
 

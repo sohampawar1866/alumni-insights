@@ -51,7 +51,7 @@ export function ChatThread({ requestId, currentUserId, otherUserName }: Props) {
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "messages", filter: `connection_request_id=eq.${requestId}` },
-        async (payload) => {
+        async (payload: any) => {
           // Fetch the profile for the new message
           const { data: profile } = await supabase
             .from("profiles")
