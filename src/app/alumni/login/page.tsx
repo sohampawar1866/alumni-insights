@@ -28,6 +28,22 @@ export default function AlumniLoginPage() {
       setError(error.message)
       setLoading(false)
     } else {
+      // Verify the user actually has the alumni role
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('roles')
+          .eq('id', user.id)
+          .single()
+        
+        if (!profile?.roles?.includes('alumni')) {
+          await supabase.auth.signOut()
+          setError('This account does not have alumni access. Contact the moderator.')
+          setLoading(false)
+          return
+        }
+      }
       router.push('/alumni/dashboard')
     }
   }

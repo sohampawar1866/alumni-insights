@@ -16,7 +16,7 @@ export default async function AlumniProfilePage({
     .from("profiles")
     .select("*")
     .eq("id", id)
-    .eq("role", "alumni")
+    .contains("roles", ["alumni"])
     .single();
 
   if (!alumni) {

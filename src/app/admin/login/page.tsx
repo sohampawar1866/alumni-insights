@@ -28,6 +28,22 @@ export default function AdminLoginPage() {
       setError(error.message)
       setLoading(false)
     } else {
+      // Verify the user actually has the admin role
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('roles')
+          .eq('id', user.id)
+          .single()
+        
+        if (!profile?.roles?.includes('admin')) {
+          await supabase.auth.signOut()
+          setError('This account does not have admin access.')
+          setLoading(false)
+          return
+        }
+      }
       router.push('/admin/dashboard')
     }
   }

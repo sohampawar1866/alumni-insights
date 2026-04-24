@@ -11,11 +11,11 @@ export default function UnauthorizedPage() {
           UNAUTHORIZED ACCESS
         </h2>
         <p className="text-lg md:text-xl font-bold uppercase tracking-wide text-foreground mb-10 max-w-lg border-4 border-destructive p-4 bg-muted text-left">
-          <span className="block text-destructive font-black mb-2">ERROR_CODE: WRONG_DOMAIN</span>
-          You must sign in using a valid IIIT Nagpur institutional email address (@iiitn.ac.in). Personal accounts are not permitted.
+          <span className="block text-destructive font-black mb-2">ERROR_CODE: INSUFFICIENT_PERMISSIONS</span>
+          You do not have the required permissions to access this section. Ensure you are signed in with the correct account and have been granted the appropriate role.
         </p>
         <Link
-          href="/login"
+          href="/"
           className="group inline-flex h-16 items-center justify-center bg-primary border-4 border-foreground px-10 text-xl font-black uppercase tracking-widest text-background shadow-[8px_8px_0px_var(--color-foreground)] transition-all hover:-translate-y-2 hover:-translate-x-2 hover:shadow-[12px_12px_0px_var(--color-foreground)] hover:bg-[#00cc50]"
         >
           RETURN TO LOGIN

@@ -22,16 +22,22 @@ export async function GET(request: Request) {
         }
         
         // Check if the user already has a row in the public.profiles table
-        const { data: profile } = await supabase.from('profiles').select('id').eq('id', user.id).single()
+        const { data: profile } = await supabase.from('profiles').select('id, roles').eq('id', user.id).single()
         
         if (!profile) {
-          // If not, automatically create a base profile row for them
+          // If not, automatically create a base profile row with the student role
           await supabase.from('profiles').insert({
             id: user.id,
             email: user.email,
-            role: 'student',
+            roles: ['student'],
             full_name: user.user_metadata?.full_name || '',
           })
+        } else if (!profile.roles?.includes('student')) {
+          // Profile exists (e.g., created as alumni/moderator) but doesn't have student role yet.
+          // Append the student role so they can access both portals.
+          await supabase.from('profiles').update({
+            roles: [...(profile.roles || []), 'student'],
+          }).eq('id', user.id)
         }
       }
 

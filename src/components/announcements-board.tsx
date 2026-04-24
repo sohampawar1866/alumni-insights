@@ -20,7 +20,7 @@ type Announcement = {
   target_city: string | null;
   profiles: {
     full_name: string;
-    role: string;
+    roles: string[];
     role_title: string;
     company: string;
   };
@@ -62,7 +62,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
       .from("announcements")
       .select(`
         *,
-        profiles!author_id (full_name, role, role_title, company),
+        profiles!author_id (full_name, roles, role_title, company),
         likes:announcement_likes (count)
       `)
       .or(`expires_at.is.null,expires_at.gt.${now}`)
@@ -361,7 +361,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
                           📌 PINNED
                         </span>
                       )}
-                      {post.profiles.role === "moderator" ? (
+                      {post.profiles.roles?.includes("moderator") ? (
                         <span className="inline-flex items-center border-2 border-foreground bg-primary/20 px-3 py-1 text-xs font-black uppercase tracking-widest text-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
                           🏫 OFFICIAL — {post.profiles.full_name} · PLACEMENT CELL
                         </span>

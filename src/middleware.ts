@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const response = NextResponse.next({
     request: { headers: request.headers },
   });
@@ -49,25 +49,49 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Fetch role
-  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
-  const role = profile?.role || (user.email?.toLowerCase() === "admin@iiitn.ac.in" ? "admin" : "student");
+  // Fetch roles (multi-role array)
+  const { data: profile } = await supabase.from("profiles").select("roles").eq("id", user.id).single();
+  const roles: string[] = profile?.roles || [];
+
+  // Determine the "primary" role for dashboard redirect (priority: admin > moderator > alumni > student)
+  const getPrimaryRole = (r: string[]): string => {
+    if (r.includes("admin")) return "admin";
+    if (r.includes("moderator")) return "moderator";
+    if (r.includes("alumni")) return "alumni";
+    if (r.includes("student")) return "student";
+    return "student";
+  };
 
   // Redirect logged-in users away from login pages to their dashboard
-  if (path === "/" || path.endsWith("/login")) {
+  const loginPaths = ["/", "/login", "/alumni/login", "/moderator/login", "/admin/login"];
+  if (loginPaths.includes(path)) {
+    const primaryRole = getPrimaryRole(roles);
     const dashboards: Record<string, string> = {
       admin: "/admin/dashboard",
       moderator: "/moderator/dashboard",
       alumni: "/alumni/dashboard",
       student: "/dashboard",
     };
-    return NextResponse.redirect(new URL(dashboards[role] || "/dashboard", request.url));
+    return NextResponse.redirect(new URL(dashboards[primaryRole] || "/dashboard", request.url));
   }
 
-  // Role-based access control
-  if (path.startsWith("/admin/dashboard") && role !== "admin") return NextResponse.redirect(new URL("/unauthorized", request.url));
-  if (path.startsWith("/moderator/dashboard") && role !== "moderator") return NextResponse.redirect(new URL("/unauthorized", request.url));
-  if (path.startsWith("/alumni/dashboard") && role !== "alumni") return NextResponse.redirect(new URL("/unauthorized", request.url));
+  // Role-based access control (multi-role: user needs at least one matching role)
+  if (path.startsWith("/admin/dashboard") && !roles.includes("admin")) {
+    return NextResponse.redirect(new URL("/unauthorized", request.url));
+  }
+  if (path.startsWith("/moderator/dashboard") && !roles.includes("moderator")) {
+    return NextResponse.redirect(new URL("/unauthorized", request.url));
+  }
+  if (path.startsWith("/alumni/dashboard") && !roles.includes("alumni")) {
+    return NextResponse.redirect(new URL("/unauthorized", request.url));
+  }
+  // Student routes — any authenticated user with 'student' role can access
+  // (student) group routes: /dashboard, /search, /announcements, /alumni/[id]
+  const studentRoutes = ["/dashboard", "/search", "/announcements"];
+  const isStudentRoute = studentRoutes.some((r) => path === r || path.startsWith(r + "/"));
+  if (isStudentRoute && !roles.includes("student")) {
+    return NextResponse.redirect(new URL("/unauthorized", request.url));
+  }
 
   return response;
 }

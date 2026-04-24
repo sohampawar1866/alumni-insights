@@ -16,26 +16,11 @@ export default async function AdminLayout({
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("role")
+    .select("roles")
     .eq("id", user.id)
-    .maybeSingle();
+    .single();
 
-  let role = profile?.role;
-
-  if (user.email?.toLowerCase() === "admin@iiitn.ac.in" && role !== "admin") {
-    await supabase.from("profiles").upsert(
-      {
-        id: user.id,
-        email: user.email,
-        role: "admin",
-        full_name: "Admin",
-      },
-      { onConflict: "id" }
-    );
-    role = "admin";
-  }
-
-  if (role !== "admin") redirect("/unauthorized");
+  if (!profile?.roles?.includes("admin")) redirect("/unauthorized");
 
   return (
     <div className="flex min-h-screen bg-background">

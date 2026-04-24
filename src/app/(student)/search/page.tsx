@@ -44,7 +44,7 @@ export default function SearchPage() {
       .select(
         "id, full_name, role_title, company, emp_type, graduation_year, branch, city, mentorship_available, bio, linkedin_url"
       )
-      .eq("role", "alumni");
+      .contains("roles", ["alumni"]);
 
     if (company.trim()) query = query.ilike("company", `%${company.trim()}%`);
     if (roleKeyword.trim())

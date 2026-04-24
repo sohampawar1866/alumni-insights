@@ -31,7 +31,7 @@
 
 **Platform:** Web + PWA (installable on mobile, no native app required).
 
-> **Intern-as-Alumni:** A student currently doing an internship may also have an moderator-created alumni account. These are two separate accounts with different logins — not linked or merged.
+> **Intern-as-Alumni:** A student currently doing an internship may also be granted the alumni role by a moderator. Thanks to the **multi-role system**, a single account can hold both `student` and `alumni` roles simultaneously — the user can access both portals without needing separate accounts or credentials.
 
 ---
 
@@ -54,7 +54,7 @@
 
 ## 3. Roles & Authentication
 
-The platform has four roles. Role boundaries are enforced at the account level.
+The platform has four roles. A single account can hold **multiple roles simultaneously** (e.g. a student who is also an alumni). Role boundaries are enforced at the route level — each portal checks whether the user's `roles` array includes the required role.
 
 ### 3.1 — The Four Roles
 
@@ -63,7 +63,7 @@ The platform has four roles. Role boundaries are enforced at the account level.
 | **Student** | Current IIIT Nagpur students using the platform to find alumni | Self-registration | Google OAuth (institutional email only, e.g. @iiitn.ac.in) |
 | **Alumni** | IIIT Nagpur graduates (or current interns) whose profiles are on the platform | Institution Moderator | Email + Password |
 | **Moderator** | Placement cell staff managing the alumni database for IIIT Nagpur | Admin | Email + Password |
-| **Admin** | Single platform-level operator who creates/manages moderator accounts | Pre-configured at deployment via environment variables | Email + Password |
+| **Admin** | Single platform-level operator who creates/manages moderator accounts | Pre-seeded in Supabase at initial deployment (one-time setup) | Email + Password |
 
 ---
 
@@ -115,12 +115,13 @@ To catch students who may have been accidentally missed by the moderator, a **"A
 
 ### 3.5 — Admin
 
-- There is exactly **one Admin** account, pre-configured at deployment. It cannot be created or recovered through any in-app flow.
+- There is exactly **one Admin** account (`admin@iiitn.ac.in`), **pre-seeded in Supabase** during initial deployment. It cannot be created or recovered through any in-app flow.
+- The admin account is created once via the Supabase dashboard (Authentication → Users → Create User) and a corresponding `profiles` row with `roles: ['admin']` is inserted. This is a one-time manual setup step.
 - The Admin panel has exactly three functions: **Create**, **Edit**, and **Delete** moderator accounts. When creating a moderator account, the Admin sets a unique display name, email, and password.
 - The Admin has no access to alumni data, student data, or any other platform content.
 - Login at `/admin/login` with email + password.
 
-> ⚠️ **Security:** Admin credentials must be stored as server-side environment variables only. They must never appear in the codebase, version control history, or any committed file. The `.env` file must be in `.gitignore`.
+> ⚠️ **Security:** The admin email is not stored in environment variables or hardcoded in the codebase. The admin account exists solely as a database record. Admin credentials should never appear in version control history or any committed file.
 
 ---
 
@@ -477,7 +478,7 @@ Student logs in → clicks Announcements
 | Alumni not logging in after receiving credentials | Medium | High | Clear onboarding email from moderator explaining the "why" |
 | Student spam to alumni | Medium | High | Weekly throttle, structured request formats, abuse reporting |
 | Alumni privacy concerns | Medium | High | Consent flows, visibility toggle, DPDP compliance |
-| Admin credentials leaked via repo | Low | Critical | Env variables only; `.gitignore` the `.env`; never hardcode credentials |
+| Admin credentials leaked via repo | Low | Critical | Admin account is pre-seeded in the database, not in code or env files; no hardcoded emails in the codebase |
 
 ---
 
@@ -491,7 +492,7 @@ Student logs in → clicks Announcements
 
 **Platform:** Web + PWA. No native app for MVP.
 
-**Intern-as-Alumni scope:** Students currently doing internships can be added as alumni by the moderator. Their intern/full-time status is a searchable field. Their student and alumni accounts are separate and not linked.
+**Intern-as-Alumni scope:** Students currently doing internships can be granted the alumni role by the moderator. Their intern/full-time status is a searchable field. Thanks to the multi-role system, the student and alumni roles coexist on the same account — the user can seamlessly switch between portals.
 
 **Student-to-student networking:** Out of scope. The platform is alumni-to-student only.
 

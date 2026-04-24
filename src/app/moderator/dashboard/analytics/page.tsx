@@ -7,13 +7,13 @@ export default async function AnalyticsPage() {
   const { count: totalAlumni } = await supabase
     .from("profiles")
     .select("*", { count: "exact", head: true })
-    .eq("role", "alumni");
+    .contains("roles", ["alumni"]);
 
   // By branch
   const { data: branchData } = await supabase
     .from("profiles")
     .select("branch")
-    .eq("role", "alumni")
+    .contains("roles", ["alumni"])
     .not("branch", "is", null);
 
   const branchCounts: Record<string, number> = {};
@@ -26,7 +26,7 @@ export default async function AnalyticsPage() {
   const { data: companyData } = await supabase
     .from("profiles")
     .select("company")
-    .eq("role", "alumni")
+    .contains("roles", ["alumni"])
     .not("company", "is", null);
 
   const companyCounts: Record<string, number> = {};
@@ -42,7 +42,7 @@ export default async function AnalyticsPage() {
   const { data: cityData } = await supabase
     .from("profiles")
     .select("city")
-    .eq("role", "alumni")
+    .contains("roles", ["alumni"])
     .not("city", "is", null);
 
   const cityCounts: Record<string, number> = {};

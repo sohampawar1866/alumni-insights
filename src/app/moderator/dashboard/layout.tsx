@@ -16,11 +16,11 @@ export default async function ModeratorLayout({
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("role, full_name")
+    .select("roles, full_name")
     .eq("id", user.id)
     .single();
 
-  if (profile?.role !== "moderator") redirect("/unauthorized");
+  if (!profile?.roles?.includes("moderator")) redirect("/unauthorized");
 
   return (
     <div className="flex min-h-screen bg-background">

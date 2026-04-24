@@ -32,7 +32,7 @@ export default function AdminDashboardPage() {
     const { data } = await supabase
       .from("profiles")
       .select("id, full_name, email")
-      .eq("role", "moderator")
+      .contains("roles", ["moderator"])
       .order("created_at", { ascending: false });
     setModerators((data as Moderator[]) || []);
     setLoading(false);
