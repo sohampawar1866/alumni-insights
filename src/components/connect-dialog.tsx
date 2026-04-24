@@ -26,6 +26,7 @@ export function ConnectDialog({
 }: ConnectDialogProps) {
   const supabase = createClient();
   const [message, setMessage] = useState("");
+  const [requestType, setRequestType] = useState("general");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,7 +37,7 @@ export function ConnectDialog({
 
     const { data, error: fnError } = await supabase.functions.invoke(
       "send-connection-request",
-      { body: { alumni_id: alumniId, message } }
+      { body: { alumni_id: alumniId, message, request_type: requestType } }
     );
 
     if (fnError || data?.error) {
@@ -66,12 +67,13 @@ export function ConnectDialog({
               <div className="flex flex-wrap gap-2">
                 {TEMPLATES.map((t, i) => {
                   const label = t.split(":")[0];
+                  const typeKey = label.toLowerCase().replace(/\s+/g, "_");
                   return (
                     <button
                       key={i}
                       type="button"
-                      onClick={() => setMessage(t.split(": ")[1])}
-                      className="text-xs font-black uppercase tracking-wider px-3 py-1 bg-muted border-2 border-foreground hover:bg-secondary hover:-translate-y-0.5 hover:shadow-[2px_2px_0px_var(--color-foreground)] transition-all"
+                      onClick={() => { setMessage(t.split(": ")[1]); setRequestType(typeKey); }}
+                      className={`text-xs font-black uppercase tracking-wider px-3 py-1 border-2 border-foreground hover:-translate-y-0.5 hover:shadow-[2px_2px_0px_var(--color-foreground)] transition-all ${requestType === typeKey ? "bg-primary text-background" : "bg-muted hover:bg-secondary"}`}
                     >
                       {label}
                     </button>

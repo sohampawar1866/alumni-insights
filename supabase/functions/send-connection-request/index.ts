@@ -59,7 +59,7 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    const { alumni_id, message } = await req.json();
+    const { alumni_id, message, request_type } = await req.json();
 
     if (!alumni_id || !message) {
       return new Response(JSON.stringify({ error: "Missing alumni_id or message" }), {
@@ -141,6 +141,7 @@ Deno.serve(async (req: Request) => {
         student_id: student.id,
         alumni_id,
         message,
+        request_type: request_type || "general",
         status: "pending",
       });
 
