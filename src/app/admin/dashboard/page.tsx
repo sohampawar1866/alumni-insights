@@ -164,13 +164,15 @@ export default function AdminDashboardPage() {
             </div>
             <div className="space-y-2">
               <label className="text-xs font-black uppercase tracking-wider text-foreground">
-                Email
+                Email (@iiitn.ac.in)
               </label>
               <Input
                 required
                 type="email"
                 disabled={!!editModId}
                 placeholder="mehta@iiitn.ac.in"
+                pattern=".*@iiitn\.ac\.in$"
+                title="Email must end with @iiitn.ac.in"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="border-2 border-foreground rounded-none shadow-[2px_2px_0px_#000] focus-visible:ring-0 focus-visible:border-primary disabled:opacity-50"

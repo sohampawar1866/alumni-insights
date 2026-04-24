@@ -5,6 +5,7 @@ import { createClient } from '@/utils/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function ModeratorLoginPage() {
   const [email, setEmail] = useState('')
@@ -84,6 +85,11 @@ export default function ModeratorLoginPage() {
             {loading ? 'Authenticating...' : 'Sign In'}
           </Button>
         </form>
+        <div className="mt-6 text-center">
+          <Link href="/" className="text-sm font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground hover:underline transition-all">
+            ← Back to Landing Page
+          </Link>
+        </div>
       </div>
     </div>
   )

@@ -67,6 +67,13 @@ Deno.serve(async (req) => {
         );
       }
 
+      if (!email.toLowerCase().endsWith("@iiitn.ac.in")) {
+        return new Response(
+          JSON.stringify({ error: "Moderator accounts must use an @iiitn.ac.in email address." }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
       // Check if user already exists
       const { data: existingUsers } = await supabaseAdmin.auth.admin.listUsers();
       const existingUser = existingUsers?.users?.find(

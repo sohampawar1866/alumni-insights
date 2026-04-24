@@ -94,7 +94,7 @@ export default async function StudentDashboard() {
                 <Link href="/dashboard/requests" className="block w-full bg-background border-2 border-foreground px-4 py-3 font-bold uppercase text-sm hover:bg-secondary hover:translate-x-1 hover:-translate-y-1 hover:shadow-[4px_4px_0px_var(--color-foreground)] transition-all">
                   View Pending Requests
                 </Link>
-                <Link href="/dashboard/messages" className="block w-full bg-background border-2 border-foreground px-4 py-3 font-bold uppercase text-sm hover:bg-secondary hover:translate-x-1 hover:-translate-y-1 hover:shadow-[4px_4px_0px_var(--color-foreground)] transition-all">
+                <Link href="/dashboard/requests" className="block w-full bg-background border-2 border-foreground px-4 py-3 font-bold uppercase text-sm hover:bg-secondary hover:translate-x-1 hover:-translate-y-1 hover:shadow-[4px_4px_0px_var(--color-foreground)] transition-all">
                   Open Messages
                 </Link>
               </div>
