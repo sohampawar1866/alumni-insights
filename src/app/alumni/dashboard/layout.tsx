@@ -32,58 +32,66 @@ export default async function AlumniLayout({
 
       {/* Sidebar */}
       <aside className="w-full md:w-72 shrink-0 flex flex-col bg-white border-b-8 md:border-b-0 md:border-r-8 border-foreground relative z-20 shadow-[8px_0px_0px_var(--color-foreground)]">
+        <input type="checkbox" id="alumni-menu" className="peer hidden" />
         <div className="p-6 border-b-4 border-foreground bg-primary text-background flex items-center justify-between">
-          <div>
+          <div className="min-w-0 pr-4">
             <h2 className="text-xl font-black uppercase tracking-tighter">ALUMNI PORTAL</h2>
             <p className="text-sm font-bold uppercase tracking-wider opacity-90 truncate max-w-[180px]">
               {profile?.full_name || user.email}
             </p>
           </div>
-          <div className="bg-background text-foreground border-2 border-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
-            <NotificationBell />
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="bg-background text-foreground border-2 border-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
+              <NotificationBell />
+            </div>
+            <label htmlFor="alumni-menu" className="md:hidden p-2 border-2 border-foreground bg-white text-foreground shadow-[2px_2px_0px_#000] cursor-pointer hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#000] transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="peer-checked:hidden"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            </label>
           </div>
         </div>
 
-        <nav className="flex-1 space-y-4 p-6">
-          <Link
-            href="/alumni/dashboard"
-            className="flex items-center justify-between px-4 py-3 bg-muted border-4 border-foreground font-black uppercase tracking-widest text-foreground shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:bg-secondary hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
-          >
-            <span>My Profile</span>
-            <span className="text-xl">👤</span>
-          </Link>
-          <Link
-            href="/alumni/dashboard/requests"
-            className="flex items-center justify-between px-4 py-3 bg-muted border-4 border-foreground font-black uppercase tracking-widest text-foreground shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:bg-secondary hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
-          >
-            <span>Requests</span>
-            <span className="text-xl">💬</span>
-          </Link>
-          <Link
-            href="/alumni/dashboard/settings"
-            className="flex items-center justify-between px-4 py-3 bg-muted border-4 border-foreground font-black uppercase tracking-widest text-foreground shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:bg-secondary hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
-          >
-            <span>Settings</span>
-            <span className="text-xl">⚙️</span>
-          </Link>
-          <Link
-            href="/alumni/dashboard/announcements"
-            className="flex items-center justify-between px-4 py-3 bg-muted border-4 border-foreground font-black uppercase tracking-widest text-foreground shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:bg-secondary hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
-          >
-            <span>Noticeboard</span>
-            <span className="text-xl">📢</span>
-          </Link>
-        </nav>
-        
-        <div className="p-6 border-t-4 border-foreground border-dashed bg-white">
-          <form action="/api/auth/signout" method="POST">
-            <button
-              type="submit"
-              className="w-full px-4 py-3 bg-destructive border-4 border-foreground font-black uppercase tracking-widest text-background shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
+        <div className="hidden peer-checked:flex md:flex flex-col flex-1">
+          <nav className="flex-1 space-y-4 p-6">
+            <Link
+              href="/alumni/dashboard"
+              className="flex items-center justify-between px-4 py-3 bg-muted border-4 border-foreground font-black uppercase tracking-widest text-foreground shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:bg-secondary hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
             >
-              SIGN OUT
-            </button>
-          </form>
+              <span>My Profile</span>
+              <span className="text-xl">👤</span>
+            </Link>
+            <Link
+              href="/alumni/dashboard/requests"
+              className="flex items-center justify-between px-4 py-3 bg-muted border-4 border-foreground font-black uppercase tracking-widest text-foreground shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:bg-secondary hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
+            >
+              <span>Requests</span>
+              <span className="text-xl">💬</span>
+            </Link>
+            <Link
+              href="/alumni/dashboard/settings"
+              className="flex items-center justify-between px-4 py-3 bg-muted border-4 border-foreground font-black uppercase tracking-widest text-foreground shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:bg-secondary hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
+            >
+              <span>Settings</span>
+              <span className="text-xl">⚙️</span>
+            </Link>
+            <Link
+              href="/alumni/dashboard/announcements"
+              className="flex items-center justify-between px-4 py-3 bg-muted border-4 border-foreground font-black uppercase tracking-widest text-foreground shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:bg-secondary hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
+            >
+              <span>Noticeboard</span>
+              <span className="text-xl">📢</span>
+            </Link>
+          </nav>
+          
+          <div className="p-6 border-t-4 border-foreground border-dashed bg-white">
+            <form action="/api/auth/signout" method="POST">
+              <button
+                type="submit"
+                className="w-full px-4 py-3 bg-destructive border-4 border-foreground font-black uppercase tracking-widest text-background shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
+              >
+                SIGN OUT
+              </button>
+            </form>
+          </div>
         </div>
       </aside>
 
