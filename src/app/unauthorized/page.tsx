@@ -14,13 +14,24 @@ export default function UnauthorizedPage() {
           <span className="block text-destructive font-black mb-2">ERROR_CODE: INSUFFICIENT_PERMISSIONS</span>
           You do not have the required permissions to access this section. Ensure you are signed in with the correct account and have been granted the appropriate role.
         </p>
-        <Link
-          href="/"
-          className="group inline-flex h-16 items-center justify-center bg-primary border-4 border-foreground px-10 text-xl font-black uppercase tracking-widest text-background shadow-[8px_8px_0px_var(--color-foreground)] transition-all hover:-translate-y-2 hover:-translate-x-2 hover:shadow-[12px_12px_0px_var(--color-foreground)] hover:bg-[#00cc50]"
-        >
-          RETURN TO LOGIN
-        </Link>
+        <div className="flex flex-col sm:flex-row gap-4 w-full max-w-lg">
+          <Link
+            href="/"
+            className="group inline-flex h-16 flex-1 items-center justify-center bg-primary border-4 border-foreground px-10 text-xl font-black uppercase tracking-widest text-background shadow-[8px_8px_0px_var(--color-foreground)] transition-all hover:-translate-y-2 hover:-translate-x-2 hover:shadow-[12px_12px_0px_var(--color-foreground)] hover:bg-[#00cc50]"
+          >
+            GO HOME
+          </Link>
+          <form action="/api/auth/signout" method="POST" className="flex-1">
+            <button
+              type="submit"
+              className="w-full h-16 bg-destructive border-4 border-foreground px-10 text-xl font-black uppercase tracking-widest text-background shadow-[8px_8px_0px_var(--color-foreground)] transition-all hover:-translate-y-2 hover:-translate-x-2 hover:shadow-[12px_12px_0px_var(--color-foreground)]"
+            >
+              SIGN OUT
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
 }
+

@@ -45,7 +45,11 @@ export async function middleware(request: NextRequest) {
 
     if (path.startsWith("/admin")) return NextResponse.redirect(new URL("/admin/login", request.url));
     if (path.startsWith("/moderator")) return NextResponse.redirect(new URL("/moderator/login", request.url));
-    if (path.startsWith("/alumni")) return NextResponse.redirect(new URL("/alumni/login", request.url));
+    // Only /alumni/dashboard* and /alumni/login are alumni-portal routes.
+    // /alumni/[id] is a student page (inside the (student) route group) — redirect to student login.
+    if (path.startsWith("/alumni/dashboard") || path === "/alumni/login") {
+      return NextResponse.redirect(new URL("/alumni/login", request.url));
+    }
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
@@ -85,11 +89,13 @@ export async function middleware(request: NextRequest) {
   if (path.startsWith("/alumni/dashboard") && !roles.includes("alumni")) {
     return NextResponse.redirect(new URL("/unauthorized", request.url));
   }
-  // Student routes — any authenticated user with 'student' role can access
-  // (student) group routes: /dashboard, /search, /announcements, /alumni/[id]
+  // Student routes — (student) route group pages: /dashboard, /search, /announcements, /alumni/[id]
+  // /alumni/[id] is inside the (student) group but maps to /alumni/<uuid> in the URL.
+  // We match it as: starts with /alumni/ but NOT /alumni/dashboard or /alumni/login.
   const studentRoutes = ["/dashboard", "/search", "/announcements"];
   const isStudentRoute = studentRoutes.some((r) => path === r || path.startsWith(r + "/"));
-  if (isStudentRoute && !roles.includes("student")) {
+  const isAlumniProfileView = path.startsWith("/alumni/") && !path.startsWith("/alumni/dashboard") && path !== "/alumni/login";
+  if ((isStudentRoute || isAlumniProfileView) && !roles.includes("student")) {
     return NextResponse.redirect(new URL("/unauthorized", request.url));
   }
 
