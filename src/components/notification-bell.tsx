@@ -120,7 +120,7 @@ export function NotificationBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 z-50 mt-4 max-h-96 w-80 bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] overflow-auto">
+        <div className="absolute right-0 z-50 mt-4 max-h-96 w-[calc(100vw-2rem)] max-w-sm sm:w-80 bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] overflow-auto">
           <div className="flex items-center justify-between px-4 py-3 border-b-4 border-foreground bg-[#fdc800]">
             <h3 className="text-sm font-black uppercase tracking-wider text-foreground">UPDATES</h3>
             {unreadCount > 0 && (

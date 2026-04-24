@@ -145,7 +145,7 @@ export function ChatThread({ requestId, currentUserId, otherUserName }: Props) {
         <div ref={bottomRef} />
       </div>
 
-      <form onSubmit={handleSend} className="p-4 border-t-4 border-foreground bg-white flex gap-4">
+      <form onSubmit={handleSend} className="p-4 border-t-4 border-foreground bg-white flex flex-col sm:flex-row gap-4">
         <textarea
           required
           rows={1}
@@ -163,7 +163,7 @@ export function ChatThread({ requestId, currentUserId, otherUserName }: Props) {
         <Button 
           type="submit" 
           disabled={!newMessage.trim()} 
-          className="self-end px-8 h-[56px] bg-foreground text-background border-4 border-transparent shadow-[4px_4px_0px_var(--color-primary)] text-lg font-black uppercase tracking-widest hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-primary)] transition-all rounded-none"
+          className="self-end sm:self-auto w-full sm:w-auto px-8 h-[56px] bg-foreground text-background border-4 border-transparent shadow-[4px_4px_0px_var(--color-primary)] text-lg font-black uppercase tracking-widest hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-primary)] transition-all rounded-none"
         >
           SEND
         </Button>

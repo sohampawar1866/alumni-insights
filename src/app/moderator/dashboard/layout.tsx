@@ -23,8 +23,8 @@ export default async function ModeratorLayout({
   if (!profile?.roles?.includes("moderator")) redirect("/unauthorized");
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <aside className="w-72 shrink-0 flex-col border-r-4 border-foreground bg-white">
+    <div className="flex flex-col md:flex-row min-h-screen bg-background">
+      <aside className="w-full md:w-72 shrink-0 flex flex-col border-b-4 md:border-b-0 md:border-r-4 border-foreground bg-white">
         <div className="border-b-4 border-foreground p-6 bg-secondary">
           <h2 className="font-heading text-xl font-black uppercase tracking-tight text-foreground">Moderator Panel</h2>
           <p className="mt-1 truncate text-xs font-bold uppercase tracking-wider text-foreground">

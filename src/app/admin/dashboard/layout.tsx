@@ -23,8 +23,8 @@ export default async function AdminLayout({
   if (!profile?.roles?.includes("admin")) redirect("/unauthorized");
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <aside className="w-72 shrink-0 flex-col border-r-4 border-foreground bg-white">
+    <div className="flex flex-col md:flex-row min-h-screen bg-background">
+      <aside className="w-full md:w-72 shrink-0 flex flex-col border-b-4 md:border-b-0 md:border-r-4 border-foreground bg-white">
         <div className="border-b-4 border-foreground p-6 bg-accent">
           <h2 className="font-heading text-xl font-black uppercase tracking-tight text-foreground">Admin Panel</h2>
           <p className="mt-1 text-xs font-bold uppercase tracking-wider text-foreground">Platform Administration</p>
