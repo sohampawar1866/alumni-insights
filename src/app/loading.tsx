@@ -1,4 +1,4 @@
-import { GraduationCap } from "lucide-react";
+import Image from "next/image";
 
 export default function Loading() {
   return (
@@ -19,9 +19,15 @@ export default function Loading() {
           {/* Reverse counter-spinning inner arc */}
           <div className="absolute inset-2 rounded-full border-4 border-transparent border-b-emerald-400 border-l-blue-600 animate-[spin_1.5s_linear_infinite_reverse]" />
 
-          {/* Center icon */}
-          <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-md animate-pulse">
-            <GraduationCap className="w-5 h-5 text-amber-400" strokeWidth={2.5} />
+          {/* Center IIITN Logo */}
+          <div className="relative w-10 h-10 shrink-0">
+            <Image
+              src="/images/iiitn.png"
+              alt="IIIT Nagpur Logo"
+              width={40}
+              height={40}
+              className="w-10 h-10 object-contain rounded-full animate-pulse"
+            />
           </div>
         </div>
 
