@@ -27,29 +27,29 @@ export function AlumniCard({
   return (
     <Link
       href={`/alumni/${id}`}
-      className="group flex flex-col justify-between p-6 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-200"
+      className="group flex flex-col justify-between p-6 bg-white border-2 border-slate-900 rounded-2xl shadow-[4px_4px_0px_#0f172a] hover:shadow-[7px_7px_0px_#0f172a] hover:-translate-y-1 hover:-translate-x-1 transition-all duration-200"
     >
       {/* Header */}
       <div className="space-y-3 mb-6">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-1">
+          <h3 className="text-xl font-bold tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-1 font-heading">
             {full_name || "Alumnus"}
           </h3>
           {mentorship_available && (
-            <span className="shrink-0 inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200/60 px-2.5 py-0.5 rounded-full text-xs font-semibold">
-              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-              Available
+            <span className="shrink-0 inline-flex items-center gap-1 bg-emerald-400 text-slate-900 border-2 border-slate-900 px-2.5 py-0.5 rounded-full text-xs font-bold shadow-[2px_2px_0px_#0f172a]">
+              <CheckCircle2 className="w-3.5 h-3.5" strokeWidth={2.5} />
+              Mentor
             </span>
           )}
         </div>
 
         <div className="space-y-1">
-          <p className="text-sm font-semibold text-slate-800 line-clamp-1">
+          <p className="text-sm font-bold text-slate-800 line-clamp-1">
             {role_title || "Alumni Member"}
           </p>
           {company && (
-            <p className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
-              <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <p className="text-xs font-semibold text-slate-600 flex items-center gap-1.5">
+              <Building2 className="w-3.5 h-3.5 text-slate-500 shrink-0" strokeWidth={2.5} />
               <span className="line-clamp-1">{company}</span>
             </p>
           )}
@@ -57,12 +57,12 @@ export function AlumniCard({
       </div>
 
       {/* Meta Tags */}
-      <div className="flex flex-wrap items-center gap-1.5 pt-4 border-t border-slate-100 mt-auto text-xs">
+      <div className="flex flex-wrap items-center gap-2 pt-4 border-t-2 border-slate-900/10 mt-auto text-xs">
         {emp_type && (
           <span
-            className={`inline-flex items-center px-2 py-0.5 rounded-md font-semibold text-[11px] ${
+            className={`inline-flex items-center px-2.5 py-1 rounded-lg border-2 border-slate-900 font-bold text-xs shadow-[2px_2px_0px_#0f172a] ${
               emp_type === "Intern"
-                ? "bg-amber-50 text-amber-800 border border-amber-200"
+                ? "bg-amber-400 text-slate-900"
                 : "bg-slate-900 text-white"
             }`}
           >
@@ -70,19 +70,19 @@ export function AlumniCard({
           </span>
         )}
         {branch && (
-          <span className="inline-flex items-center bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md font-medium text-[11px]">
+          <span className="inline-flex items-center bg-slate-100 text-slate-900 border-2 border-slate-900 px-2.5 py-1 rounded-lg font-bold text-xs shadow-[2px_2px_0px_#0f172a]">
             {branch}
           </span>
         )}
         {graduation_year && (
-          <span className="inline-flex items-center bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md font-medium text-[11px]">
-            <GraduationCap className="w-3 h-3 mr-1 text-slate-400" />
-            Class of &apos;{String(graduation_year).slice(-2)}
+          <span className="inline-flex items-center bg-slate-100 text-slate-900 border-2 border-slate-900 px-2.5 py-1 rounded-lg font-bold text-xs shadow-[2px_2px_0px_#0f172a]">
+            <GraduationCap className="w-3.5 h-3.5 mr-1" strokeWidth={2.5} />
+            &apos;{String(graduation_year).slice(-2)}
           </span>
         )}
         {city && (
-          <span className="inline-flex items-center bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium text-[11px] ml-auto">
-            <MapPin className="w-3 h-3 mr-0.5 text-slate-400" />
+          <span className="inline-flex items-center bg-slate-100 text-slate-900 border-2 border-slate-900 px-2.5 py-1 rounded-lg font-bold text-xs shadow-[2px_2px_0px_#0f172a] ml-auto">
+            <MapPin className="w-3.5 h-3.5 mr-1" strokeWidth={2.5} />
             {city}
           </span>
         )}

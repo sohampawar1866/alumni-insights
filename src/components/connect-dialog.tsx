@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Send, X } from "lucide-react";
 
 type ConnectDialogProps = {
   alumniId: string;
@@ -49,21 +50,29 @@ export function ConnectDialog({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/80 backdrop-blur-sm p-4">
-      <div className="w-full max-w-md bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)]">
-        <div className="p-6 border-b-4 border-foreground bg-primary">
-          <h2 className="text-2xl font-black uppercase tracking-tighter text-background">
-            CONNECT // {alumniName.split(' ')[0]}
-          </h2>
-          <p className="text-sm font-bold uppercase tracking-wider text-background mt-2">
-            Send a brief message explaining what you need help with.
-          </p>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+      <div className="w-full max-w-md bg-white border-2 border-slate-900 rounded-2xl shadow-[8px_8px_0px_#0f172a] overflow-hidden">
+        <div className="p-6 border-b-2 border-slate-900 bg-amber-400 flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-bold tracking-tight text-slate-900 font-heading">
+              Connect with {alumniName}
+            </h2>
+            <p className="text-xs font-semibold text-slate-900/80 mt-1">
+              Send a structured mentorship request note.
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-1 rounded-lg hover:bg-slate-900/10 text-slate-900"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6 bg-background">
+        <form onSubmit={handleSubmit} className="p-6 space-y-5 bg-white">
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">QUICK TEMPLATES (OPTIONAL)</label>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Quick Templates</label>
               <div className="flex flex-wrap gap-2">
                 {TEMPLATES.map((t, i) => {
                   const label = t.split(":")[0];
@@ -73,7 +82,7 @@ export function ConnectDialog({
                       key={i}
                       type="button"
                       onClick={() => { setMessage(t.split(": ")[1]); setRequestType(typeKey); }}
-                      className={`text-xs font-black uppercase tracking-wider px-3 py-1 border-2 border-foreground hover:-translate-y-0.5 hover:shadow-[2px_2px_0px_var(--color-foreground)] transition-all ${requestType === typeKey ? "bg-primary text-background" : "bg-muted hover:bg-secondary"}`}
+                      className={`text-xs font-bold px-3 py-1 rounded-lg border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] transition-all ${requestType === typeKey ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-800 hover:bg-amber-300"}`}
                     >
                       {label}
                     </button>
@@ -81,48 +90,48 @@ export function ConnectDialog({
                 })}
               </div>
             </div>
-            <div className="space-y-2">
-              <label className="text-sm font-black uppercase tracking-wide text-foreground">PITCH / CUSTOM MESSAGE</label>
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-700">Custom Request Note</label>
               <textarea
                 required
                 maxLength={200}
                 rows={4}
-                placeholder="Hi! I'm currently a junior in CSE and would love to get your advice..."
+                placeholder="Hi! I'm currently a CSE student at IIITN and would love your advice on..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="flex w-full border-2 border-foreground p-3 text-sm font-medium shadow-[4px_4px_0px_var(--color-foreground)] focus-visible:outline-none focus:bg-secondary transition-colors resize-none mb-1"
+                className="w-full rounded-xl border-2 border-slate-900 bg-white p-3.5 text-sm font-semibold text-slate-900 shadow-[2px_2px_0px_#0f172a] focus:shadow-[4px_4px_0px_#0f172a] outline-none transition-all resize-none"
               />
-              <div className="flex justify-between text-xs font-bold uppercase text-muted-foreground mt-2">
-                <span>KEEP IT PROFESSIONAL.</span>
+              <div className="flex justify-between text-xs font-semibold text-slate-400 mt-1">
+                <span>Maximum 200 characters</span>
                 <span>{message.length}/200</span>
               </div>
             </div>
           </div>
 
           {error && (
-            <div className="bg-destructive border-2 border-foreground p-3 shadow-[4px_4px_0px_var(--color-foreground)]">
-              <p className="text-sm font-black text-background uppercase">
-                ERROR: {error}
+            <div className="bg-red-50 border-2 border-red-900 rounded-xl p-3 shadow-[2px_2px_0px_#0f172a]">
+              <p className="text-xs font-bold text-red-900">
+                Error: {error}
               </p>
             </div>
           )}
 
-          <div className="flex justify-end gap-4 pt-4 border-t-2 border-foreground border-dashed">
+          <div className="flex justify-end gap-3 pt-4 border-t-2 border-slate-900">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
               disabled={loading}
-              className="border-2 border-foreground"
             >
-              CANCEL
+              Cancel
             </Button>
             <Button 
               type="submit" 
               disabled={loading || !message.trim()}
-              className="bg-primary text-background shadow-[4px_4px_0px_var(--color-foreground)] hover:shadow-[2px_2px_0px_var(--color-foreground)] hover:translate-x-[2px] hover:translate-y-[2px]"
+              className="gap-2"
             >
-              {loading ? "SENDING..." : "DISPATCH REQUEST"}
+              <Send className="w-4 h-4" />
+              {loading ? "Sending Request..." : "Send Request"}
             </Button>
           </div>
         </form>

@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Send, MessageSquare } from "lucide-react";
 
 type Message = {
   id: string;
@@ -52,7 +53,6 @@ export function ChatThread({ requestId, currentUserId, otherUserName }: Props) {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "messages", filter: `connection_request_id=eq.${requestId}` },
         async (payload: any) => {
-          // Fetch the profile for the new message
           const { data: profile } = await supabase
             .from("profiles")
             .select("full_name")
@@ -83,7 +83,7 @@ export function ChatThread({ requestId, currentUserId, otherUserName }: Props) {
     if (!newMessage.trim()) return;
 
     const content = newMessage.trim();
-    setNewMessage(""); // optimistic clear
+    setNewMessage("");
 
     const { error } = await supabase.from("messages").insert({
       connection_request_id: requestId,
@@ -93,49 +93,57 @@ export function ChatThread({ requestId, currentUserId, otherUserName }: Props) {
 
     if (error) {
       alert("Failed to send message: " + error.message);
-      setNewMessage(content); // restore on error
+      setNewMessage(content);
     }
   };
 
   if (loading) {
     return (
       <div className="flex h-[400px] items-center justify-center font-sans">
-        <div className="h-12 w-12 animate-spin border-4 border-foreground border-t-primary shadow-[4px_4px_0px_var(--color-foreground)]" />
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-300 border-t-slate-900" />
       </div>
     );
   }
 
   return (
-    <div className="bg-white border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] flex h-[600px] flex-col overflow-hidden font-sans">
-      <div className="flex items-center justify-between border-b-4 border-foreground bg-secondary p-6">
-        <div>
-          <h2 className="text-xl font-black uppercase tracking-tight text-foreground">Chat with {otherUserName}</h2>
-          <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mt-1">Messages are auto-archived after 30 days of inactivity.</p>
+    <div className="bg-white border-2 border-slate-900 rounded-2xl shadow-[5px_5px_0px_#0f172a] flex h-[600px] flex-col overflow-hidden font-sans">
+      {/* Chat Header */}
+      <div className="flex items-center justify-between border-b-2 border-slate-900 bg-amber-400 p-5">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-[2px_2px_0px_#0f172a]">
+            {otherUserName.charAt(0)}
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-slate-900 font-heading">Chat with {otherUserName}</h2>
+            <p className="text-xs font-semibold text-slate-900/80">Active Mentorship Thread</p>
+          </div>
         </div>
       </div>
 
-      <div className="flex-1 space-y-6 overflow-y-auto bg-muted/30 p-6">
+      {/* Messages Feed */}
+      <div className="flex-1 space-y-4 overflow-y-auto bg-slate-50 p-6">
         {messages.length === 0 ? (
-          <div className="text-center mt-10 border-4 border-foreground border-dashed p-8 bg-white shadow-[4px_4px_0px_var(--color-foreground)]">
-            <p className="text-lg font-black uppercase tracking-tight text-foreground">No messages yet.</p>
-            <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground mt-2">Send a message to start the conversation!</p>
+          <div className="text-center mt-12 border-2 border-slate-900 border-dashed rounded-xl p-8 bg-white shadow-[3px_3px_0px_#0f172a] max-w-md mx-auto space-y-2">
+            <MessageSquare className="w-8 h-8 text-slate-400 mx-auto" strokeWidth={2} />
+            <p className="text-base font-bold text-slate-900 font-heading">No Messages Yet</p>
+            <p className="text-xs font-medium text-slate-600">Send a greeting message to initiate your 1:1 conversation.</p>
           </div>
         ) : (
           messages.map((msg) => {
             const isMe = msg.sender_id === currentUserId;
             return (
               <div key={msg.id} className={`flex flex-col ${isMe ? "items-end" : "items-start"}`}>
-                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1 px-1">{msg.profiles.full_name}</span>
+                <span className="text-[11px] font-bold text-slate-500 mb-1 px-1">{msg.profiles.full_name}</span>
                 <div
-                  className={`max-w-[80%] border-4 border-foreground px-4 py-3 text-base font-bold shadow-[4px_4px_0px_var(--color-foreground)] transition-transform hover:-translate-y-1 hover:shadow-[6px_6px_0px_var(--color-foreground)] ${
+                  className={`max-w-[80%] border-2 border-slate-900 px-4 py-3 text-sm font-semibold shadow-[3px_3px_0px_#0f172a] rounded-2xl ${
                     isMe
-                      ? "bg-primary text-background rounded-none"
-                      : "bg-white text-foreground rounded-none"
+                      ? "bg-slate-900 text-white rounded-br-none"
+                      : "bg-white text-slate-900 rounded-bl-none"
                   }`}
                 >
-                  <p className="whitespace-pre-wrap">{msg.content}</p>
+                  <p className="whitespace-pre-wrap leading-relaxed">{msg.content}</p>
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-2 px-1">
+                <span className="text-[10px] font-bold text-slate-400 mt-1 px-1">
                   {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
@@ -145,11 +153,12 @@ export function ChatThread({ requestId, currentUserId, otherUserName }: Props) {
         <div ref={bottomRef} />
       </div>
 
-      <form onSubmit={handleSend} className="p-4 border-t-4 border-foreground bg-white flex flex-col sm:flex-row gap-4">
+      {/* Form */}
+      <form onSubmit={handleSend} className="p-4 border-t-2 border-slate-900 bg-white flex items-center gap-3">
         <textarea
           required
           rows={1}
-          placeholder="TYPE A MESSAGE..."
+          placeholder="Write your message..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyDown={(e) => {
@@ -158,14 +167,14 @@ export function ChatThread({ requestId, currentUserId, otherUserName }: Props) {
               handleSend(e);
             }
           }}
-          className="flex-1 min-h-[56px] max-h-[120px] resize-none border-4 border-foreground bg-white p-4 text-base font-bold shadow-[4px_4px_0px_var(--color-foreground)] focus-visible:outline-none focus:bg-secondary transition-colors rounded-none"
+          className="flex-1 min-h-[48px] max-h-[120px] resize-none border-2 border-slate-900 bg-white px-4 py-3 text-sm font-semibold text-slate-900 shadow-[2px_2px_0px_#0f172a] focus:shadow-[4px_4px_0px_#0f172a] focus:outline-none rounded-xl"
         />
         <Button 
           type="submit" 
           disabled={!newMessage.trim()} 
-          className="self-end sm:self-auto w-full sm:w-auto px-8 h-[56px] bg-foreground text-background border-4 border-transparent shadow-[4px_4px_0px_var(--color-primary)] text-lg font-black uppercase tracking-widest hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-primary)] transition-all rounded-none"
+          className="h-[48px] px-6 gap-2 shrink-0"
         >
-          SEND
+          <Send className="w-4 h-4" /> Send
         </Button>
       </form>
     </div>

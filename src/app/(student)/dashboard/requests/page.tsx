@@ -1,7 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { FeedbackButton } from "@/components/feedback-button";
-import { ArrowLeft, ArrowRight, MessageSquare, CheckCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, MessageSquare, CheckCircle2, Clock, XCircle } from "lucide-react";
 
 export default async function MyRequestsPage() {
   const supabase = await createClient();
@@ -29,7 +29,6 @@ export default async function MyRequestsPage() {
     .eq("student_id", user!.id)
     .order("created_at", { ascending: false });
 
-  // Fetch existing feedback so we know which completed requests already have it
   const { data: feedbackData } = await supabase
     .from("session_feedback")
     .select("request_id")
@@ -38,35 +37,37 @@ export default async function MyRequestsPage() {
   const feedbackRequestIds = new Set(feedbackData?.map((f) => f.request_id) || []);
 
   return (
-    <div className="max-w-4xl mx-auto p-4 md:p-8 space-y-8">
-      <div className="mb-8">
+    <div className="max-w-5xl mx-auto p-4 md:p-8 space-y-8 font-sans">
+      <div>
         <Link 
           href="/dashboard" 
-          className="inline-block text-sm font-black uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors group mb-6"
+          className="inline-flex items-center text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors mb-4 gap-1"
         >
-          <ArrowLeft className="w-4 h-4 inline-block transition-transform group-hover:-translate-x-1" strokeWidth={2.5} /> BACK TO MISSION CONTROL
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to Dashboard
         </Link>
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b-2 border-slate-900">
           <div>
-            <h1 className="text-5xl font-black uppercase tracking-tighter text-foreground mb-2">MY ACTIVE COMMS</h1>
-            <p className="text-xl font-bold uppercase tracking-wider text-muted-foreground">
-              TRACK YOUR CONNECTION REQUESTS AND MENTORSHIP STATUS.
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900 font-heading">
+              My Connection Requests
+            </h1>
+            <p className="text-sm text-slate-600 mt-1">
+              Track your outgoing mentorship requests and active chat sessions.
             </p>
           </div>
           <Link
             href="/search"
-            className="flex-shrink-0 bg-[#fdc800] text-foreground text-sm font-black uppercase tracking-wider px-6 py-3 border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all hover:shadow-[2px_2px_0px_var(--color-foreground)] inline-flex items-center gap-2"
+            className="shrink-0 bg-amber-400 text-slate-900 text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-xl border-2 border-slate-900 shadow-[3px_3px_0px_#0f172a] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0f172a] transition-all inline-flex items-center gap-2"
           >
-            DISCOVER TARGETS <ArrowRight className="w-4 h-4 inline-block" strokeWidth={2.5} />
+            Find Alumni <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
           </Link>
         </div>
       </div>
 
       <div className="space-y-6">
         {!requests || requests.length === 0 ? (
-          <div className="border-4 border-foreground bg-background p-12 text-center shadow-[8px_8px_0px_var(--color-foreground)]">
-            <p className="text-2xl font-black uppercase text-foreground mb-2">NO ACTIVE COMMS</p>
-            <p className="font-bold text-muted-foreground uppercase">YOU HAVEN&apos;T SENT ANY REQUESTS YET. GET TO IT.</p>
+          <div className="border-2 border-slate-900 rounded-2xl bg-white p-12 text-center shadow-[5px_5px_0px_#0f172a] space-y-2">
+            <p className="text-lg font-bold text-slate-900 font-heading">No Connection Requests Sent</p>
+            <p className="text-xs text-slate-600">Browse the alumni directory and send structured mentorship asks to get started.</p>
           </div>
         ) : (
           requests.map((req) => {
@@ -81,33 +82,33 @@ export default async function MyRequestsPage() {
             return (
               <div
                 key={req.id}
-                className="border-4 border-foreground bg-background shadow-[8px_8px_0px_var(--color-foreground)] overflow-hidden"
+                className="border-2 border-slate-900 rounded-2xl bg-white shadow-[5px_5px_0px_#0f172a] overflow-hidden transition-all"
               >
-                <div className="p-6 border-b-4 border-foreground bg-[#f4f4f4] flex flex-col md:flex-row justify-between gap-4">
+                <div className="p-6 border-b-2 border-slate-900 bg-slate-50 flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
-                    <h3 className="text-2xl font-black uppercase text-foreground">
-                      {alumni?.full_name || "UNKNOWN ALUMNI"}
+                    <h3 className="text-xl font-bold text-slate-900 font-heading">
+                      {alumni?.full_name || "Alumnus Member"}
                     </h3>
-                    <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground mt-1">
+                    <p className="text-xs font-semibold text-slate-600 mt-1">
                       {alumni?.role_title || "—"}{" "}
-                      {alumni?.company ? `AT ${alumni.company}` : ""}
+                      {alumni?.company ? `@ ${alumni.company}` : ""}
                     </p>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <div
-                      className={`px-3 py-1.5 border-4 border-foreground text-sm font-black uppercase shadow-[2px_2px_0px_var(--color-foreground)] ${
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={`px-3 py-1 rounded-full border-2 border-slate-900 text-xs font-bold shadow-[2px_2px_0px_#0f172a] ${
                         req.status === "accepted"
-                          ? "bg-[#00ff66] text-foreground"
+                          ? "bg-emerald-400 text-slate-900"
                           : req.status === "declined"
-                          ? "bg-[#ff3366] text-foreground"
+                          ? "bg-red-400 text-slate-900"
                           : req.status === "completed"
-                          ? "bg-[#00ffff] text-foreground"
-                          : "bg-[#fdc800] text-foreground animate-pulse"
+                          ? "bg-cyan-300 text-slate-900"
+                          : "bg-amber-400 text-slate-900"
                       }`}
                     >
-                      {req.status}
-                    </div>
-                    <time className="text-sm font-bold uppercase text-muted-foreground border-2 border-foreground px-2 py-1 bg-background">
+                      {req.status === "pending" ? "Pending Approval" : req.status.toUpperCase()}
+                    </span>
+                    <time className="text-xs font-bold text-slate-700 border-2 border-slate-900 px-2.5 py-1 rounded-lg bg-white shadow-[2px_2px_0px_#0f172a]">
                       {new Date(req.created_at).toLocaleDateString("en-US", {
                         month: "short",
                         day: "2-digit",
@@ -116,46 +117,46 @@ export default async function MyRequestsPage() {
                   </div>
                 </div>
 
-                <div className="p-6 bg-background">
-                  <div className="mb-6">
-                    <p className="text-sm font-black uppercase text-foreground mb-2">YOUR TRANSMISSION:</p>
-                    <div className="bg-secondary border-2 border-foreground p-4 shadow-[4px_4px_0px_var(--color-foreground)]">
-                      <p className="whitespace-pre-wrap font-medium text-foreground">{req.message}</p>
+                <div className="p-6 space-y-4">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Your Note to Alumnus:</p>
+                    <div className="bg-amber-50/50 border-2 border-slate-900 rounded-xl p-4 shadow-[3px_3px_0px_#0f172a]">
+                      <p className="text-sm font-medium text-slate-800 leading-relaxed whitespace-pre-wrap">{req.message}</p>
                     </div>
                   </div>
 
                   {req.status === "accepted" && alumni && (
-                    <div className="pt-6 border-t-4 border-foreground border-dashed flex flex-wrap items-center gap-4">
+                    <div className="pt-4 border-t-2 border-slate-900/10 flex flex-wrap items-center gap-3">
                       <Link
                         href={`/dashboard/messages/${req.id}`}
-                        className="bg-primary text-background text-sm font-black uppercase tracking-wider px-6 py-3 border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all hover:shadow-[2px_2px_0px_var(--color-foreground)] inline-flex items-center gap-2"
+                        className="bg-slate-900 text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-xl border-2 border-slate-900 shadow-[3px_3px_0px_#0f172a] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0f172a] transition-all inline-flex items-center gap-2"
                       >
-                        <MessageSquare className="w-5 h-5" strokeWidth={2.5} /> ENTER SECURE CHAT
+                        <MessageSquare className="w-4 h-4 text-emerald-400" strokeWidth={2.5} /> Open 1:1 Mentorship Chat
                       </Link>
                       {alumni.linkedin_url && (
                         <a
                           href={alumni.linkedin_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="bg-background text-foreground text-sm font-black uppercase tracking-wider px-6 py-3 border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all hover:shadow-[2px_2px_0px_var(--color-foreground)] hover:bg-[#0077b5] hover:text-white"
+                          className="bg-white text-slate-900 text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-xl border-2 border-slate-900 shadow-[3px_3px_0px_#0f172a] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0f172a] transition-all"
                         >
-                          LINKEDIN TARGET
+                          LinkedIn Profile
                         </a>
                       )}
                     </div>
                   )}
 
                   {req.status === "completed" && alumni && (
-                    <div className="pt-6 border-t-4 border-foreground border-dashed flex flex-wrap items-center justify-between gap-4">
-                      <div className="bg-[#00ff66] border-4 border-foreground px-4 py-2 shadow-[2px_2px_0px_var(--color-foreground)]">
-                         <p className="text-sm font-black uppercase text-foreground tracking-wider flex items-center gap-1.5">
-                           <CheckCircle className="w-4 h-4" strokeWidth={2.5} /> MISSION ACCOMPLISHED
+                    <div className="pt-4 border-t-2 border-slate-900/10 flex flex-wrap items-center justify-between gap-4">
+                      <div className="bg-emerald-100 border-2 border-slate-900 px-3.5 py-1.5 rounded-lg shadow-[2px_2px_0px_#0f172a]">
+                         <p className="text-xs font-bold text-emerald-900 tracking-wider flex items-center gap-1.5">
+                           <CheckCircle2 className="w-4 h-4 text-emerald-700" strokeWidth={2.5} /> Mentorship Session Completed
                          </p>
                       </div>
                       <FeedbackButton
                         requestId={req.id}
                         alumniId={alumni.id}
-                        alumniName={alumni.full_name || "ALUMNI"}
+                        alumniName={alumni.full_name || "Alumnus"}
                         hasFeedback={feedbackRequestIds.has(req.id)}
                       />
                     </div>
