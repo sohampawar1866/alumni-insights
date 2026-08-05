@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowLeft, Shield } from 'lucide-react'
 
 export default function ModeratorLoginPage() {
@@ -52,9 +53,18 @@ export default function ModeratorLoginPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 font-sans p-4 relative overflow-hidden">
       <div className="p-8 bg-white border-2 border-slate-900 rounded-2xl shadow-[8px_8px_0px_#0f172a] max-w-sm w-full relative z-10 space-y-6">
-        <div className="text-center space-y-2">
+        <div className="text-center space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 border-2 border-slate-900 text-xs font-bold text-slate-900 shadow-[2px_2px_0px_#0f172a]">
             <Shield className="w-3.5 h-3.5 text-blue-600" /> Placement Cell Moderator
+          </div>
+          <div className="relative w-16 h-16 mx-auto">
+            <Image
+              src="/images/iiitn.png"
+              alt="IIIT Nagpur Logo"
+              width={64}
+              height={64}
+              className="w-16 h-16 object-contain rounded-full"
+            />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 font-heading">
             Moderator Sign In

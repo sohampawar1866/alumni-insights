@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowLeft, ShieldAlert } from 'lucide-react'
 
 export default function AdminLoginPage() {
@@ -52,9 +53,18 @@ export default function AdminLoginPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 font-sans p-4 relative overflow-hidden">
       <div className="p-8 bg-white border-2 border-slate-900 rounded-2xl shadow-[8px_8px_0px_#0f172a] max-w-sm w-full relative z-10 space-y-6">
-        <div className="text-center space-y-2">
+        <div className="text-center space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 text-white border-2 border-slate-900 text-xs font-bold shadow-[2px_2px_0px_#0f172a]">
             <ShieldAlert className="w-3.5 h-3.5 text-amber-400" /> Admin Control
+          </div>
+          <div className="relative w-16 h-16 mx-auto">
+            <Image
+              src="/images/iiitn.png"
+              alt="IIIT Nagpur Logo"
+              width={64}
+              height={64}
+              className="w-16 h-16 object-contain rounded-full"
+            />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 font-heading">
             Admin Sign In

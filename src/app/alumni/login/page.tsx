@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowLeft, UserCheck } from 'lucide-react'
 
 export default function AlumniLoginPage() {
@@ -55,9 +56,18 @@ export default function AlumniLoginPage() {
       <div className="absolute inset-0 pointer-events-none opacity-30 bg-[linear-gradient(to_right,#cbd5e1_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e1_1px,transparent_1px)] bg-[size:32px_32px]" />
 
       <div className="p-8 bg-white border-2 border-slate-900 rounded-2xl shadow-[8px_8px_0px_#0f172a] max-w-sm w-full relative z-10 space-y-6">
-        <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-400 border-2 border-slate-900 text-xs font-bold text-slate-900 shadow-[2px_2px_0px_#0f172a] mb-2">
+        <div className="text-center space-y-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-400 border-2 border-slate-900 text-xs font-bold text-slate-900 shadow-[2px_2px_0px_#0f172a]">
             <UserCheck className="w-3.5 h-3.5" /> Alumni Portal
+          </div>
+          <div className="relative w-16 h-16 mx-auto">
+            <Image
+              src="/images/iiitn.png"
+              alt="IIIT Nagpur Logo"
+              width={64}
+              height={64}
+              className="w-16 h-16 object-contain rounded-full"
+            />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 font-heading">
             Alumni Sign In

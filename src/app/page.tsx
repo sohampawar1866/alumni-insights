@@ -12,13 +12,13 @@ export default function LandingPage() {
       <header className="relative z-10 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center p-1.5 shadow-sm border border-slate-900 overflow-hidden">
+            <div className="relative w-10 h-10 shrink-0">
               <Image
                 src="/images/iiitn.png"
                 alt="IIIT Nagpur Logo"
-                width={32}
-                height={32}
-                className="object-contain rounded-full"
+                width={40}
+                height={40}
+                className="w-10 h-10 object-contain rounded-full"
               />
             </div>
             <div className="flex flex-col">
@@ -149,8 +149,8 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs">
           <div className="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
             <div className="flex items-center gap-2 shrink-0">
-              <Image src="/images/iiitn.png" alt="IIITN Logo" width={22} height={22} className="object-contain rounded-full" />
-              <Image src="/images/crispt.png" alt="CRISPR Logo" width={22} height={22} className="object-contain rounded-full" />
+              <Image src="/images/iiitn.png" alt="IIITN Logo" width={24} height={24} className="w-6 h-6 object-contain rounded-full" />
+              <Image src="/images/crispt.png" alt="CRISPR Logo" width={24} height={24} className="w-6 h-6 object-contain rounded-full" />
             </div>
             <span className="text-slate-300 font-semibold">
               A product by the CRISPR Club, IIITN in collaboration with IIITN Placement Cell

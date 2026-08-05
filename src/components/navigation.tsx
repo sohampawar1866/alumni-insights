@@ -21,17 +21,17 @@ export function Navigation() {
   ]
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b-2 border-slate-900 bg-white/95 backdrop-blur-md px-4 py-3 sm:px-8 shadow-sm">
+    <header className="sticky top-0 z-40 w-full border-b-2 border-slate-900 bg-white/95 backdrop-blur-md px-4 py-3 sm:px-8 shadow-sm font-sans">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-8">
           <Link href="/dashboard" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-slate-900 border-2 border-slate-900 flex items-center justify-center p-1.5 shadow-[2px_2px_0px_#0f172a] group-hover:bg-amber-400 transition-all">
+            <div className="relative w-10 h-10 shrink-0">
               <Image
                 src="/images/iiitn.png"
                 alt="IIIT Nagpur Logo"
-                width={32}
-                height={32}
-                className="object-contain"
+                width={40}
+                height={40}
+                className="w-10 h-10 object-contain rounded-full"
               />
             </div>
             <div className="flex flex-col">

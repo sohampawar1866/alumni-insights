@@ -33,13 +33,13 @@ export default function LoginPage() {
         </div>
         
         <div className="space-y-3">
-          <div className="w-14 h-14 rounded-2xl bg-slate-900 border-2 border-slate-900 p-2 mx-auto flex items-center justify-center shadow-[3px_3px_0px_#0f172a]">
+          <div className="relative w-16 h-16 mx-auto">
             <Image
               src="/images/iiitn.png"
               alt="IIIT Nagpur Logo"
-              width={40}
-              height={40}
-              className="object-contain"
+              width={64}
+              height={64}
+              className="w-16 h-16 object-contain rounded-full"
             />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 font-heading">

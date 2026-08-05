@@ -1,7 +1,8 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { User, MessageSquare, Settings, Megaphone, Menu, LogOut, GraduationCap } from "lucide-react";
+import Image from "next/image";
+import { User, MessageSquare, Settings, Megaphone, Menu, LogOut } from "lucide-react";
 
 import { FirstLoginNudge } from "@/components/first-login-nudge";
 import { NotificationBell } from "@/components/notification-bell";
@@ -35,8 +36,14 @@ export default async function AlumniLayout({
         {/* Sidebar Header */}
         <div className="p-5 border-b-2 border-slate-900 bg-amber-400 flex items-center justify-between">
           <div className="min-w-0 pr-2 flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-[2px_2px_0px_#0f172a]">
-              <GraduationCap className="w-5 h-5 text-amber-400" />
+            <div className="relative w-9 h-9 shrink-0">
+              <Image
+                src="/images/iiitn.png"
+                alt="IIIT Nagpur Logo"
+                width={36}
+                height={36}
+                className="w-9 h-9 object-contain rounded-full"
+              />
             </div>
             <div className="min-w-0">
               <h2 className="text-sm font-bold tracking-tight text-slate-900 font-heading truncate">Alumni Portal</h2>
