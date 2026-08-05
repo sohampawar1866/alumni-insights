@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Search, Handshake, Rocket, GraduationCap, ShieldCheck, ArrowRight, Users, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
+import { Search, Handshake, Rocket, ShieldCheck, ArrowRight, CheckCircle2 } from "lucide-react";
 
 export default function LandingPage() {
   return (
@@ -10,9 +11,15 @@ export default function LandingPage() {
       {/* Header Bar */}
       <header className="relative z-10 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center text-white shadow-sm">
-              <GraduationCap className="w-5 h-5" strokeWidth={2.2} />
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center p-1.5 shadow-sm border border-slate-900 overflow-hidden">
+              <Image
+                src="/images/iiitn.png"
+                alt="IIIT Nagpur Logo"
+                width={32}
+                height={32}
+                className="object-contain rounded-full"
+              />
             </div>
             <div className="flex flex-col">
               <span className="font-heading text-lg font-bold tracking-tight text-slate-900 leading-none">
@@ -22,11 +29,17 @@ export default function LandingPage() {
                 IIIT Nagpur
               </span>
             </div>
-          </div>
+          </Link>
           <div className="flex items-center gap-3">
             <Link
-              href="/alumni/login"
+              href="/about"
               className="text-xs font-semibold text-slate-700 hover:text-slate-900 px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors"
+            >
+              About
+            </Link>
+            <Link
+              href="/alumni/login"
+              className="text-xs font-semibold text-slate-700 hover:text-slate-900 px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors hidden sm:inline-block"
             >
               Alumni Portal
             </Link>
@@ -76,18 +89,10 @@ export default function LandingPage() {
           </div>
 
           {/* Institutional Trust Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-6 pt-8 text-xs font-medium text-slate-500">
+          <div className="flex items-center justify-center pt-8 text-xs font-medium text-slate-500">
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              Verified Institutional OAuth
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              100% Volunteer Mentorship
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              Placement Cell Approved
+              Verified Institutional OAuth (@iiitn.ac.in)
             </span>
           </div>
         </div>
@@ -110,7 +115,7 @@ export default function LandingPage() {
               <div className="w-12 h-12 rounded-xl bg-blue-100 border border-blue-200/60 flex items-center justify-center text-blue-700">
                 <Search className="w-6 h-6" strokeWidth={2} />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Discover Alumni</h3>
+              <h3 className="text-lg font-bold text-slate-900 font-heading">Discover Alumni</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
                 Filter alumni by company, role title, branch, graduation year, and city to target the exact career path you aspire to.
               </p>
@@ -120,7 +125,7 @@ export default function LandingPage() {
               <div className="w-12 h-12 rounded-xl bg-amber-100 border border-amber-200/60 flex items-center justify-center text-amber-700">
                 <Handshake className="w-6 h-6" strokeWidth={2} />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Structured Requests</h3>
+              <h3 className="text-lg font-bold text-slate-900 font-heading">Structured Requests</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
                 Send structured mentorship asks (resume review, career chat, job referral) with clear response time expectations.
               </p>
@@ -130,7 +135,7 @@ export default function LandingPage() {
               <div className="w-12 h-12 rounded-xl bg-emerald-100 border border-emerald-200/60 flex items-center justify-center text-emerald-700">
                 <Rocket className="w-6 h-6" strokeWidth={2} />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Accelerate Growth</h3>
+              <h3 className="text-lg font-bold text-slate-900 font-heading">Accelerate Growth</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
                 Gain real-world industry insights, interview preparation tips, and direct referral opportunities from IIIT Nagpur seniors.
               </p>
@@ -141,18 +146,25 @@ export default function LandingPage() {
 
       {/* Institutional Footer */}
       <footer className="py-8 px-6 bg-slate-900 text-slate-400 border-t border-slate-800 z-10 mt-auto">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-medium">
-          <div className="flex items-center gap-2">
-            <GraduationCap className="w-4 h-4 text-slate-300" />
-            <span className="text-slate-300 font-semibold">Alumni Insights · IIIT Nagpur</span>
-            <span className="text-slate-600">|</span>
-            <span>Placement Cell Platform</span>
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs">
+          <div className="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
+            <div className="flex items-center gap-2 shrink-0">
+              <Image src="/images/iiitn.png" alt="IIITN Logo" width={22} height={22} className="object-contain rounded-full" />
+              <Image src="/images/crispt.png" alt="CRISPR Logo" width={22} height={22} className="object-contain rounded-full" />
+            </div>
+            <span className="text-slate-300 font-semibold">
+              A product by the CRISPR Club, IIITN in collaboration with IIITN Placement Cell
+            </span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 text-xs font-semibold shrink-0">
+            <Link href="/about" className="text-slate-300 hover:text-white transition-colors">
+              About
+            </Link>
+            <span className="text-slate-700">&bull;</span>
             <Link href="/moderator/login" className="hover:text-white transition-colors">
               Moderator Portal
             </Link>
-            <span className="text-slate-700">•</span>
+            <span className="text-slate-700">&bull;</span>
             <Link href="/admin/login" className="hover:text-white transition-colors">
               Admin Login
             </Link>

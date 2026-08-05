@@ -2,10 +2,11 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { NotificationBell } from '@/components/notification-bell'
-import { LayoutDashboard, Search, GitPullRequest, Megaphone, Menu, X, LogOut, GraduationCap } from 'lucide-react'
+import { LayoutDashboard, Search, GitPullRequest, Megaphone, Menu, X, LogOut, Info } from 'lucide-react'
 
 export function Navigation() {
   const pathname = usePathname()
@@ -16,6 +17,7 @@ export function Navigation() {
     { href: '/search', label: 'Search Alumni', icon: Search },
     { href: '/dashboard/requests', label: 'My Requests', icon: GitPullRequest },
     { href: '/announcements', label: 'Announcements', icon: Megaphone },
+    { href: '/about', label: 'About', icon: Info },
   ]
 
   return (
@@ -23,8 +25,14 @@ export function Navigation() {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-8">
           <Link href="/dashboard" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-slate-900 border-2 border-slate-900 flex items-center justify-center text-white shadow-[2px_2px_0px_#0f172a] group-hover:bg-amber-400 group-hover:text-slate-900 transition-all">
-              <GraduationCap className="w-5 h-5" strokeWidth={2.5} />
+            <div className="w-10 h-10 rounded-xl bg-slate-900 border-2 border-slate-900 flex items-center justify-center p-1.5 shadow-[2px_2px_0px_#0f172a] group-hover:bg-amber-400 transition-all">
+              <Image
+                src="/images/iiitn.png"
+                alt="IIIT Nagpur Logo"
+                width={32}
+                height={32}
+                className="object-contain"
+              />
             </div>
             <div className="flex flex-col">
               <span className="font-heading text-xl font-bold tracking-tight text-slate-900 leading-none">

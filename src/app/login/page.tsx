@@ -3,7 +3,8 @@
 import { createClient } from '@/utils/supabase/client'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { ArrowLeft, GraduationCap, ShieldCheck } from 'lucide-react'
+import Image from 'next/image'
+import { ArrowLeft, ShieldCheck } from 'lucide-react'
 
 export default function LoginPage() {
   const supabase = createClient()
@@ -31,9 +32,15 @@ export default function LoginPage() {
           Student Sign In Portal
         </div>
         
-        <div className="space-y-2">
-          <div className="w-12 h-12 rounded-xl bg-slate-900 border-2 border-slate-900 text-white mx-auto flex items-center justify-center shadow-[3px_3px_0px_#0f172a]">
-            <GraduationCap className="w-6 h-6" strokeWidth={2.5} />
+        <div className="space-y-3">
+          <div className="w-14 h-14 rounded-2xl bg-slate-900 border-2 border-slate-900 p-2 mx-auto flex items-center justify-center shadow-[3px_3px_0px_#0f172a]">
+            <Image
+              src="/images/iiitn.png"
+              alt="IIIT Nagpur Logo"
+              width={40}
+              height={40}
+              className="object-contain"
+            />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 font-heading">
             Alumni Insights
