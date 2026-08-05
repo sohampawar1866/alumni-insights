@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ShieldAlert } from 'lucide-react'
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('')
@@ -30,7 +30,6 @@ export default function AdminLoginPage() {
       setError(error.message)
       setLoading(false)
     } else {
-      // Verify the user actually has the admin role
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
         const { data: profile } = await supabase
@@ -51,44 +50,57 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
-      <div className="p-8 bg-white border-4 border-foreground shadow-[8px_8px_0px_#000] max-w-sm w-full">
-        <h1 className="text-2xl font-black mb-2 text-center uppercase tracking-tight">Admin Portal</h1>
-        <p className="mb-6 text-sm font-bold text-muted-foreground text-center uppercase tracking-wider">Platform Administration</p>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 font-sans p-4 relative overflow-hidden">
+      <div className="p-8 bg-white border-2 border-slate-900 rounded-2xl shadow-[8px_8px_0px_#0f172a] max-w-sm w-full relative z-10 space-y-6">
+        <div className="text-center space-y-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 text-white border-2 border-slate-900 text-xs font-bold shadow-[2px_2px_0px_#0f172a]">
+            <ShieldAlert className="w-3.5 h-3.5 text-amber-400" /> Admin Control
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 font-heading">
+            Admin Sign In
+          </h1>
+          <p className="text-xs text-slate-500 font-medium">
+            System administration and moderator role management.
+          </p>
+        </div>
         
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div className="space-y-2">
-            <label className="block text-xs font-black uppercase tracking-wider" htmlFor="email">Email</label>
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-700" htmlFor="email">Email</label>
             <Input 
               id="email" 
               type="email" 
+              placeholder="admin@iiitn.ac.in"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="border-2 border-foreground rounded-none shadow-[2px_2px_0px_#000] focus-visible:ring-0 focus-visible:border-primary"
               required 
             />
           </div>
-          <div className="space-y-2">
-            <label className="block text-xs font-black uppercase tracking-wider" htmlFor="password">Password</label>
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-700" htmlFor="password">Password</label>
             <Input 
               id="password" 
               type="password" 
+              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="border-2 border-foreground rounded-none shadow-[2px_2px_0px_#000] focus-visible:ring-0 focus-visible:border-primary"
               required 
             />
           </div>
           
-          {error && <p className="text-destructive font-bold text-sm text-center uppercase tracking-tight bg-destructive/10 border-2 border-destructive p-2">{error}</p>}
+          {error && (
+            <div className="bg-red-50 border-2 border-red-900 rounded-xl p-3 text-xs font-bold text-red-900 shadow-[2px_2px_0px_#0f172a]">
+              {error}
+            </div>
+          )}
           
-          <Button type="submit" className="w-full font-black uppercase tracking-wider border-2 border-foreground rounded-none shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all" size="lg" disabled={loading}>
-            {loading ? 'Authenticating...' : 'Sign In'}
+          <Button type="submit" className="w-full h-11 text-sm font-bold shadow-[4px_4px_0px_#0f172a] mt-4" disabled={loading}>
+            {loading ? 'Authenticating...' : 'Sign In to Admin Panel'}
           </Button>
         </form>
-        <div className="mt-6 text-center">
-          <Link href="/" className="text-sm font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground hover:underline transition-all">
-            <ArrowLeft className="w-4 h-4 inline-block mr-1" strokeWidth={2.5} /> Back to Landing Page
+        <div className="pt-2 text-center">
+          <Link href="/" className="inline-flex items-center text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors gap-1">
+            <ArrowLeft className="w-3.5 h-3.5" /> Back to Landing Page
           </Link>
         </div>
       </div>

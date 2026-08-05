@@ -1,32 +1,34 @@
 import Link from "next/link";
+import { ArrowLeft, AlertCircle } from "lucide-react";
 
 export default function UnauthorizedPage() {
   return (
-    <div className="flex flex-col min-h-screen items-center justify-center p-8 bg-background relative overflow-hidden font-sans">
-      <div className="w-full max-w-2xl bg-white border-8 border-foreground p-12 md:p-20 shadow-[16px_16px_0px_var(--color-foreground)] relative z-10 flex flex-col items-center justify-center text-center">
-        <h1 className="text-[6rem] md:text-[8rem] font-black uppercase tracking-tighter text-destructive leading-none mb-4 -rotate-3 drop-shadow-[6px_6px_0px_var(--color-foreground)]">
-          HALT
-        </h1>
-        <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-background bg-foreground px-6 py-2 mb-6 rotate-1">
-          UNAUTHORIZED ACCESS
-        </h2>
-        <p className="text-lg md:text-xl font-bold uppercase tracking-wide text-foreground mb-10 max-w-lg border-4 border-destructive p-4 bg-muted text-left">
-          <span className="block text-destructive font-black mb-2">ERROR_CODE: INSUFFICIENT_PERMISSIONS</span>
-          You do not have the required permissions to access this section. Ensure you are signed in with the correct account and have been granted the appropriate role.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 w-full max-w-lg">
+    <div className="flex flex-col min-h-screen items-center justify-center p-6 bg-slate-50 relative overflow-hidden font-sans">
+      <div className="w-full max-w-md bg-white border-2 border-slate-900 rounded-2xl p-8 shadow-[8px_8px_0px_#0f172a] relative z-10 flex flex-col items-center justify-center text-center space-y-6">
+        <div className="w-12 h-12 rounded-xl bg-red-100 border-2 border-slate-900 text-red-600 flex items-center justify-center shadow-[3px_3px_0px_#0f172a]">
+          <AlertCircle className="w-6 h-6" strokeWidth={2.5} />
+        </div>
+        <div className="space-y-2">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 font-heading">
+            Unauthorized Access
+          </h1>
+          <p className="text-xs text-slate-600 font-medium leading-relaxed">
+            You do not have permission to access this portal page. Please make sure you are signed in with the correct role.
+          </p>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-3 w-full pt-2">
           <Link
             href="/"
-            className="group inline-flex h-16 flex-1 items-center justify-center bg-primary border-4 border-foreground px-10 text-xl font-black uppercase tracking-widest text-background shadow-[8px_8px_0px_var(--color-foreground)] transition-all hover:-translate-y-2 hover:-translate-x-2 hover:shadow-[12px_12px_0px_var(--color-foreground)] hover:bg-[#00cc50]"
+            className="flex-1 inline-flex items-center justify-center h-11 bg-slate-900 text-white rounded-xl border-2 border-slate-900 font-bold text-xs shadow-[3px_3px_0px_#0f172a] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0f172a] transition-all gap-1.5"
           >
-            GO HOME
+            <ArrowLeft className="w-3.5 h-3.5" /> Return Home
           </Link>
           <form action="/api/auth/signout" method="POST" className="flex-1">
             <button
               type="submit"
-              className="w-full h-16 bg-destructive border-4 border-foreground px-10 text-xl font-black uppercase tracking-widest text-background shadow-[8px_8px_0px_var(--color-foreground)] transition-all hover:-translate-y-2 hover:-translate-x-2 hover:shadow-[12px_12px_0px_var(--color-foreground)]"
+              className="w-full h-11 bg-white text-slate-900 rounded-xl border-2 border-slate-900 font-bold text-xs shadow-[3px_3px_0px_#0f172a] hover:bg-red-50 hover:text-red-700 hover:-translate-y-0.5 transition-all"
             >
-              SIGN OUT
+              Sign Out
             </button>
           </form>
         </div>
@@ -34,4 +36,3 @@ export default function UnauthorizedPage() {
     </div>
   );
 }
-

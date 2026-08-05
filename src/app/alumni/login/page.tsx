@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, UserCheck } from 'lucide-react'
 
 export default function AlumniLoginPage() {
   const [email, setEmail] = useState('')
@@ -30,7 +30,6 @@ export default function AlumniLoginPage() {
       setError(error.message)
       setLoading(false)
     } else {
-      // Verify the user actually has the alumni role
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
         const { data: profile } = await supabase
@@ -41,7 +40,7 @@ export default function AlumniLoginPage() {
         
         if (!profile?.roles?.includes('alumni')) {
           await supabase.auth.signOut()
-          setError('This account does not have alumni access. Contact the moderator.')
+          setError('This account does not have alumni access. Contact the placement moderator.')
           setLoading(false)
           return
         }
@@ -51,50 +50,61 @@ export default function AlumniLoginPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4 relative">
-      <div className="absolute top-0 left-0 w-full h-8 bg-secondary border-b-4 border-foreground" />
-      <div className="p-8 bg-background border-4 border-foreground shadow-[12px_12px_0px_var(--color-foreground)] max-w-sm w-full relative z-10 mt-4">
-        
-        <div className="absolute -top-6 right-4 rotate-3 bg-primary border-2 border-foreground px-4 py-1 font-black text-xs uppercase">
-          ALUMNI ACCESS ONLY
-        </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 font-sans p-4 relative overflow-hidden">
+      {/* Decorative Grid Background */}
+      <div className="absolute inset-0 pointer-events-none opacity-30 bg-[linear-gradient(to_right,#cbd5e1_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e1_1px,transparent_1px)] bg-[size:32px_32px]" />
 
-        <h1 className="text-3xl font-black mb-2 text-center uppercase tracking-tighter mt-2">Alumni Portal</h1>
-        <p className="mb-6 text-sm font-bold text-muted-foreground uppercase text-center">Sign in with the credentials provided by the moderator.</p>
+      <div className="p-8 bg-white border-2 border-slate-900 rounded-2xl shadow-[8px_8px_0px_#0f172a] max-w-sm w-full relative z-10 space-y-6">
+        <div className="text-center space-y-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-400 border-2 border-slate-900 text-xs font-bold text-slate-900 shadow-[2px_2px_0px_#0f172a] mb-2">
+            <UserCheck className="w-3.5 h-3.5" /> Alumni Portal
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 font-heading">
+            Alumni Sign In
+          </h1>
+          <p className="text-xs text-slate-500 font-medium">
+            Sign in with the login credentials provided by the Placement Cell.
+          </p>
+        </div>
         
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div className="space-y-2">
-            <label className="block text-sm font-black uppercase tracking-wide" htmlFor="email">Email Address</label>
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-700" htmlFor="email">Email Address</label>
             <Input 
               id="email" 
               type="email" 
+              placeholder="alumni@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required 
-              className="text-lg font-mono focus-visible:bg-secondary"
             />
           </div>
-          <div className="space-y-2">
-            <label className="block text-sm font-black uppercase tracking-wide" htmlFor="password">Passcode</label>
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-700" htmlFor="password">Password</label>
             <Input 
               id="password" 
               type="password" 
+              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required 
-              className="text-lg font-mono focus-visible:bg-secondary"
             />
           </div>
           
-          {error && <div className="bg-destructive text-white p-3 border-2 border-foreground font-bold text-center uppercase tracking-wide text-xs">{error}</div>}
+          {error && (
+            <div className="bg-red-50 border-2 border-red-900 rounded-xl p-3 text-xs font-bold text-red-900 shadow-[2px_2px_0px_#0f172a]">
+              {error}
+            </div>
+          )}
           
-          <Button type="submit" className="w-full h-14 text-lg mt-8 shadow-[8px_8px_0px_var(--color-foreground)] hover:shadow-[4px_4px_0px_var(--color-foreground)]" disabled={loading}>
-            {loading ? 'Authenticating...' : 'Enter Platform'}
+          <Button type="submit" className="w-full h-11 text-sm font-bold shadow-[4px_4px_0px_#0f172a] mt-4" disabled={loading}>
+            {loading ? 'Signing In...' : 'Sign In to Alumni Portal'}
           </Button>
         </form>
-        <div className="mt-6 text-center">
-          <Link href="/" className="text-sm font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground hover:underline transition-all">
-            <ArrowLeft className="w-4 h-4 inline-block mr-1" strokeWidth={2.5} /> Back to Landing Page
+
+        <div className="pt-2 text-center">
+          <Link href="/" className="inline-flex items-center text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors gap-1">
+            <ArrowLeft className="w-3.5 h-3.5" /> Back to Landing Page
           </Link>
         </div>
       </div>

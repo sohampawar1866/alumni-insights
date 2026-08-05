@@ -1,7 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { User, MessageSquare, Settings, Megaphone, Menu } from "lucide-react";
+import { User, MessageSquare, Settings, Megaphone, Menu, LogOut, GraduationCap } from "lucide-react";
 
 import { FirstLoginNudge } from "@/components/first-login-nudge";
 import { NotificationBell } from "@/components/notification-bell";
@@ -27,69 +27,72 @@ export default async function AlumniLayout({
   if (!profile?.roles?.includes("alumni")) redirect("/unauthorized");
 
   return (
-    <div className="flex flex-col md:flex-row h-[100dvh] bg-background font-sans relative overflow-hidden">
-      {/* Decorative Grid Background */}
-      <div className="absolute inset-0 pointer-events-none opacity-20 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
-
+    <div className="flex flex-col md:flex-row min-h-screen bg-slate-50 font-sans relative">
       {/* Sidebar */}
-      <aside className="w-full md:w-72 shrink-0 flex flex-col bg-white border-b-8 md:border-b-0 md:border-r-8 border-foreground relative z-20 shadow-[8px_0px_0px_var(--color-foreground)] md:overflow-y-auto">
+      <aside className="w-full md:w-64 shrink-0 flex flex-col bg-white border-b-2 md:border-b-0 md:border-r-2 border-slate-900 relative z-20 shadow-[4px_0px_0px_#0f172a] md:min-h-screen">
         <input type="checkbox" id="alumni-menu" className="peer hidden" />
-        <div className="p-6 border-b-4 border-foreground bg-primary text-background flex items-center justify-between">
-          <div className="min-w-0 pr-4">
-            <h2 className="text-xl font-black uppercase tracking-tighter">ALUMNI PORTAL</h2>
-            <p className="text-sm font-bold uppercase tracking-wider opacity-90 truncate max-w-[180px]">
-              {profile?.full_name || user.email}
-            </p>
-          </div>
-          <div className="flex items-center gap-3 shrink-0">
-            <div className="bg-background text-foreground border-2 border-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
-              <NotificationBell />
+        
+        {/* Sidebar Header */}
+        <div className="p-5 border-b-2 border-slate-900 bg-amber-400 flex items-center justify-between">
+          <div className="min-w-0 pr-2 flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-[2px_2px_0px_#0f172a]">
+              <GraduationCap className="w-5 h-5 text-amber-400" />
             </div>
-            <label htmlFor="alumni-menu" className="md:hidden p-2 border-2 border-foreground bg-white text-foreground shadow-[2px_2px_0px_#000] cursor-pointer hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#000] transition-all">
-              <Menu className="w-6 h-6" strokeWidth={3} />
+            <div className="min-w-0">
+              <h2 className="text-sm font-bold tracking-tight text-slate-900 font-heading truncate">Alumni Portal</h2>
+              <p className="text-xs font-semibold text-slate-900/80 truncate">
+                {profile?.full_name || user.email}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <NotificationBell />
+            <label htmlFor="alumni-menu" className="md:hidden p-2.5 rounded-xl border-2 border-slate-900 bg-white text-slate-900 shadow-[2px_2px_0px_#0f172a] cursor-pointer">
+              <Menu className="w-5 h-5" strokeWidth={2.5} />
             </label>
           </div>
         </div>
 
-        <div className="hidden peer-checked:flex md:flex flex-col flex-1">
-          <nav className="flex-1 space-y-4 p-6">
+        {/* Navigation Items */}
+        <div className="hidden peer-checked:flex md:flex flex-col flex-1 justify-between p-4">
+          <nav className="space-y-2">
             <Link
               href="/alumni/dashboard"
-              className="flex items-center justify-between px-4 py-3 bg-muted border-4 border-foreground font-black uppercase tracking-widest text-foreground shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:bg-secondary hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
+              className="flex items-center justify-between px-4 py-2.5 rounded-xl border-2 border-slate-900 bg-white text-xs font-bold uppercase tracking-wider text-slate-900 shadow-[2px_2px_0px_#0f172a] hover:bg-slate-100 hover:-translate-y-0.5 transition-all"
             >
               <span>My Profile</span>
-              <User className="w-5 h-5" strokeWidth={2.5} />
+              <User className="w-4 h-4" strokeWidth={2.5} />
             </Link>
             <Link
               href="/alumni/dashboard/requests"
-              className="flex items-center justify-between px-4 py-3 bg-muted border-4 border-foreground font-black uppercase tracking-widest text-foreground shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:bg-secondary hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
+              className="flex items-center justify-between px-4 py-2.5 rounded-xl border-2 border-slate-900 bg-white text-xs font-bold uppercase tracking-wider text-slate-900 shadow-[2px_2px_0px_#0f172a] hover:bg-slate-100 hover:-translate-y-0.5 transition-all"
             >
               <span>Requests</span>
-              <MessageSquare className="w-5 h-5" strokeWidth={2.5} />
+              <MessageSquare className="w-4 h-4" strokeWidth={2.5} />
             </Link>
             <Link
               href="/alumni/dashboard/settings"
-              className="flex items-center justify-between px-4 py-3 bg-muted border-4 border-foreground font-black uppercase tracking-widest text-foreground shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:bg-secondary hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
+              className="flex items-center justify-between px-4 py-2.5 rounded-xl border-2 border-slate-900 bg-white text-xs font-bold uppercase tracking-wider text-slate-900 shadow-[2px_2px_0px_#0f172a] hover:bg-slate-100 hover:-translate-y-0.5 transition-all"
             >
               <span>Settings</span>
-              <Settings className="w-5 h-5" strokeWidth={2.5} />
+              <Settings className="w-4 h-4" strokeWidth={2.5} />
             </Link>
             <Link
               href="/alumni/dashboard/announcements"
-              className="flex items-center justify-between px-4 py-3 bg-muted border-4 border-foreground font-black uppercase tracking-widest text-foreground shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:bg-secondary hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
+              className="flex items-center justify-between px-4 py-2.5 rounded-xl border-2 border-slate-900 bg-white text-xs font-bold uppercase tracking-wider text-slate-900 shadow-[2px_2px_0px_#0f172a] hover:bg-slate-100 hover:-translate-y-0.5 transition-all"
             >
               <span>Noticeboard</span>
-              <Megaphone className="w-5 h-5" strokeWidth={2.5} />
+              <Megaphone className="w-4 h-4" strokeWidth={2.5} />
             </Link>
           </nav>
           
-          <div className="p-6 border-t-4 border-foreground border-dashed bg-white">
+          <div className="pt-4 border-t-2 border-slate-900 mt-6">
             <form action="/api/auth/signout" method="POST">
               <button
                 type="submit"
-                className="w-full px-4 py-3 bg-destructive border-4 border-foreground font-black uppercase tracking-widest text-background shadow-[4px_4px_0px_var(--color-foreground)] transition-all hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)]"
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border-2 border-slate-900 bg-red-50 text-xs font-bold uppercase tracking-wider text-red-700 shadow-[2px_2px_0px_#0f172a] hover:bg-red-100 transition-all"
               >
-                SIGN OUT
+                <LogOut className="w-4 h-4" /> Sign Out
               </button>
             </form>
           </div>
@@ -97,7 +100,7 @@ export default async function AlumniLayout({
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto relative z-10 w-full">
+      <main className="flex-1 overflow-auto p-4 sm:p-8 relative z-10 w-full">
         {children}
         <FirstLoginNudge />
       </main>

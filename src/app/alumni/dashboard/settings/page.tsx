@@ -4,7 +4,7 @@ import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle2, Lock } from "lucide-react";
 
 export default function AlumniSettingsPage() {
   const supabase = createClient();
@@ -47,24 +47,26 @@ export default function AlumniSettingsPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-10 space-y-8">
-      <div className="border-l-8 border-primary pl-4">
-        <h1 className="text-4xl font-black uppercase tracking-tighter text-foreground">Settings</h1>
-        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground mt-2">
-          Update your account password.
+    <div className="max-w-xl mx-auto space-y-6 font-sans">
+      <div className="pb-6 border-b-2 border-slate-900">
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900 font-heading flex items-center gap-2">
+          <Lock className="w-6 h-6 text-slate-700" /> Account Security
+        </h1>
+        <p className="text-xs text-slate-600 mt-1">
+          Update your alumni account password.
         </p>
       </div>
 
       <form
         onSubmit={handleChangePassword}
-        className="space-y-6 border-4 border-foreground bg-white p-8 shadow-[8px_8px_0px_var(--color-foreground)]"
+        className="space-y-4 bg-white border-2 border-slate-900 rounded-2xl p-6 shadow-[5px_5px_0px_#0f172a]"
       >
-        <h2 className="text-sm font-black uppercase tracking-wider text-foreground border-b-4 border-foreground pb-3">
+        <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider border-b-2 border-slate-100 pb-2">
           Change Password
         </h2>
 
-        <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-wider text-foreground">
+        <div className="space-y-1.5">
+          <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
             New Password
           </label>
           <Input
@@ -74,33 +76,31 @@ export default function AlumniSettingsPage() {
             placeholder="At least 8 characters"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            className="border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] rounded-none focus-visible:ring-0 focus-visible:border-primary text-base font-bold h-12"
           />
         </div>
 
-        <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-wider text-foreground">
+        <div className="space-y-1.5">
+          <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
             Confirm New Password
           </label>
           <Input
             required
             type="password"
-            placeholder="Re-enter password"
+            placeholder="Re-enter new password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] rounded-none focus-visible:ring-0 focus-visible:border-primary text-base font-bold h-12"
           />
         </div>
 
         {error && (
-          <div className="border-4 border-foreground bg-destructive text-background p-4 shadow-[4px_4px_0px_var(--color-foreground)]">
-            <p className="text-sm font-black uppercase tracking-widest">{error}</p>
+          <div className="bg-red-50 border-2 border-red-900 rounded-xl p-3 text-xs font-bold text-red-900 shadow-[2px_2px_0px_#0f172a]">
+            {error}
           </div>
         )}
 
         {success && (
-          <div className="border-4 border-foreground bg-primary text-foreground p-4 shadow-[4px_4px_0px_var(--color-foreground)]">
-            <p className="text-sm font-black uppercase tracking-widest flex items-center gap-1.5"><CheckCircle className="w-4 h-4" strokeWidth={2.5} /> Password updated successfully.</p>
+          <div className="bg-emerald-50 border-2 border-emerald-900 rounded-xl p-3 text-xs font-bold text-emerald-900 shadow-[2px_2px_0px_#0f172a] flex items-center gap-1.5">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Password updated successfully.
           </div>
         )}
 
@@ -108,9 +108,9 @@ export default function AlumniSettingsPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="h-14 px-10 bg-secondary text-foreground border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] text-lg font-black uppercase tracking-widest hover:-translate-y-1 hover:translate-x-1 hover:shadow-[12px_12px_0px_var(--color-foreground)] transition-all rounded-none"
+            className="w-full"
           >
-            {loading ? "UPDATING..." : "UPDATE PASSWORD"}
+            {loading ? "Updating..." : "Update Password"}
           </Button>
         </div>
       </form>

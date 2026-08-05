@@ -5,6 +5,7 @@ import { createClient } from '@/utils/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
+import { UserCheck } from 'lucide-react'
 
 export function ProfileForm({ initialData }: { initialData?: Record<string, unknown> | null }) {
   const [branch, setBranch] = useState<string>((initialData?.branch as string) || '')
@@ -29,36 +30,35 @@ export function ProfileForm({ initialData }: { initialData?: Record<string, unkn
         .eq('id', user.id)
 
       if (!error) {
-        router.refresh() // Trigger a server re-render to reflect the completed profile
+        router.refresh()
       }
     }
     setLoading(false)
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] w-full max-w-md space-y-6 p-8 relative mt-6">
-      <div className="absolute -top-5 -left-4 bg-primary border-2 border-foreground px-3 py-1 font-black text-sm uppercase transform -rotate-3">
-        Action Required
+    <form onSubmit={handleSubmit} className="bg-white border-2 border-slate-900 rounded-2xl shadow-[6px_6px_0px_#0f172a] w-full max-w-md space-y-5 p-6 sm:p-8 relative mt-4 font-sans">
+      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400 border-2 border-slate-900 text-xs font-bold text-slate-900 shadow-[2px_2px_0px_#0f172a]">
+        <UserCheck className="w-3.5 h-3.5" /> Action Required
       </div>
       
-      <div>
-        <h2 className="text-3xl font-black uppercase tracking-tighter mb-2">Complete Profile</h2>
-        <p className="text-sm font-bold text-muted-foreground uppercase tracking-wide">Provide your branch and graduation year to continue exploring.</p>
+      <div className="space-y-1">
+        <h2 className="text-xl font-bold tracking-tight text-slate-900 font-heading">Complete Student Profile</h2>
+        <p className="text-xs text-slate-600 font-medium">Provide your branch and graduation year to finish account setup.</p>
       </div>
       
-      <div className="space-y-2">
-        <label className="block text-sm font-black uppercase tracking-wide text-foreground">Branch</label>
+      <div className="space-y-1.5">
+        <label className="text-xs font-bold uppercase tracking-wider text-slate-700">Branch</label>
         <Input 
           required 
           placeholder="e.g., Computer Science Engineering" 
           value={branch} 
           onChange={(e) => setBranch(e.target.value)} 
-          className="text-lg font-mono focus-visible:bg-secondary"
         />
       </div>
       
-      <div className="space-y-2">
-        <label className="block text-sm font-black uppercase tracking-wide text-foreground">Graduation Year</label>
+      <div className="space-y-1.5">
+        <label className="text-xs font-bold uppercase tracking-wider text-slate-700">Graduation Year</label>
         <Input 
           required 
           type="number" 
@@ -67,12 +67,11 @@ export function ProfileForm({ initialData }: { initialData?: Record<string, unkn
           onChange={(e) => setGraduationYear(e.target.value)} 
           min={2000}
           max={2100}
-          className="text-lg font-mono focus-visible:bg-secondary"
         />
       </div>
 
-      <Button type="submit" disabled={loading} className="w-full h-14 text-lg mt-4 shadow-[8px_8px_0px_var(--color-foreground)] hover:shadow-[4px_4px_0px_var(--color-foreground)]">
-        {loading ? 'SAVING...' : 'SAVE & CONTINUE'}
+      <Button type="submit" disabled={loading} className="w-full mt-2">
+        {loading ? 'Saving Profile...' : 'Save & Continue'}
       </Button>
     </form>
   )

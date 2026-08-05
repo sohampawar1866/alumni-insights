@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ShieldAlert } from "lucide-react";
 
 export function FirstLoginNudge() {
   const [show, setShow] = useState(false);
@@ -10,7 +11,6 @@ export function FirstLoginNudge() {
   useEffect(() => {
     const dismissed = localStorage.getItem("alumni_password_nudge_dismissed");
     if (!dismissed) {
-      // Small delay to let the page load first
       const timer = setTimeout(() => setShow(true), 1500);
       return () => clearTimeout(timer);
     }
@@ -24,19 +24,19 @@ export function FirstLoginNudge() {
   if (!show) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 max-w-sm p-6 bg-secondary border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] animate-in slide-in-from-bottom-5">
-      <div className="absolute -top-3 -right-3 bg-primary border-2 border-foreground w-8 h-8 flex items-center justify-center font-black rotate-12">
-        !
+    <div className="fixed bottom-6 right-6 z-50 max-w-sm p-5 bg-white border-2 border-slate-900 rounded-2xl shadow-[6px_6px_0px_#0f172a] animate-in slide-in-from-bottom-5 font-sans space-y-3">
+      <div className="flex items-center gap-2">
+        <ShieldAlert className="w-5 h-5 text-amber-600 shrink-0" />
+        <h3 className="text-sm font-bold text-slate-900 font-heading">Security Notice</h3>
       </div>
-      <h3 className="text-xl font-black uppercase tracking-tighter text-foreground mb-2">Secure Account</h3>
-      <p className="mt-1 text-sm font-bold text-foreground/80 uppercase tracking-wide leading-relaxed">
-        You are currently using a temporary passcode. Change it to remain secure.
+      <p className="text-xs font-semibold text-slate-600 leading-relaxed">
+        You are currently using a temporary passcode. Please update your password to keep your alumni account secure.
       </p>
-      <div className="mt-6 flex items-center gap-4">
+      <div className="flex items-center gap-2 pt-1">
         <Link href="/alumni/dashboard/settings" onClick={dismiss}>
-          <Button size="sm" variant="default" className="shadow-[4px_4px_0px_var(--color-foreground)] text-xs h-10 px-4 bg-background">Update Now</Button>
+          <Button size="sm" className="text-xs h-9">Update Password</Button>
         </Link>
-        <Button size="sm" variant="ghost" className="border-2 border-transparent hover:border-foreground text-xs h-10 px-4 font-black uppercase" onClick={dismiss}>
+        <Button size="sm" variant="ghost" className="text-xs h-9" onClick={dismiss}>
           Dismiss
         </Button>
       </div>

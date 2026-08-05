@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Check } from "lucide-react";
+import { ArrowLeft, CheckCircle2, UserPlus } from "lucide-react";
 
 export default function ApplyAlumniPage() {
   const supabase = createClient();
@@ -30,7 +30,6 @@ export default function ApplyAlumniPage() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    // Check if application already exists
     const { data: existingApp } = await supabase
       .from("alumni_applications")
       .select("id")
@@ -58,7 +57,7 @@ export default function ApplyAlumniPage() {
       setError(insertError.message);
     } else {
       setSuccess(true);
-      setTimeout(() => router.push("/dashboard"), 3000);
+      setTimeout(() => router.push("/dashboard"), 2500);
     }
 
     setLoading(false);
@@ -66,111 +65,111 @@ export default function ApplyAlumniPage() {
 
   if (success) {
     return (
-      <div className="max-w-2xl mx-auto px-6 py-20 text-center space-y-6 font-sans">
-        <div className="w-24 h-24 bg-primary text-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] flex items-center justify-center mx-auto text-5xl font-black -rotate-6"><Check className="w-12 h-12" strokeWidth={4} /></div>
-        <div className="border-4 border-foreground bg-white p-8 shadow-[8px_8px_0px_var(--color-foreground)] space-y-4 inline-block mt-8">
-          <h1 className="text-3xl font-black uppercase tracking-tighter text-foreground">Application Submitted</h1>
-          <p className="text-base font-bold uppercase tracking-wider text-muted-foreground">Your application to be listed in the alumni directory has been sent to the placement cell for review.</p>
-          <p className="text-xs font-black uppercase tracking-widest text-primary pt-4">Redirecting to dashboard...</p>
+      <div className="max-w-xl mx-auto px-4 py-20 text-center space-y-4 font-sans">
+        <div className="w-16 h-16 bg-emerald-100 border-2 border-slate-900 text-emerald-700 rounded-2xl shadow-[4px_4px_0px_#0f172a] flex items-center justify-center mx-auto">
+          <CheckCircle2 className="w-8 h-8" strokeWidth={2.5} />
+        </div>
+        <div className="border-2 border-slate-900 bg-white p-8 rounded-2xl shadow-[6px_6px_0px_#0f172a] space-y-3">
+          <h1 className="text-xl font-bold tracking-tight text-slate-900 font-heading">Application Submitted</h1>
+          <p className="text-xs text-slate-600 font-medium">Your application to be listed in the Alumni Directory has been sent to the placement cell for review.</p>
+          <p className="text-xs font-bold text-amber-600 pt-2 animate-pulse">Redirecting to dashboard...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-10 space-y-8 font-sans">
-      <div className="border-l-8 border-primary pl-4">
+    <div className="max-w-3xl mx-auto px-4 py-8 space-y-6 font-sans">
+      <div>
         <Link
           href="/dashboard"
-          className="inline-flex items-center text-sm font-black uppercase tracking-widest text-background bg-foreground px-3 py-1 mb-6 hover:-translate-y-1 hover:shadow-[4px_4px_0px_var(--color-primary)] transition-all border-2 border-transparent"
+          className="inline-flex items-center text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors gap-1 mb-4"
         >
-          <ArrowLeft className="w-4 h-4 inline-block mr-1" strokeWidth={2.5} /> BACK TO DASHBOARD
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to Dashboard
         </Link>
-        <h1 className="text-4xl font-black uppercase tracking-tighter text-foreground mb-2">Apply as Alumni</h1>
-        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-          Are you working or interning? Submit your details below to be listed in the Alumni Directory so juniors can connect with you.
-        </p>
+        <div className="pb-6 border-b-2 border-slate-900">
+          <h1 className="text-2xl font-bold text-slate-900 font-heading flex items-center gap-2">
+            <UserPlus className="w-6 h-6 text-slate-700" /> Apply for Alumni Listing
+          </h1>
+          <p className="text-xs text-slate-600 mt-1">
+            Are you currently working or interning? Submit your profile details to join the verified IIIT Nagpur Alumni Directory.
+          </p>
+        </div>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white border-4 border-foreground p-8 shadow-[8px_8px_0px_var(--color-foreground)] space-y-8"
+        className="bg-white border-2 border-slate-900 rounded-2xl p-6 sm:p-8 shadow-[6px_6px_0px_#0f172a] space-y-5"
       >
-        <div className="grid sm:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-wider text-foreground">Current Role / Title</label>
+        <div className="grid sm:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-700">Current Role / Title</label>
             <Input
               required
-              placeholder="Software Engineering Intern"
+              placeholder="e.g. Software Engineer"
               value={roleTitle}
               onChange={(e) => setRoleTitle(e.target.value)}
-              className="border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] rounded-none focus-visible:ring-0 focus-visible:border-primary text-base font-bold h-12"
             />
           </div>
-          <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-wider text-foreground">Company</label>
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-700">Company</label>
             <Input
               required
-              placeholder="Google"
+              placeholder="e.g. Razorpay"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
-              className="border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] rounded-none focus-visible:ring-0 focus-visible:border-primary text-base font-bold h-12"
             />
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-wider text-foreground">Employment Type</label>
+        <div className="grid sm:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-700">Employment Type</label>
             <select
               required
-              className="flex h-12 w-full border-4 border-foreground bg-white px-3 py-2 text-base font-bold shadow-[4px_4px_0px_var(--color-foreground)] focus-visible:outline-none focus:bg-secondary transition-colors uppercase cursor-pointer appearance-none"
+              className="h-11 w-full rounded-xl border-2 border-slate-900 bg-white px-4 py-2 text-sm text-slate-900 font-medium shadow-[2px_2px_0px_#0f172a] focus:shadow-[4px_4px_0px_#0f172a] outline-none transition-all cursor-pointer"
               value={empType}
               onChange={(e) => setEmpType(e.target.value as "Full-time" | "Intern")}
             >
-              <option value="" disabled>SELECT...</option>
-              <option value="Full-time">FULL-TIME</option>
-              <option value="Intern">INTERN</option>
+              <option value="" disabled>Select type...</option>
+              <option value="Full-time">Full-time</option>
+              <option value="Intern">Intern</option>
             </select>
           </div>
-          <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-wider text-foreground">City / Country</label>
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-700">City / Location</label>
             <Input
               required
-              placeholder="Bangalore, India"
+              placeholder="e.g. Bangalore, India"
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              className="border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] rounded-none focus-visible:ring-0 focus-visible:border-primary text-base font-bold h-12"
             />
           </div>
         </div>
 
-        <div className="space-y-2 pt-2">
-          <label className="text-xs font-black uppercase tracking-wider text-foreground">LinkedIn URL (optional)</label>
+        <div className="space-y-1.5">
+          <label className="text-xs font-bold uppercase tracking-wider text-slate-700">LinkedIn Profile URL (Optional)</label>
           <Input
             type="url"
-            placeholder="https://linkedin.com/in/yourname"
+            placeholder="https://linkedin.com/in/username"
             value={linkedinUrl}
             onChange={(e) => setLinkedinUrl(e.target.value)}
-            className="border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] rounded-none focus-visible:ring-0 focus-visible:border-primary text-base font-bold h-12 bg-muted/50"
           />
         </div>
 
         {error && (
-          <div className="border-4 border-foreground bg-destructive text-background p-4 shadow-[4px_4px_0px_var(--color-foreground)]">
-            <p className="text-sm font-black uppercase tracking-widest">
-              {error}
-            </p>
+          <div className="bg-red-50 border-2 border-red-900 rounded-xl p-3 text-xs font-bold text-red-900 shadow-[2px_2px_0px_#0f172a]">
+            {error}
           </div>
         )}
 
-        <div className="pt-6 border-t-4 border-foreground border-dashed">
+        <div className="pt-4 border-t-2 border-slate-900">
           <Button 
             type="submit" 
             disabled={loading} 
-            className="h-14 px-10 bg-primary text-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] text-lg font-black uppercase tracking-widest hover:-translate-y-1 hover:translate-x-1 hover:shadow-[12px_12px_0px_var(--color-foreground)] transition-all rounded-none w-full sm:w-auto"
+            className="w-full sm:w-auto px-8"
           >
-            {loading ? "SUBMITTING..." : "SUBMIT APPLICATION"}
+            {loading ? "Submitting Application..." : "Submit Alumni Application"}
           </Button>
         </div>
       </form>

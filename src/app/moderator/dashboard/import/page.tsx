@@ -4,7 +4,7 @@ import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { CheckCircle, AlertTriangle } from "lucide-react";
+import { CheckCircle2, AlertTriangle, FileSpreadsheet, Download } from "lucide-react";
 
 type ImportResult = {
   success: { name: string; email: string; password: string }[];
@@ -21,8 +21,8 @@ export default function BulkImportPage() {
   const handleImport = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) {
-      toast.error("No Data Source detected", {
-        description: "Please attach a CSV file before dispatching."
+      toast.error("No file selected", {
+        description: "Please attach a CSV file to import."
       });
       return;
     }
@@ -31,8 +31,8 @@ export default function BulkImportPage() {
     setError(null);
     setResult(null);
     
-    toast.info("Import Active", {
-      description: "Dispatching records to the mainframe..."
+    toast.info("Importing Records", {
+      description: "Processing alumni records..."
     });
 
     const text = await file.text();
@@ -47,7 +47,6 @@ export default function BulkImportPage() {
       return;
     }
 
-    // Parse header
     const header = lines[0].split(",").map((h) => h.trim().toLowerCase());
     const nameIdx = header.indexOf("name");
     const emailIdx = header.indexOf("email");
@@ -61,7 +60,6 @@ export default function BulkImportPage() {
       return;
     }
 
-    // Parse rows
     const rows = lines.slice(1).map((line) => {
       const cols = line.split(",").map((c) => c.trim());
       return {
@@ -130,87 +128,71 @@ export default function BulkImportPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-10 space-y-8">
-      <div className="border-l-8 border-secondary pl-4">
-        <h1 className="font-heading text-4xl font-black uppercase tracking-tight text-foreground">Bulk CSV Import</h1>
-        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground mt-2">
-          Upload a CSV file with alumni data. Required columns:{" "}
-          <code className="text-xs bg-foreground text-white px-1.5 py-0.5 rounded-none font-black ml-1">
-            name
-          </code>
-          ,{" "}
-          <code className="text-xs bg-foreground text-white px-1.5 py-0.5 rounded-none font-black ml-1">
-            email
-          </code>
-          . Optional:{" "}
-          <code className="text-xs bg-muted text-foreground border-2 border-foreground px-1.5 py-0.5 rounded-none font-black ml-1">
-            branch
-          </code>
-          ,{" "}
-          <code className="text-xs bg-muted text-foreground border-2 border-foreground px-1.5 py-0.5 rounded-none font-black ml-1">
-            graduation_year
-          </code>
-          ,{" "}
-          <code className="text-xs bg-muted text-foreground border-2 border-foreground px-1.5 py-0.5 rounded-none font-black ml-1">
-            password
-          </code>
-          .
+    <div className="max-w-3xl mx-auto space-y-6 font-sans">
+      <div className="pb-6 border-b-2 border-slate-900">
+        <h1 className="font-heading text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+          <FileSpreadsheet className="w-6 h-6 text-slate-700" /> Bulk Alumni CSV Import
+        </h1>
+        <p className="text-xs text-slate-600 mt-1">
+          Upload a CSV file containing alumni accounts. Required header columns: <code className="text-xs font-bold bg-slate-100 border border-slate-300 px-1.5 py-0.5 rounded">name</code>, <code className="text-xs font-bold bg-slate-100 border border-slate-300 px-1.5 py-0.5 rounded">email</code>.
         </p>
       </div>
 
       <form
         onSubmit={handleImport}
-        className="space-y-6 border-4 border-foreground bg-white p-8 shadow-[8px_8px_0px_#000]"
+        className="space-y-4 bg-white border-2 border-slate-900 rounded-2xl p-6 shadow-[5px_5px_0px_#0f172a]"
       >
-        <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-wider text-foreground">
-            CSV File
+        <div className="space-y-1.5">
+          <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
+            Select CSV File
           </label>
           <input
             type="file"
             accept=".csv"
             required
             onChange={(e) => setFile(e.target.files?.[0] || null)}
-            className="block w-full text-sm font-bold text-foreground border-2 border-foreground p-2 shadow-[2px_2px_0px_#000] focus-visible:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-none file:border-2 file:border-foreground file:text-xs file:font-black file:uppercase file:tracking-wider file:bg-primary file:text-foreground hover:file:bg-primary/80 transition-colors cursor-pointer"
+            className="block w-full text-xs font-medium text-slate-900 border-2 border-slate-900 rounded-xl p-3 shadow-[2px_2px_0px_#0f172a] file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-2 file:border-slate-900 file:text-xs file:font-bold file:bg-amber-400 file:text-slate-900 cursor-pointer"
           />
         </div>
 
         {error && (
-          <p className="text-sm font-bold uppercase tracking-tight text-white bg-destructive border-2 border-foreground p-3 shadow-[4px_4px_0px_#000]">
+          <div className="bg-red-50 border-2 border-red-900 rounded-xl p-3 text-xs font-bold text-red-900 shadow-[2px_2px_0px_#0f172a]">
             {error}
-          </p>
+          </div>
         )}
 
         <Button 
           type="submit" 
           disabled={loading || !file} 
-          className="w-full font-black uppercase tracking-wider border-2 border-foreground rounded-none shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all"
+          className="w-full mt-2"
         >
-          {loading ? "Importing..." : "Import Alumni"}
+          {loading ? "Importing Accounts..." : "Start Bulk Import"}
         </Button>
       </form>
 
       {/* Results */}
       {result && (
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* Success summary */}
           {result.success.length > 0 && (
-            <div className="border-4 border-foreground bg-primary p-6 shadow-[8px_8px_0px_#000] space-y-4">
-              <div className="flex items-start justify-between sm:items-center flex-col sm:flex-row gap-4 border-b-4 border-foreground pb-4">
-                <h3 className="text-xl font-black uppercase tracking-tight text-foreground">
-                  <CheckCircle className="w-5 h-5 inline-block mr-1" strokeWidth={2.5} /> {result.success.length} accounts created
+            <div className="bg-emerald-50 border-2 border-slate-900 rounded-2xl p-6 shadow-[5px_5px_0px_#0f172a] space-y-4">
+              <div className="flex items-center justify-between gap-4 border-b-2 border-emerald-200 pb-3">
+                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600" /> {result.success.length} Alumni Accounts Created
                 </h3>
                 <Button
                   onClick={downloadCredentialCSV}
-                  className="text-xs font-black uppercase tracking-wider border-2 border-foreground bg-white text-foreground hover:bg-muted shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all rounded-none"
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5 text-xs bg-white border-slate-900"
                 >
-                  Download Credential CSV
+                  <Download className="w-3.5 h-3.5" /> Download Credential CSV
                 </Button>
               </div>
-              <div className="max-h-48 overflow-y-auto space-y-2 pr-2">
+              <div className="max-h-48 overflow-y-auto space-y-1.5 pr-1">
                 {result.success.map((r, i) => (
-                  <p key={i} className="text-sm font-bold uppercase tracking-wider text-foreground bg-white border-2 border-foreground p-2 shadow-[2px_2px_0px_#000]">
-                    {r.name} — {r.email}
+                  <p key={i} className="text-xs font-mono bg-white border border-slate-200 rounded-lg p-2 text-slate-800">
+                    {r.name} &bull; {r.email}
                   </p>
                 ))}
               </div>
@@ -219,13 +201,13 @@ export default function BulkImportPage() {
 
           {/* Error summary */}
           {result.errors.length > 0 && (
-            <div className="border-4 border-foreground bg-destructive text-white p-6 shadow-[8px_8px_0px_#000] space-y-4">
-              <h3 className="text-xl font-black uppercase tracking-tight pb-4 border-b-4 border-foreground">
-                <AlertTriangle className="w-5 h-5 inline-block mr-1" strokeWidth={2.5} /> {result.errors.length} rows failed
+            <div className="bg-red-50 border-2 border-slate-900 rounded-2xl p-6 shadow-[5px_5px_0px_#0f172a] space-y-4">
+              <h3 className="text-sm font-bold text-red-900 flex items-center gap-1.5 border-b-2 border-red-200 pb-3">
+                <AlertTriangle className="w-5 h-5 text-red-600" /> {result.errors.length} Rows Failed
               </h3>
-              <div className="max-h-48 overflow-y-auto space-y-2 pr-2">
+              <div className="max-h-48 overflow-y-auto space-y-1.5 pr-1">
                 {result.errors.map((err, i) => (
-                  <p key={i} className="text-sm font-bold uppercase tracking-wider bg-white text-foreground border-2 border-foreground p-2 shadow-[2px_2px_0px_#000]">
+                  <p key={i} className="text-xs font-medium text-red-800 bg-white border border-red-200 rounded-lg p-2">
                     Row {err.row}: {err.message}
                   </p>
                 ))}

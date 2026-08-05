@@ -1,4 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
+import { ShieldCheck } from "lucide-react";
 
 export default async function AuditLogPage() {
   const supabase = await createClient();
@@ -17,21 +18,23 @@ export default async function AuditLogPage() {
     .limit(100);
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-10 space-y-8">
-      <div className="border-l-8 border-destructive pl-4">
-        <h1 className="font-heading text-4xl font-black uppercase tracking-tight text-foreground">Audit Log</h1>
-        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground mt-2">
-          Chronological record of all moderator actions. Read-only.
+    <div className="max-w-4xl mx-auto space-y-6 font-sans">
+      <div className="pb-6 border-b-2 border-slate-900">
+        <h1 className="font-heading text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+          <ShieldCheck className="w-6 h-6 text-slate-700" /> Moderator Audit Log
+        </h1>
+        <p className="text-xs text-slate-600 mt-1">
+          Read-only chronological audit log of all placement moderator operations.
         </p>
       </div>
 
-      <div className="border-4 border-foreground bg-white shadow-[8px_8px_0px_#000] overflow-hidden">
+      <div className="border-2 border-slate-900 rounded-2xl bg-white shadow-[5px_5px_0px_#0f172a] overflow-hidden">
         {!logs || logs.length === 0 ? (
-          <div className="p-10 text-center text-sm font-black uppercase tracking-wider text-muted-foreground border-4 border-foreground m-4 shadow-[4px_4px_0px_#000]">
-            No actions recorded yet.
+          <div className="p-8 text-center text-xs font-semibold text-slate-500">
+            No audit log entries recorded yet.
           </div>
         ) : (
-          <div className="divide-y-4 divide-foreground">
+          <div className="divide-y divide-slate-100">
             {logs.map((log) => {
               const moderator = log.moderator as unknown as {
                 full_name: string | null;
@@ -39,20 +42,19 @@ export default async function AuditLogPage() {
               return (
                 <div
                   key={log.id}
-                  className="flex items-start gap-4 px-6 py-5 hover:bg-muted transition-colors relative group"
+                  className="flex items-start gap-3.5 px-6 py-4 hover:bg-slate-50 transition-colors"
                 >
-                  {/* Timeline dot */}
-                  <div className="mt-1 shrink-0 relative z-10">
-                    <div className="h-4 w-4 bg-primary border-2 border-foreground shadow-[2px_2px_0px_#000] group-hover:scale-110 transition-transform" />
+                  <div className="mt-1.5 shrink-0">
+                    <div className="h-2.5 w-2.5 bg-slate-900 rounded-full" />
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-black uppercase tracking-tight text-foreground">{log.action}</p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <span className="text-xs font-bold uppercase tracking-wider text-foreground bg-white border-2 border-foreground px-2 py-0.5 shadow-[2px_2px_0px_#000]">
-                        {moderator?.full_name || "Unknown"}
+                    <p className="text-xs font-bold text-slate-900">{log.action}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 border border-slate-300 rounded px-1.5 py-0.5">
+                        {moderator?.full_name || "Unknown Moderator"}
                       </span>
-                      <time className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                      <time className="text-[11px] text-slate-400">
                         {new Date(log.created_at!).toLocaleString("en-IN", {
                           dateStyle: "medium",
                           timeStyle: "short",
