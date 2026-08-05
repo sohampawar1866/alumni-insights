@@ -148,7 +148,7 @@ export default function AboutPage() {
               <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-100 border-2 border-slate-900 flex items-center justify-center text-emerald-800 shadow-[2px_2px_0px_#0f172a]">
                 <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
               </div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-900 font-heading">Gamified Recognition Badges</h3>
+              <h3 className="text-sm sm:text-base font-bold text-slate-900 font-heading">Alumni Impact Recognition Tiers</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
                 Seniors earn Platinum, Gold, Silver, and Bronze Mentor badges based on completed sessions, ratings, and student feedback.
               </p>
