@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { UserPlus, Copy, Check, ShieldCheck } from "lucide-react";
 
 type Credential = {
   name: string;
@@ -80,57 +81,56 @@ export default function AlumniManagementPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-10 space-y-8">
-      <div className="border-l-8 border-primary pl-4">
-        <h1 className="font-heading text-4xl font-black uppercase tracking-tight text-foreground">Add Alumni</h1>
-        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground mt-2">
-          Create a single alumni account. Credentials will be shown after creation.
+    <div className="max-w-2xl mx-auto px-4 py-8 space-y-6 font-sans">
+      <div className="pb-6 border-b border-slate-200">
+        <h1 className="text-2xl font-bold text-slate-900 font-heading flex items-center gap-2">
+          <UserPlus className="w-6 h-6 text-slate-700" /> Add Alumni Member
+        </h1>
+        <p className="text-sm text-slate-600 mt-1">
+          Create an alumni account. A shareable credential card will be generated upon creation.
         </p>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="space-y-6 bg-white border-4 border-foreground p-8 shadow-[8px_8px_0px_#000]"
+        className="space-y-5 bg-white border border-slate-200 rounded-xl p-6 shadow-sm"
       >
-        <div className="grid sm:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-wider text-foreground">
+        <div className="grid sm:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-700">
               Full Name
             </label>
             <Input
               required
-              placeholder="Arjun Sharma"
+              placeholder="e.g. Arjun Sharma"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="border-2 border-foreground rounded-none shadow-[2px_2px_0px_#000] focus-visible:ring-0 focus-visible:border-primary"
             />
           </div>
-          <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-wider text-foreground">Email</label>
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-700">Email Address</label>
             <Input
               required
               type="email"
-              placeholder="arjun@gmail.com"
+              placeholder="arjun@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="border-2 border-foreground rounded-none shadow-[2px_2px_0px_#000] focus-visible:ring-0 focus-visible:border-primary"
             />
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-wider text-foreground">Branch</label>
+        <div className="grid sm:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-700">Branch</label>
             <Input
               required
-              placeholder="CSE"
+              placeholder="e.g. CSE"
               value={branch}
               onChange={(e) => setBranch(e.target.value)}
-              className="border-2 border-foreground rounded-none shadow-[2px_2px_0px_#000] focus-visible:ring-0 focus-visible:border-primary"
             />
           </div>
-          <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-wider text-foreground">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-700">
               Graduation Year
             </label>
             <Input
@@ -139,13 +139,12 @@ export default function AlumniManagementPage() {
               placeholder="2023"
               value={graduationYear}
               onChange={(e) => setGraduationYear(e.target.value)}
-              className="border-2 border-foreground rounded-none shadow-[2px_2px_0px_#000] focus-visible:ring-0 focus-visible:border-primary"
             />
           </div>
         </div>
 
-        <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-wider text-foreground">
+        <div className="space-y-1.5">
+          <label className="text-xs font-semibold text-slate-700">
             Temporary Password
           </label>
           <Input
@@ -155,53 +154,58 @@ export default function AlumniManagementPage() {
             minLength={8}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="border-2 border-foreground rounded-none shadow-[2px_2px_0px_#000] focus-visible:ring-0 focus-visible:border-primary"
           />
         </div>
 
         {error && (
-          <p className="text-sm font-bold uppercase tracking-tight text-white bg-destructive border-2 border-foreground p-3 shadow-[4px_4px_0px_#000]">
+          <div className="text-xs font-medium text-red-900 bg-red-50 border border-red-200 rounded-lg p-3">
             {error}
-          </p>
+          </div>
         )}
 
         <Button 
           type="submit" 
           disabled={loading} 
-          className="w-full font-black uppercase tracking-wider border-2 border-foreground rounded-none shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all"
+          className="w-full gap-2"
         >
-          {loading ? "Creating..." : "Create Alumni"}
+          {loading ? "Creating Alumni Account..." : "Create Alumni Account"}
         </Button>
       </form>
 
       {/* Credential Card */}
       {credential && (
-        <div className="space-y-4 border-4 border-foreground bg-primary p-6 shadow-[8px_8px_0px_#000]">
-          <div className="flex items-start justify-between sm:items-center flex-col sm:flex-row gap-4">
-            <h3 className="text-lg font-black uppercase tracking-tight text-foreground">
-              ACCESS GRANTED
-            </h3>
+        <div className="space-y-4 border border-emerald-200 bg-emerald-50/50 rounded-xl p-6 shadow-sm">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-emerald-600" />
+              <h3 className="text-sm font-bold text-slate-900">
+                Alumni Credentials Generated
+              </h3>
+            </div>
             <Button
               onClick={copyCredentials}
-              className="text-xs font-black uppercase tracking-wider border-2 border-foreground bg-white text-foreground hover:bg-muted shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all rounded-none"
+              variant="outline"
+              size="sm"
+              className="gap-1.5 text-xs bg-white border-slate-200"
             >
-              {copied ? "COPIED TO CLIPBOARD!" : "COPY CREDENTIALS"}
+              {copied ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-600" /> Copied!
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" /> Copy Card
+                </>
+              )}
             </Button>
           </div>
-          <div className="space-y-2 text-sm font-bold text-foreground bg-white border-2 border-foreground p-4">
-            <p>
-              <span className="opacity-50 inline-block w-24">NAME:</span> {credential.name}
-            </p>
-            <p>
-              <span className="opacity-50 inline-block w-24">EMAIL:</span> {credential.email}
-            </p>
-            <p>
-              <span className="opacity-50 inline-block w-24">PASSWORD:</span>{" "}
-              {credential.password}
-            </p>
+          <div className="space-y-1.5 text-xs font-mono bg-white border border-slate-200 rounded-lg p-4 text-slate-800">
+            <p><span className="text-slate-400 font-sans font-semibold inline-block w-20">Name:</span> {credential.name}</p>
+            <p><span className="text-slate-400 font-sans font-semibold inline-block w-20">Email:</span> {credential.email}</p>
+            <p><span className="text-slate-400 font-sans font-semibold inline-block w-20">Password:</span> {credential.password}</p>
           </div>
-          <p className="text-xs font-bold uppercase tracking-wider text-foreground">
-            Share these credentials securely via WhatsApp or email.
+          <p className="text-xs text-slate-600">
+            Copy and send these credentials directly to the alumnus via WhatsApp or email.
           </p>
         </div>
       )}

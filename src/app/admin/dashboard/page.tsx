@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ShieldAlert, Plus, Edit2, Trash2, CheckCircle2 } from "lucide-react";
 
 type Moderator = {
   id: string;
@@ -39,10 +40,8 @@ export default function AdminDashboardPage() {
   }, [supabase]);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchModerators();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchModerators]);
 
   const openCreate = () => {
     setEditModId(null);
@@ -113,58 +112,59 @@ export default function AdminDashboardPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-10 space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between border-l-8 border-accent pl-4 gap-4">
+    <div className="max-w-4xl mx-auto px-4 py-8 space-y-6 font-sans">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
         <div>
-          <h1 className="text-4xl font-black uppercase tracking-tight text-foreground">
-            Manage Moderators
+          <h1 className="text-2xl font-bold text-slate-900 font-heading flex items-center gap-2">
+            <ShieldAlert className="w-6 h-6 text-slate-700" /> Admin Control Panel
           </h1>
-          <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground mt-2">
-            Create, edit, and remove moderator accounts.
+          <p className="text-sm text-slate-600 mt-1">
+            Create, update, and manage IIIT Nagpur Placement Cell moderator credentials.
           </p>
         </div>
         <Button 
           onClick={() => showForm ? setShowForm(false) : openCreate()}
-          className="font-black uppercase tracking-wider border-2 border-foreground rounded-none shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all"
+          className="gap-2 shrink-0"
         >
-          {showForm ? "Cancel" : "+ Add Moderator"}
+          {showForm ? "Cancel" : <><Plus className="w-4 h-4" /> Add Moderator</>}
         </Button>
       </div>
 
       {error && (
-        <p className="text-sm font-bold uppercase tracking-tight text-white bg-destructive border-2 border-foreground p-3 shadow-[4px_4px_0px_#000]">{error}</p>
+        <div className="text-xs font-medium text-red-900 bg-red-50 border border-red-200 rounded-lg p-3">
+          {error}
+        </div>
       )}
       {success && (
-        <p className="text-sm font-bold uppercase tracking-tight text-foreground bg-[var(--color-primary)] border-2 border-foreground p-3 shadow-[4px_4px_0px_#000]">
-          {success}
-        </p>
+        <div className="text-xs font-medium text-emerald-900 bg-emerald-50 border border-emerald-200 rounded-lg p-3 flex items-center gap-1.5">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600" /> {success}
+        </div>
       )}
 
       {/* Create / Edit Form */}
       {showForm && (
         <form
           onSubmit={handleSubmit}
-          className="space-y-6 border-4 border-foreground bg-white p-8 shadow-[8px_8px_0px_#000]"
+          className="space-y-5 border border-slate-200 bg-white p-6 rounded-xl shadow-sm"
         >
-          <h2 className="text-lg font-black uppercase tracking-tight text-foreground bg-secondary border-2 border-foreground px-3 py-1 inline-block">
+          <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
             {editModId ? "Edit Moderator Account" : "New Moderator Account"}
           </h2>
-          <div className="grid sm:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="text-xs font-black uppercase tracking-wider text-foreground">
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-700">
                 Display Name
               </label>
               <Input
                 required
-                placeholder="Dr. Mehta"
+                placeholder="e.g. Dr. Mehta"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="border-2 border-foreground rounded-none shadow-[2px_2px_0px_#000] focus-visible:ring-0 focus-visible:border-primary"
               />
             </div>
-            <div className="space-y-2">
-              <label className="text-xs font-black uppercase tracking-wider text-foreground">
-                Email (@iiitn.ac.in)
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-700">
+                Institutional Email (@iiitn.ac.in)
               </label>
               <Input
                 required
@@ -175,12 +175,11 @@ export default function AdminDashboardPage() {
                 title="Email must end with @iiitn.ac.in"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="border-2 border-foreground rounded-none shadow-[2px_2px_0px_#000] focus-visible:ring-0 focus-visible:border-primary disabled:opacity-50"
               />
             </div>
           </div>
-          <div className="space-y-2 pb-4">
-            <label className="text-xs font-black uppercase tracking-wider text-foreground">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-700">
               {editModId ? "New Password (Optional)" : "Password"}
             </label>
             <Input
@@ -190,13 +189,12 @@ export default function AdminDashboardPage() {
               placeholder="At least 8 characters"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="border-2 border-foreground rounded-none shadow-[2px_2px_0px_#000] focus-visible:ring-0 focus-visible:border-primary"
             />
           </div>
           <Button 
             type="submit" 
             disabled={formLoading}
-            className="w-full font-black uppercase tracking-wider border-2 border-foreground rounded-none shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all"
+            className="w-full"
           >
             {formLoading ? "Saving..." : editModId ? "Save Changes" : "Create Moderator"}
           </Button>
@@ -204,42 +202,44 @@ export default function AdminDashboardPage() {
       )}
 
       {/* Moderator List */}
-      <div className="border-4 border-foreground bg-white shadow-[8px_8px_0px_#000] overflow-hidden mt-8">
+      <div className="border border-slate-200 bg-white rounded-xl shadow-sm overflow-hidden">
         {loading ? (
-          <div className="p-10 flex justify-center min-h-[200px] items-center">
-            <div className="h-12 w-12 border-4 border-foreground border-t-primary rounded-none animate-[spin_1s_linear_infinite] shadow-[4px_4px_0px_#000]" />
+          <div className="p-10 flex justify-center items-center">
+            <div className="h-8 w-8 border-2 border-slate-300 border-t-slate-900 rounded-full animate-spin" />
           </div>
         ) : moderators.length === 0 ? (
-          <div className="p-10 text-center text-sm font-black uppercase tracking-wider text-muted-foreground border-4 border-foreground m-4 shadow-[4px_4px_0px_#000]">
-            No moderators yet. Click &quot;+ Add Moderator&quot; to create one.
+          <div className="p-10 text-center text-sm font-medium text-slate-500">
+            No active moderators found. Click &quot;Add Moderator&quot; above to create one.
           </div>
         ) : (
-          <div className="divide-y-4 divide-foreground">
+          <div className="divide-y divide-slate-100">
             {moderators.map((mod) => (
               <div
                 key={mod.id}
-                className="flex flex-col sm:flex-row sm:items-center justify-between px-6 py-5 hover:bg-muted transition-colors gap-4"
+                className="flex flex-col sm:flex-row sm:items-center justify-between px-6 py-4 hover:bg-slate-50 transition-colors gap-3"
               >
                 <div>
-                  <p className="text-lg font-black uppercase tracking-tight text-foreground bg-accent px-2 py-0.5 border-2 border-foreground inline-block mb-2 shadow-[2px_2px_0px_#000]">
-                    {mod.full_name || "Unnamed"}
+                  <p className="text-sm font-bold text-slate-900">
+                    {mod.full_name || "Unnamed Moderator"}
                   </p>
-                  <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{mod.email}</p>
+                  <p className="text-xs text-slate-500">{mod.email}</p>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-2">
                   <Button
                     variant="outline"
-                    className="font-black uppercase tracking-wider border-2 border-foreground rounded-none shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all bg-white"
+                    size="sm"
+                    className="gap-1 text-xs"
                     onClick={() => openEdit(mod)}
                   >
-                    Edit
+                    <Edit2 className="w-3.5 h-3.5" /> Edit
                   </Button>
                   <Button
-                    variant="outline"
-                    className="font-black uppercase tracking-wider border-2 border-foreground rounded-none shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all bg-destructive text-white hover:bg-destructive hover:text-white"
+                    variant="ghost"
+                    size="sm"
+                    className="gap-1 text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
                     onClick={() => handleDelete(mod.id, mod.full_name)}
                   >
-                    Delete
+                    <Trash2 className="w-3.5 h-3.5" /> Delete
                   </Button>
                 </div>
               </div>

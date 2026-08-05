@@ -5,7 +5,7 @@ import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AlumniBadge } from "@/components/alumni-badge";
-import { Check } from "lucide-react";
+import { Check, User, Save, Sparkles } from "lucide-react";
 
 const MENTORSHIP_SUGGESTIONS = [
   "Resume Review",
@@ -64,7 +64,6 @@ export default function AlumniDashboardPage() {
       }
       setLoading(false);
 
-      // Fetch contribution stats
       const { data: stats } = await supabase
         .from("alumni_contribution_stats")
         .select("*")
@@ -73,8 +72,7 @@ export default function AlumniDashboardPage() {
       if (stats) setContributionStats(stats);
     }
     load();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [supabase]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -122,39 +120,39 @@ export default function AlumniDashboardPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20 font-sans">
-        <div className="h-12 w-12 animate-spin border-4 border-foreground border-t-primary shadow-[4px_4px_0px_var(--color-foreground)]" />
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-300 border-t-slate-900" />
       </div>
     );
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-10 space-y-8 font-sans">
-      <div className="border-l-8 border-primary pl-4">
-        <h1 className="font-heading text-4xl font-black uppercase tracking-tighter text-foreground mb-2">My Profile</h1>
-        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-          Update your professional details. Students will see this when they search for alumni.
+    <div className="max-w-4xl mx-auto px-4 py-8 space-y-8 font-sans">
+      <div className="pb-6 border-b border-slate-200">
+        <h1 className="text-2xl font-bold text-slate-900 font-heading">My Alumni Profile</h1>
+        <p className="text-sm text-slate-600 mt-1">
+          Manage your current company, position, mentorship preferences, and availability status.
         </p>
       </div>
 
       {/* Profile Completeness Score */}
-      <div className="bg-white border-4 border-foreground p-6 shadow-[8px_8px_0px_var(--color-foreground)] space-y-4 transition-all hover:shadow-[12px_12px_0px_var(--color-foreground)] hover:-translate-y-1">
-        <div className="flex items-center justify-between border-b-4 border-foreground pb-2 mb-2">
-          <h2 className="text-xl font-black uppercase tracking-tight text-foreground">Profile Completeness</h2>
-          <span className="text-xl font-black text-background bg-foreground px-3 py-1 -rotate-2 shadow-[2px_2px_0px_var(--color-foreground)]">{completeness}%</span>
+      <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Profile Completeness</h2>
+          <span className="text-sm font-bold text-blue-700 bg-blue-50 border border-blue-200 px-3 py-0.5 rounded-full">{completeness}%</span>
         </div>
-        <div className="h-6 w-full bg-muted border-4 border-foreground overflow-hidden">
+        <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
           <div
-            className="h-full bg-primary border-r-4 border-foreground transition-all duration-500 ease-out flex items-center shadow-[inset_-4px_0_0_rgba(0,0,0,0.1)]"
+            className="h-full bg-slate-900 rounded-full transition-all duration-500 ease-out"
             style={{ width: `${completeness}%` }}
           />
         </div>
         {completeness < 100 ? (
-          <p className="text-xs font-black uppercase tracking-widest text-muted-foreground pt-1">
-            COMPLETE YOUR PROFILE TO RANK HIGHER IN STUDENT SEARCH RESULTS.
+          <p className="text-xs text-slate-500">
+            Complete your profile to rank higher in student search results.
           </p>
         ) : (
-          <p className="text-xs font-black uppercase tracking-widest text-primary pt-1">
-            PERFECT. PROFILE FULLY OPTIMIZED.
+          <p className="text-xs font-semibold text-emerald-700 flex items-center gap-1">
+            <Sparkles className="w-3.5 h-3.5" /> Profile fully optimized and discoverable.
           </p>
         )}
       </div>
@@ -172,101 +170,96 @@ export default function AlumniDashboardPage() {
 
       <form
         onSubmit={handleSave}
-        className="bg-white border-4 border-foreground p-8 shadow-[8px_8px_0px_var(--color-foreground)] space-y-8"
+        className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 shadow-sm space-y-6"
       >
-        <div className="grid sm:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-wider text-foreground">
+        <div className="grid sm:grid-cols-2 gap-5">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-700">
               Current Role / Title
             </label>
             <Input
-              placeholder="Software Engineer"
+              placeholder="e.g. Software Engineer, SDE-II"
               value={roleTitle}
               onChange={(e) => setRoleTitle(e.target.value)}
-              className="border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] rounded-none focus-visible:ring-0 focus-visible:border-primary text-base font-bold h-12"
             />
           </div>
-          <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-wider text-foreground">
-              Company
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-700">
+              Company / Employer
             </label>
             <Input
-              placeholder="Google"
+              placeholder="e.g. Google, Razorpay"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
-              className="border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] rounded-none focus-visible:ring-0 focus-visible:border-primary text-base font-bold h-12"
             />
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-wider text-foreground">
+        <div className="grid sm:grid-cols-2 gap-5">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-700">
               Employment Type
             </label>
             <select
-              className="flex h-12 w-full border-4 border-foreground bg-white px-3 py-2 text-base font-bold shadow-[4px_4px_0px_var(--color-foreground)] focus-visible:outline-none focus:bg-secondary transition-colors uppercase cursor-pointer appearance-none"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-900 focus:outline-none"
               value={empType}
               onChange={(e) =>
                 setEmpType(e.target.value as "Full-time" | "Intern" | "")
               }
             >
-              <option value="">SELECT...</option>
-              <option value="Full-time">FULL-TIME</option>
-              <option value="Intern">INTERN</option>
+              <option value="">Select Employment Type...</option>
+              <option value="Full-time">Full-time</option>
+              <option value="Intern">Intern</option>
             </select>
           </div>
-          <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-wider text-foreground">
-              City / Country
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-700">
+              City / Location
             </label>
             <Input
-              placeholder="Bangalore, India"
+              placeholder="e.g. Bangalore, India"
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              className="border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] rounded-none focus-visible:ring-0 focus-visible:border-primary text-base font-bold h-12"
             />
           </div>
         </div>
 
-        <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-wider text-foreground">
-            LinkedIn URL (optional)
+        <div className="space-y-1.5">
+          <label className="text-xs font-semibold text-slate-700">
+            LinkedIn Profile URL <span className="text-slate-400 font-normal">(Optional)</span>
           </label>
           <Input
             type="url"
-            placeholder="https://linkedin.com/in/yourname"
+            placeholder="https://linkedin.com/in/yourprofile"
             value={linkedinUrl}
             onChange={(e) => setLinkedinUrl(e.target.value)}
-            className="border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] rounded-none focus-visible:ring-0 focus-visible:border-primary text-base font-bold h-12 bg-muted/50"
           />
         </div>
 
-        <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-wider text-foreground">
-            Bio / What I can help with{" "}
-            <span className="text-muted-foreground">(max 300 chars)</span>
+        <div className="space-y-1.5">
+          <label className="text-xs font-semibold text-slate-700">
+            Bio & Mentorship Topics <span className="text-slate-400 font-normal">(Max 300 chars)</span>
           </label>
           <textarea
-            className="flex w-full border-4 border-foreground p-4 text-base font-bold shadow-[4px_4px_0px_var(--color-foreground)] focus-visible:outline-none focus:bg-secondary transition-colors resize-y min-h-[120px]"
-            placeholder="I can help with resume reviews, career advice, and company insights..."
+            className="w-full rounded-lg border border-slate-200 bg-white p-3.5 text-sm text-slate-900 shadow-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none min-h-[100px]"
+            placeholder="Describe what advice or guidance you can provide to IIITN students..."
             maxLength={300}
             value={bio}
             onChange={(e) => setBio(e.target.value)}
           />
-          <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground text-right border-t-4 border-foreground pt-2 mt-2 -rotate-1 w-max ml-auto">
+          <p className="text-xs text-slate-400 text-right">
             {bio.length}/300
           </p>
         </div>
 
         {/* Mentorship Toggle */}
-        <div className="flex items-center justify-between border-4 border-foreground bg-muted p-6 shadow-[4px_4px_0px_var(--color-foreground)]">
+        <div className="flex items-center justify-between border border-slate-200 bg-slate-50 p-4 rounded-xl">
           <div>
-            <p className="text-lg font-black uppercase tracking-tight text-foreground">
-              Open to mentorship
+            <p className="text-sm font-bold text-slate-900">
+              Available for Volunteer Mentorship
             </p>
-            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mt-1">
-              Students will see you as available for connection requests.
+            <p className="text-xs text-slate-500 mt-0.5">
+              Allow IIITN students to discover your profile and send connection requests.
             </p>
           </div>
           <label className="relative inline-flex items-center cursor-pointer">
@@ -276,36 +269,35 @@ export default function AlumniDashboardPage() {
               checked={mentorshipAvailable}
               onChange={() => setMentorshipAvailable(!mentorshipAvailable)}
             />
-            <div className="w-14 h-8 bg-background border-4 border-foreground peer-focus:outline-none rounded-none peer peer-checked:after:translate-x-full peer-checked:after:border-foreground after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-foreground after:border-foreground after:border-2 after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
+            <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
           </label>
         </div>
 
         {/* Mentorship Preferences */}
         {mentorshipAvailable && (
-          <div className="space-y-4 pt-4 border-t-4 border-foreground border-dashed">
-            <label className="text-xs font-black uppercase tracking-wider text-foreground block">
-              Mentorship Preferences
+          <div className="space-y-3 pt-2">
+            <label className="text-xs font-semibold text-slate-700 block">
+              Mentorship Focus Areas
             </label>
-            <div className="relative group">
+            <div className="relative">
               <Input
-                placeholder="TYPE YOUR PREFERENCES OR TAP SUGGESTIONS BELOW"
+                placeholder="e.g. Resume Review, Career Advice"
                 value={mentorshipPreferences}
                 onChange={(e) => setMentorshipPreferences(e.target.value)}
-                className="peer border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] rounded-none focus-visible:ring-0 focus-visible:border-primary text-sm font-bold h-12 uppercase"
               />
-              <div className="hidden peer-focus:flex hover:flex flex-wrap gap-2 mt-4 bg-background p-4 border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] absolute z-10 w-full left-0">
-                <p className="w-full text-xs font-black uppercase tracking-widest text-muted-foreground mb-2">COMMON SUGGESTIONS:</p>
+              <div className="flex flex-wrap gap-2 mt-3 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                <p className="w-full text-xs font-semibold text-slate-500">Tap to add quick topics:</p>
                 {MENTORSHIP_SUGGESTIONS.map((s) => (
                   <button
                     key={s}
                     type="button"
                     onMouseDown={(e) => {
-                      e.preventDefault(); // Prevents input onBlur from firing immediately
+                      e.preventDefault();
                       setMentorshipPreferences((prev) =>
                         prev ? `${prev}, ${s}` : s
                       );
                     }}
-                    className="border-2 border-foreground bg-muted px-3 py-1.5 text-xs font-black uppercase tracking-wider text-foreground hover:bg-secondary hover:-translate-y-1 hover:shadow-[2px_2px_0px_var(--color-foreground)] transition-all"
+                    className="border border-slate-200 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 rounded-md hover:bg-slate-100 transition-colors"
                   >
                     + {s}
                   </button>
@@ -315,17 +307,18 @@ export default function AlumniDashboardPage() {
           </div>
         )}
 
-        <div className="flex items-center gap-4 pt-4">
+        <div className="flex items-center gap-4 pt-2">
           <Button 
             type="submit" 
             disabled={saving}
-            className="h-14 px-8 bg-foreground text-background border-4 border-transparent shadow-[4px_4px_0px_var(--color-primary)] text-lg font-black uppercase tracking-widest hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-primary)] transition-all rounded-none"
+            className="gap-2"
           >
-            {saving ? "SAVING..." : "SAVE PROFILE"}
+            <Save className="w-4 h-4" />
+            {saving ? "Saving Changes..." : "Save Profile"}
           </Button>
           {saved && (
-            <span className="text-sm font-black uppercase tracking-widest text-primary bg-primary/10 border-2 border-primary px-4 py-2 mt-1 -rotate-2">
-              <Check className="w-4 h-4 inline-block mr-1" strokeWidth={3} /> CHANGES SAVED
+            <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-md flex items-center gap-1">
+              <Check className="w-3.5 h-3.5" /> Profile Saved Successfully
             </span>
           )}
         </div>

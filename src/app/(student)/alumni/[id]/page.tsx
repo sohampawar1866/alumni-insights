@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ConnectSection } from "./connect-section";
 import { AlumniBadge } from "@/components/alumni-badge";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink, Building2, MapPin, GraduationCap, CheckCircle2 } from "lucide-react";
 
 export default async function AlumniProfilePage({
   params,
@@ -44,45 +44,40 @@ export default async function AlumniProfilePage({
     .single();
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-10 space-y-8">
+    <div className="max-w-4xl mx-auto px-4 py-8 space-y-6 font-sans">
       {/* Back Link */}
       <Link
-        href="/dashboard/search"
-        className="inline-flex items-center text-sm font-black uppercase text-foreground bg-primary border-2 border-foreground px-4 py-2 hover:shadow-[4px_4px_0px_var(--color-foreground)] hover:-translate-y-1 transition-all"
+        href="/search"
+        className="inline-flex items-center text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors gap-1"
       >
-        <ArrowLeft className="w-4 h-4 inline-block mr-1" strokeWidth={2.5} /> BACK TO SEARCH
+        <ArrowLeft className="w-3.5 h-3.5" /> Back to Alumni Directory
       </Link>
 
       {/* Profile Header */}
-      <div className="bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] p-8 space-y-6 relative overflow-hidden">
-        {/* Background Decorative Elements */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-40 h-40 bg-[#fdc800]/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
-
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 relative z-10">
+      <div className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 shadow-sm space-y-6 relative overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tighter text-foreground break-words max-w-full">
-                {alumni.full_name || "Alumni"}
+              <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 font-heading">
+                {alumni.full_name || "Alumnus"}
               </h1>
               {alumni.mentorship_available && (
-                <span className="inline-flex items-center gap-1 border-2 border-foreground bg-[#00e559] px-3 py-1 text-xs sm:text-sm font-black uppercase text-foreground shadow-[4px_4px_0px_var(--color-foreground)] whitespace-nowrap">
-                  <span className="inline-block w-2 h-2 bg-foreground" />
-                  MENTOR
+                <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full text-xs font-semibold">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Available for Mentorship
                 </span>
               )}
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-muted-foreground uppercase tracking-wide">
-              {alumni.role_title || "—"} {alumni.company ? `// ${alumni.company}` : ""}
+            <p className="text-base sm:text-lg font-semibold text-slate-700">
+              {alumni.role_title || "Alumni Member"} {alumni.company ? `@ ${alumni.company}` : ""}
             </p>
           </div>
 
           {alumni.emp_type && (
             <span
-              className={`self-start inline-flex items-center border-2 border-foreground px-4 py-2 text-sm font-black uppercase shadow-[4px_4px_0px_var(--color-foreground)] whitespace-nowrap ${
+              className={`shrink-0 inline-flex items-center px-3 py-1 rounded-md text-xs font-semibold ${
                 alumni.emp_type === "Intern"
-                  ? "bg-[#fdc800] text-foreground"
-                  : "bg-primary text-background"
+                  ? "bg-amber-50 text-amber-800 border border-amber-200"
+                  : "bg-slate-900 text-white"
               }`}
             >
               {alumni.emp_type}
@@ -91,47 +86,26 @@ export default async function AlumniProfilePage({
         </div>
 
         {/* Info Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-6 border-t-4 border-foreground relative z-10">
-          <div className="flex flex-col">
-            <p className="text-xs font-black text-muted-foreground uppercase tracking-wider mb-1">
-              Branch
-            </p>
-            <p className="text-base sm:text-lg font-bold text-foreground bg-muted border-2 border-foreground p-2 shadow-[2px_2px_0px_var(--color-foreground)] w-fit">
-              {alumni.branch || "—"}
-            </p>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-slate-100">
+          <div className="space-y-1">
+            <p className="text-xs font-medium text-slate-400">Branch</p>
+            <p className="text-sm font-semibold text-slate-900">{alumni.branch || "—"}</p>
           </div>
-          <div className="flex flex-col">
-            <p className="text-xs font-black text-muted-foreground uppercase tracking-wider mb-1">
-              Graduation
-            </p>
-            <p className="text-base sm:text-lg font-bold text-foreground bg-muted border-2 border-foreground p-2 shadow-[2px_2px_0px_var(--color-foreground)] w-fit">
-              &apos;{String(alumni.graduation_year || "—").slice(-2)}
-            </p>
+          <div className="space-y-1">
+            <p className="text-xs font-medium text-slate-400">Graduation Year</p>
+            <p className="text-sm font-semibold text-slate-900">Class of &apos;{String(alumni.graduation_year || "—").slice(-2)}</p>
           </div>
-          <div className="flex flex-col">
-            <p className="text-xs font-black text-muted-foreground uppercase tracking-wider mb-1">
-              City
-            </p>
-            <p className="text-base sm:text-lg font-bold text-foreground bg-muted border-2 border-foreground p-2 shadow-[2px_2px_0px_var(--color-foreground)] w-fit">
-              {alumni.city || "—"}
-            </p>
+          <div className="space-y-1">
+            <p className="text-xs font-medium text-slate-400">City / Location</p>
+            <p className="text-sm font-semibold text-slate-900">{alumni.city || "—"}</p>
           </div>
-          <div className="flex flex-col">
-            <p className="text-xs font-black text-muted-foreground uppercase tracking-wider mb-1">
-              Response
+          <div className="space-y-1">
+            <p className="text-xs font-medium text-slate-400">Acceptance History</p>
+            <p className="text-sm font-semibold text-slate-900">
+              {totalRequests && totalRequests > 0
+                ? `${acceptedRequests || 0} of ${totalRequests} accepted`
+                : "New Mentor"}
             </p>
-            <div className="flex flex-col gap-1">
-              <p className="text-sm font-bold text-foreground bg-muted border-2 border-foreground p-2 shadow-[2px_2px_0px_var(--color-foreground)] w-fit">
-                {totalRequests && totalRequests > 0
-                  ? `${acceptedRequests || 0}/${totalRequests} ACCPT`
-                  : "N/A"}
-              </p>
-              {stats && stats.avg_response_hours > 0 && (
-                <p className="text-xs font-bold text-muted-foreground uppercase">
-                  ~{stats.avg_response_hours < 24 ? "<24 HR" : `${Math.round(stats.avg_response_hours / 24)} DAY`}
-                </p>
-              )}
-            </div>
           </div>
         </div>
       </div>
@@ -147,13 +121,13 @@ export default async function AlumniProfilePage({
         />
       )}
 
-      {/* Bio / What I can help with */}
+      {/* Bio / Mentorship details */}
       {alumni.bio && (
-        <div className="bg-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] p-6">
-          <h2 className="text-lg font-black text-foreground uppercase tracking-widest mb-4 border-b-2 border-foreground pb-2 inline-block">
-            What I Can Help With
+        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-3">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            About & Mentorship Focus
           </h2>
-          <p className="text-base text-foreground font-medium leading-relaxed font-mono">
+          <p className="text-sm text-slate-700 leading-relaxed">
             {alumni.bio}
           </p>
         </div>
@@ -161,34 +135,31 @@ export default async function AlumniProfilePage({
 
       {/* Mentorship Preferences */}
       {alumni.mentorship_preferences && (
-        <div className="bg-[#fdc800]/20 border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] p-6">
-          <h2 className="text-lg font-black text-foreground uppercase tracking-widest mb-4 border-b-2 border-foreground pb-2 inline-block">
-            Mentorship Preferences
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 shadow-sm space-y-3">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            Preferred Topics
           </h2>
-          <p className="text-base text-foreground font-medium leading-relaxed font-mono">
+          <p className="text-sm text-slate-800 font-medium leading-relaxed">
             {alumni.mentorship_preferences}
           </p>
         </div>
       )}
 
-      {/* LinkedIn */}
+      {/* External Links */}
       {alumni.linkedin_url && (
         <a
           href={alumni.linkedin_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-sm font-black uppercase text-background bg-[#0A66C2] border-2 border-foreground px-6 py-3 shadow-[4px_4px_0px_var(--color-foreground)] hover:shadow-[2px_2px_0px_var(--color-foreground)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 rounded-lg px-4 py-2.5 hover:bg-blue-100 transition-colors"
         >
-           LINKEDIN PROFILE <ExternalLink className="w-4 h-4 inline-block" strokeWidth={2.5} />
+          View LinkedIn Profile <ExternalLink className="w-3.5 h-3.5" />
         </a>
       )}
 
-      {/* Connect Button */}
-      <div className="pt-8 pb-12 border-t-4 border-foreground border-dashed mt-8">
-        <ConnectSection alumniId={alumni.id} alumniName={alumni.full_name || "Alumni"} />
-        <p className="text-xs font-bold text-muted-foreground uppercase mt-4 max-w-md">
-          SEND A CONNECTION REQUEST WITH A SHORT NOTE EXPLAINING YOUR ASK.
-        </p>
+      {/* Connect Section */}
+      <div className="pt-6 border-t border-slate-200 space-y-2">
+        <ConnectSection alumniId={alumni.id} alumniName={alumni.full_name || "Alumnus"} />
       </div>
     </div>
   );

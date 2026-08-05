@@ -55,7 +55,6 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
 
   const fetchAnnouncements = useCallback(async () => {
     setLoading(true);
-    // Fetch announcements that are not expired
     const now = new Date().toISOString();
     
     const { data } = await supabase
@@ -70,7 +69,6 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
       .order("created_at", { ascending: false });
 
     if (data) {
-      // Fetch user's likes
       const { data: userLikes } = await supabase
         .from("announcement_likes")
         .select("announcement_id")
@@ -108,13 +106,14 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
   }, [supabase, currentUserId, currentUserRole]);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchAnnouncements();
   }, [fetchAnnouncements]);
 
   const handlePost = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!title || !body) return;
     setPosting(true);
+
     const { error } = await supabase.from("announcements").insert({
       author_id: currentUserId,
       title,
@@ -143,7 +142,6 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
   };
 
   const toggleLike = async (id: string, currentlyLiked: boolean) => {
-    // Optimistic UI update
     setAnnouncements((prev) =>
       prev.map((a) => {
         if (a.id === id) {
@@ -184,154 +182,153 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20 font-sans">
-        <div className="h-12 w-12 animate-spin border-4 border-foreground border-t-primary shadow-[4px_4px_0px_var(--color-foreground)]" />
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-300 border-t-slate-900" />
       </div>
     );
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-10 space-y-8 font-sans">
-      <div className="flex items-end justify-between border-b-scratch border-foreground border-b-8 pb-4">
-        <div className="border-l-8 border-primary pl-4">
-          <h1 className="text-4xl font-black uppercase tracking-tighter text-foreground mb-2">Announcements</h1>
-          <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-            Updates and notices from IIIT Nagpur and its alumni.
+    <div className="max-w-4xl mx-auto px-4 py-8 space-y-6 font-sans">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900 font-heading">
+            Community Announcements
+          </h1>
+          <p className="text-sm text-slate-600 mt-1">
+            Official placement notices, event updates, and alumni announcements.
           </p>
         </div>
         {currentUserRole !== "student" && (
           <Button 
             onClick={() => setShowNewPost(!showNewPost)}
-            className="h-12 px-6 bg-secondary text-foreground border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] font-black uppercase tracking-wider hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_var(--color-foreground)] transition-all rounded-none"
+            className="shrink-0"
           >
-            {showNewPost ? "CANCEL" : "NEW POST"}
+            {showNewPost ? "Cancel" : "New Post"}
           </Button>
         )}
       </div>
 
+      {/* New Post Form */}
       {showNewPost && (
         <form
           onSubmit={handlePost}
-          className="bg-white border-4 border-foreground p-8 shadow-[8px_8px_0px_var(--color-foreground)] space-y-6"
+          className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-5"
         >
-          <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-wider text-foreground">Title</label>
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-700">Title</label>
             <Input
               required
               maxLength={100}
-              placeholder="POST TITLE"
+              placeholder="Announcement title..."
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] rounded-none focus-visible:ring-0 focus-visible:border-primary text-base font-bold h-12 uppercase"
             />
           </div>
-          <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-wider text-foreground">Message</label>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-700">Message</label>
             <textarea
               required
               maxLength={1000}
               rows={4}
-              placeholder="What do you want to share?"
+              placeholder="Write announcement details..."
               value={body}
               onChange={(e) => setBody(e.target.value)}
-              className="flex w-full border-4 border-foreground p-4 text-base font-bold shadow-[4px_4px_0px_var(--color-foreground)] focus-visible:outline-none focus:bg-secondary transition-colors resize-y min-h-[120px]"
+              className="w-full rounded-lg border border-slate-200 bg-white p-3 text-sm text-slate-900 shadow-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition-colors"
             />
-            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground text-right border-t-4 border-foreground pt-2 mt-2 -rotate-1 w-max ml-auto">
+            <p className="text-xs text-slate-400 text-right">
               {body.length}/1000
             </p>
           </div>
 
           {currentUserRole === "moderator" && (
-            <div className="bg-muted border-4 border-foreground p-6 shadow-[4px_4px_0px_var(--color-foreground)] space-y-4">
-              <p className="text-sm font-black tracking-widest uppercase text-foreground border-b-4 border-foreground pb-2">Target Audience (Optional)</p>
-              <div className="grid sm:grid-cols-3 gap-6">
-                <div className="space-y-2">
-                  <label className="text-xs font-black uppercase tracking-wider text-foreground">Branch</label>
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 space-y-3">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-700">Target Audience (Optional)</p>
+              <div className="grid sm:grid-cols-3 gap-3">
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-slate-600">Branch</label>
                   <select
-                    className="flex h-12 w-full border-4 border-foreground bg-white px-3 py-2 text-base font-bold shadow-[4px_4px_0px_var(--color-foreground)] focus-visible:outline-none focus:bg-secondary transition-colors uppercase cursor-pointer appearance-none"
+                    className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-900 shadow-sm focus:border-slate-900 focus:outline-none"
                     value={targetBranch}
                     onChange={(e) => setTargetBranch(e.target.value)}
                   >
-                    <option value="">ALL BRANCHES</option>
+                    <option value="">All Branches</option>
                     <option value="CSE">CSE</option>
                     <option value="ECE">ECE</option>
                   </select>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-black uppercase tracking-wider text-foreground">Batch (Grad Year)</label>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-slate-600">Batch (Grad Year)</label>
                   <Input
                     type="number"
-                    placeholder="e.g. 2020"
+                    placeholder="e.g. 2026"
                     value={targetBatch}
                     onChange={(e) => setTargetBatch(e.target.value)}
-                    className="border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] rounded-none focus-visible:ring-0 focus-visible:border-primary text-base font-bold h-12 uppercase"
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-black uppercase tracking-wider text-foreground">City</label>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-slate-600">City</label>
                   <Input
                     type="text"
                     placeholder="e.g. Bangalore"
                     value={targetCity}
                     onChange={(e) => setTargetCity(e.target.value)}
-                    className="border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] rounded-none focus-visible:ring-0 focus-visible:border-primary text-base font-bold h-12 uppercase"
                   />
                 </div>
               </div>
-              <p className="text-xs font-black tracking-wider uppercase text-muted-foreground pt-2">Leave fields empty to broadcast to everyone.</p>
             </div>
           )}
 
-          <div className="grid sm:grid-cols-2 gap-6 pt-4">
-            <div className="space-y-2">
-              <label className="text-xs font-black uppercase tracking-wider text-foreground">Attachment / Link URL</label>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-slate-700">Attachment / Link URL</label>
               <Input
                 type="url"
                 placeholder="https://..."
                 value={attachmentUrl}
                 onChange={(e) => setAttachmentUrl(e.target.value)}
-                className="border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] rounded-none focus-visible:ring-0 focus-visible:border-primary text-base font-bold h-12"
               />
             </div>
-            <div className="space-y-2">
-              <label className="text-xs font-black uppercase tracking-wider text-foreground">Expiry Date (Optional)</label>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-slate-700">Expiry Date (Optional)</label>
               <Input
                 type="date"
                 min={new Date().toISOString().split("T")[0]}
                 value={expiresAt}
                 onChange={(e) => setExpiresAt(e.target.value)}
-                className="border-4 border-foreground shadow-[4px_4px_0px_var(--color-foreground)] rounded-none focus-visible:ring-0 focus-visible:border-primary text-base font-bold h-12"
               />
             </div>
           </div>
           
           {currentUserRole === "moderator" && (
-            <label className="flex items-center gap-3 cursor-pointer pt-4 w-max border-4 border-foreground bg-muted p-4 shadow-[4px_4px_0px_var(--color-foreground)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_var(--color-foreground)] transition-all">
+            <label className="flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700">
               <input
                 type="checkbox"
-                className="h-6 w-6 appearance-none border-4 border-foreground bg-white checked:bg-primary checked:border-foreground relative checked:after:content-[''] checked:after:absolute checked:after:inset-0 checked:after:m-auto checked:after:block checked:after:w-2 checked:after:h-2 checked:after:bg-foreground"
+                className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900"
                 checked={isPinned}
                 onChange={(e) => setIsPinned(e.target.checked)}
               />
-              <span className="text-sm text-foreground font-black uppercase tracking-widest pt-1">PIN TO TOP</span>
+              <span>Pin this announcement to top</span>
             </label>
           )}
 
-          <div className="pt-4">
+          <div className="pt-2">
             <Button 
               type="submit" 
               disabled={posting || !title || !body}
-              className="h-14 px-10 bg-primary text-background border-4 border-foreground shadow-[8px_8px_0px_var(--color-foreground)] text-lg font-black uppercase tracking-widest hover:-translate-y-1 hover:translate-x-1 hover:shadow-[12px_12px_0px_var(--color-foreground)] transition-all rounded-none w-full sm:w-auto"
             >
-              {posting ? "POSTING..." : "PUBLISH POST"}
+              {posting ? "Publishing..." : "Publish Announcement"}
             </Button>
           </div>
         </form>
       )}
 
-      <div className="space-y-6">
+      {/* Feed */}
+      <div className="space-y-4">
         {announcements.length === 0 ? (
-          <div className="bg-white border-4 border-foreground p-10 text-center shadow-[8px_8px_0px_var(--color-foreground)]">
-            <p className="text-sm font-black uppercase tracking-widest text-muted-foreground">NO ANNOUNCEMENTS YET.</p>
+          <div className="bg-white border border-slate-200 rounded-xl p-10 text-center shadow-sm">
+            <p className="text-sm font-medium text-slate-500">No active announcements found.</p>
           </div>
         ) : (
           announcements.map((post) => {
@@ -343,94 +340,95 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
             if (post.target_branch) targets.push(post.target_branch);
             if (post.target_batch) targets.push(`Batch '${post.target_batch}`);
             if (post.target_city) targets.push(post.target_city);
-            const targetString = targets.length > 0 ? targets.join(", ") : "Everyone";
+            const targetString = targets.length > 0 ? targets.join(", ") : null;
 
             return (
               <div
                 key={post.id}
-                className={`bg-white border-4 border-foreground p-6 shadow-[8px_8px_0px_var(--color-foreground)] transition-all hover:-translate-y-1 hover:shadow-[12px_12px_0px_var(--color-foreground)] ${
-                  post.is_pinned ? "border-l-8 border-l-secondary" : ""
+                className={`bg-white border rounded-xl p-6 shadow-sm transition-all ${
+                  post.is_pinned ? "border-amber-300 bg-amber-50/20" : "border-slate-200"
                 }`}
               >
-                <div className="flex items-start justify-between gap-4 border-b-4 border-foreground pb-4 mb-4">
-                  <div>
-                    <div className="flex flex-wrap items-center gap-3 mb-3">
+                <div className="flex items-start justify-between gap-4 pb-4 border-b border-slate-100">
+                  <div className="space-y-2">
+                    <div className="flex flex-wrap items-center gap-2 text-xs">
                       {post.is_pinned && (
-                        <span className="inline-flex items-center gap-1.5 border-2 border-foreground bg-secondary px-3 py-1 text-xs font-black uppercase tracking-widest text-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
-                          <Pin className="w-3.5 h-3.5" strokeWidth={2.5} /> PINNED
+                        <span className="inline-flex items-center gap-1 bg-amber-100 text-amber-900 border border-amber-200 px-2 py-0.5 rounded font-semibold text-[11px]">
+                          <Pin className="w-3 h-3 text-amber-700" /> Pinned Notice
                         </span>
                       )}
                       {post.profiles.roles?.includes("moderator") ? (
-                        <span className="inline-flex items-center gap-1.5 border-2 border-foreground bg-primary/20 px-3 py-1 text-xs font-black uppercase tracking-widest text-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
-                          <School className="w-3.5 h-3.5" strokeWidth={2.5} /> OFFICIAL — {post.profiles.full_name} · PLACEMENT CELL
+                        <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-900 border border-blue-200 px-2.5 py-0.5 rounded-full font-semibold text-[11px]">
+                          <School className="w-3.5 h-3.5 text-blue-600" /> Official — Placement Cell ({post.profiles.full_name})
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 border-2 border-foreground bg-muted px-3 py-1 text-xs font-black uppercase tracking-widest text-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
-                          <User className="w-3.5 h-3.5" strokeWidth={2.5} /> ALUMNI — {post.profiles.full_name}, {post.profiles.role_title} AT {post.profiles.company}
+                        <span className="inline-flex items-center gap-1 bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full font-medium text-[11px]">
+                          <User className="w-3.5 h-3.5 text-slate-500" /> Alumni — {post.profiles.full_name} ({post.profiles.role_title || "Graduate"} {post.profiles.company ? `@ ${post.profiles.company}` : ""})
                         </span>
                       )}
-                      
-                      {currentUserRole === "moderator" && (
-                        <span className="inline-flex items-center gap-1.5 border-2 border-foreground bg-destructive/10 px-3 py-1 text-xs font-black uppercase tracking-widest text-foreground shadow-[2px_2px_0px_var(--color-foreground)]">
-                          <Crosshair className="w-3.5 h-3.5" strokeWidth={2.5} /> TARGET: {targetString}
+                      {targetString && (
+                        <span className="inline-flex items-center gap-1 bg-slate-100 text-slate-600 px-2 py-0.5 rounded text-[11px]">
+                          <Crosshair className="w-3 h-3 text-slate-400" /> Target: {targetString}
                         </span>
                       )}
                     </div>
-                    <h3 className="text-2xl font-black uppercase tracking-tight text-foreground">{post.title}</h3>
-                    <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mt-1">
-                      {new Date(post.created_at).toLocaleDateString()}
+                    <h3 className="text-xl font-bold text-slate-900 font-heading">{post.title}</h3>
+                    <p className="text-xs font-normal text-slate-400">
+                      Posted on {new Date(post.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-3 shrink-0">
+                  <div className="flex items-center gap-2 shrink-0">
                     {canDelete && (
                       <button
-                         onClick={() => handleDelete(post.id)}
-                        className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-background bg-destructive border-2 border-foreground px-3 py-1.5 shadow-[2px_2px_0px_var(--color-foreground)] hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_var(--color-foreground)] transition-all"
+                        onClick={() => handleDelete(post.id)}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                        title="Delete Post"
                       >
-                        <Trash2 className="w-3.5 h-3.5" strokeWidth={2.5} /> DELETE
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     )}
                     {currentUserRole === "student" && !isAuthor && (
                       <button
                         onClick={() => handleFlag(post.id)}
-                        className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-foreground bg-muted border-2 border-foreground px-3 py-1.5 shadow-[2px_2px_0px_var(--color-foreground)] hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_var(--color-foreground)] transition-all"
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-amber-600 hover:bg-amber-50 transition-colors"
+                        title="Flag Post"
                       >
-                        <Flag className="w-3.5 h-3.5" strokeWidth={2.5} /> FLAG
+                        <Flag className="w-4 h-4" />
                       </button>
                     )}
                   </div>
                 </div>
 
-                <div className="text-base font-bold text-foreground whitespace-pre-wrap">
+                <div className="py-4 text-sm font-normal text-slate-700 leading-relaxed whitespace-pre-wrap">
                   {post.body}
                 </div>
 
                 {post.attachment_url && (
-                  <div className="mt-4">
+                  <div className="pt-2">
                     <a
                       href={post.attachment_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-sm font-black uppercase tracking-widest text-background bg-foreground px-4 py-2 border-2 border-foreground shadow-[4px_4px_0px_var(--color-primary)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_var(--color-primary)] transition-all rounded-none"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-lg transition-colors"
                     >
-                      <Link2 className="w-4 h-4" strokeWidth={2.5} /> VIEW ATTACHMENT / LINK
+                      <Link2 className="w-3.5 h-3.5" /> View Attachment / Document
                     </a>
                   </div>
                 )}
 
-                <div className="border-t-4 border-foreground border-dashed mt-6 pt-4 flex items-center justify-between">
+                <div className="border-t border-slate-100 mt-4 pt-3 flex items-center justify-between">
                   <button
                     onClick={() => toggleLike(post.id, !!post.user_liked)}
-                    className={`inline-flex items-center gap-2 border-4 border-foreground px-4 py-2 text-sm font-black uppercase tracking-widest transition-all shadow-[4px_4px_0px_var(--color-foreground)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_var(--color-foreground)] ${
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                       post.user_liked
-                        ? "bg-primary text-background border-primary shadow-[4px_4px_0px_var(--color-foreground)]"
-                        : "bg-white text-foreground hover:bg-muted"
+                        ? "bg-blue-50 text-blue-700 border border-blue-200"
+                        : "text-slate-600 hover:bg-slate-100"
                     }`}
                   >
-                    <ThumbsUp className={`w-4 h-4 ${post.user_liked ? "fill-current" : ""}`} strokeWidth={2.5} />
-                    <span>{post.user_liked ? "LIKED" : "LIKE"}</span>
-                    {likesCount > 0 && <span className="ml-2 px-2 py-0.5 bg-foreground text-background text-xs">{likesCount}</span>}
+                    <ThumbsUp className={`w-3.5 h-3.5 ${post.user_liked ? "fill-blue-600 text-blue-600" : ""}`} />
+                    <span>{post.user_liked ? "Liked" : "Like"}</span>
+                    {likesCount > 0 && <span className="ml-1 text-slate-400 text-[11px]">({likesCount})</span>}
                   </button>
                 </div>
               </div>

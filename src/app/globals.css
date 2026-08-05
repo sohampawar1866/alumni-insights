@@ -1,3 +1,4 @@
+/* Hallmark · genre: modern-minimal · theme: cobalt · nav: N5 · footer: Ft2 */
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -28,29 +29,26 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
   --radius-2xl: calc(var(--radius) * 1.8);
-  --shadow-brutal-sm: 2px 2px 0px 0px rgba(27, 28, 26, 1);
-  --shadow-brutal-md: 4px 4px 0px 0px rgba(27, 28, 26, 1);
-  --shadow-brutal-lg: 8px 8px 0px 0px rgba(27, 28, 26, 1);
 }
 
 :root {
-  --background: #fbf9f5;
-  --foreground: #1b1c1a;
+  --background: #f8fafc;
+  --foreground: #0f172a;
   --popover: #ffffff;
-  --popover-foreground: #1b1c1a;
-  --primary: #00e559;
-  --primary-foreground: #1b1c1a;
-  --secondary: #fdc800;
-  --secondary-foreground: #1b1c1a;
-  --muted: #e7e5df;
-  --muted-foreground: #52424c;
-  --accent: #ff90e8;
-  --accent-foreground: #1b1c1a;
-  --destructive: #ba1a1a;
-  --border: #1b1c1a;
-  --input: #1b1c1a;
-  --ring: #00e559;
-  --radius: 0.25rem;
+  --popover-foreground: #0f172a;
+  --primary: #0f172a;
+  --primary-foreground: #ffffff;
+  --secondary: #d97706;
+  --secondary-foreground: #ffffff;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #059669;
+  --accent-foreground: #ffffff;
+  --destructive: #dc2626;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #2563eb;
+  --radius: 0.5rem;
 }
 
 @layer base {
