@@ -82,7 +82,7 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/alumni/login"
-              className="inline-flex h-11 sm:h-12 w-full sm:w-auto items-center justify-center bg-white border border-slate-200 rounded-xl px-6 sm:px-7 text-xs sm:text-sm font-semibold text-slate-800 shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all"
+              className="inline-flex h-11 sm:h-12 w-full sm:w-auto items-center justify-center bg-white border-2 border-slate-900 rounded-xl px-6 sm:px-7 text-xs sm:text-sm font-bold text-slate-900 shadow-[3px_3px_0px_#0f172a] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0f172a] transition-all"
             >
               Alumni Sign In
             </Link>
