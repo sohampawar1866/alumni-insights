@@ -118,7 +118,7 @@ export default function IncomingRequestsPage() {
                     {req.student?.full_name || "Anonymous Student"}
                   </h3>
                   <p className="text-xs font-semibold text-slate-500">
-                    {req.student?.branch || "Student"} &bull; Class of &apos;{String(req.student?.graduation_year || "—").slice(-2)}
+                    {req.student?.branch || "Student"} &bull; Class of &apos;{String(req.student?.graduation_year || "N/A").slice(-2)}
                   </p>
                 </div>
                 <time className="text-xs font-bold text-slate-500">
@@ -169,7 +169,7 @@ export default function IncomingRequestsPage() {
                   {req.student?.full_name || "Student"}
                 </p>
                 <p className="text-xs font-semibold text-slate-500 mt-0.5">
-                  {req.student?.branch || "Student"} &bull; Class of &apos;{String(req.student?.graduation_year || "—").slice(-2)}
+                  {req.student?.branch || "Student"} &bull; Class of &apos;{String(req.student?.graduation_year || "N/A").slice(-2)}
                 </p>
               </div>
               <div className="flex items-center gap-3">

@@ -95,7 +95,7 @@ export function AlumniBadge({
       <div className="grid grid-cols-3 gap-3 pt-2">
         <div className="text-center bg-slate-100 border-2 border-slate-900 rounded-xl p-3 shadow-[2px_2px_0px_#0f172a]">
           <p className="text-2xl font-bold text-slate-900 font-heading">
-            {avgRating > 0 ? avgRating.toFixed(1) : "—"}
+            {avgRating > 0 ? avgRating.toFixed(1) : "-"}
           </p>
           <p className="text-[11px] font-bold uppercase tracking-wider text-slate-600 mt-0.5">
             Rating
@@ -109,7 +109,7 @@ export function AlumniBadge({
         </div>
         <div className="text-center bg-slate-100 border-2 border-slate-900 rounded-xl p-3 shadow-[2px_2px_0px_#0f172a]">
           <p className="text-2xl font-bold text-slate-900 font-heading">
-            {acceptanceRate > 0 ? `${acceptanceRate}%` : "—"}
+            {acceptanceRate > 0 ? `${acceptanceRate}%` : "-"}
           </p>
           <p className="text-[11px] font-bold uppercase tracking-wider text-slate-600 mt-0.5">
             Accept Rate

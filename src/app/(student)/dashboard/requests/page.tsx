@@ -90,7 +90,7 @@ export default async function MyRequestsPage() {
                       {alumni?.full_name || "Alumnus Member"}
                     </h3>
                     <p className="text-xs font-semibold text-slate-600 mt-1">
-                      {alumni?.role_title || "—"}{" "}
+                      {alumni?.role_title || "Graduate"}{" "}
                       {alumni?.company ? `@ ${alumni.company}` : ""}
                     </p>
                   </div>

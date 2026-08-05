@@ -36,7 +36,7 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Public paths — no auth required
+  // Public paths - no auth required
   if (!user) {
     const publicPaths = ["/", "/login", "/alumni/login", "/moderator/login", "/admin/login", "/api/auth", "/unauthorized"];
     if (publicPaths.some((p) => path === p || path.startsWith(p + "/"))) {
@@ -46,7 +46,7 @@ export async function middleware(request: NextRequest) {
     if (path.startsWith("/admin")) return NextResponse.redirect(new URL("/admin/login", request.url));
     if (path.startsWith("/moderator")) return NextResponse.redirect(new URL("/moderator/login", request.url));
     // Only /alumni/dashboard* and /alumni/login are alumni-portal routes.
-    // /alumni/[id] is a student page (inside the (student) route group) — redirect to student login.
+    // /alumni/[id] is a student page (inside the (student) route group) - redirect to student login.
     if (path.startsWith("/alumni/dashboard") || path === "/alumni/login") {
       return NextResponse.redirect(new URL("/alumni/login", request.url));
     }
@@ -89,7 +89,7 @@ export async function middleware(request: NextRequest) {
   if (path.startsWith("/alumni/dashboard") && !roles.includes("alumni")) {
     return NextResponse.redirect(new URL("/unauthorized", request.url));
   }
-  // Student routes — (student) route group pages: /dashboard, /search, /announcements, /alumni/[id]
+  // Student routes - (student) route group pages: /dashboard, /search, /announcements, /alumni/[id]
   // /alumni/[id] is inside the (student) group but maps to /alumni/<uuid> in the URL.
   // We match it as: starts with /alumni/ but NOT /alumni/dashboard or /alumni/login.
   const studentRoutes = ["/dashboard", "/search", "/announcements"];

@@ -89,15 +89,15 @@ export default async function AlumniProfilePage({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-slate-100">
           <div className="space-y-1">
             <p className="text-xs font-medium text-slate-400">Branch</p>
-            <p className="text-sm font-semibold text-slate-900">{alumni.branch || "—"}</p>
+            <p className="text-sm font-semibold text-slate-900">{alumni.branch || "-"}</p>
           </div>
           <div className="space-y-1">
             <p className="text-xs font-medium text-slate-400">Graduation Year</p>
-            <p className="text-sm font-semibold text-slate-900">Class of &apos;{String(alumni.graduation_year || "—").slice(-2)}</p>
+            <p className="text-sm font-semibold text-slate-900">Class of &apos;{String(alumni.graduation_year || "N/A").slice(-2)}</p>
           </div>
           <div className="space-y-1">
             <p className="text-xs font-medium text-slate-400">City / Location</p>
-            <p className="text-sm font-semibold text-slate-900">{alumni.city || "—"}</p>
+            <p className="text-sm font-semibold text-slate-900">{alumni.city || "-"}</p>
           </div>
           <div className="space-y-1">
             <p className="text-xs font-medium text-slate-400">Acceptance History</p>

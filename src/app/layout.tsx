@@ -14,7 +14,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Alumni Insights — IIIT Nagpur",
+  title: "Alumni Insights - IIIT Nagpur",
   description:
     "Official IIIT Nagpur alumni discovery and mentorship platform for career guidance and networking. A product by the CRISPR Club, IIITN in collaboration with IIITN Placement Cell.",
   icons: {
