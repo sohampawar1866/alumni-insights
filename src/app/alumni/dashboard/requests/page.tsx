@@ -82,7 +82,7 @@ export default function AlumniRequestsPage() {
   }, [supabase]);
 
   useEffect(() => {
-    loadRequests();
+    void (async () => { await loadRequests(); })();
   }, [loadRequests]);
 
   const handleUpdateStatus = async (

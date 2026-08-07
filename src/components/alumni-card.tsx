@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Building2, MapPin, GraduationCap, CheckCircle2 } from "lucide-react";
+import { MembershipBadge, MembershipType } from "./membership-badge";
 
 type AlumniCardProps = {
   id: string;
@@ -10,7 +11,9 @@ type AlumniCardProps = {
   graduation_year: number | null;
   branch: string | null;
   city: string | null;
-  mentorship_available: boolean | null;
+  mentorship_available?: boolean | null;
+  membership_type?: MembershipType | null;
+  hrefPrefix?: string;
 };
 
 export function AlumniCard({
@@ -23,20 +26,29 @@ export function AlumniCard({
   branch,
   city,
   mentorship_available,
+  membership_type,
+  hrefPrefix = "/alumni",
 }: AlumniCardProps) {
   return (
     <Link
-      href={`/alumni/${id}`}
+      href={`${hrefPrefix}/${id}`}
       className="group flex flex-col justify-between p-6 bg-white border-2 border-slate-900 rounded-2xl shadow-[4px_4px_0px_#0f172a] hover:shadow-[7px_7px_0px_#0f172a] hover:-translate-y-1 hover:-translate-x-1 transition-all duration-200"
     >
       {/* Header */}
       <div className="space-y-3 mb-6">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="text-xl font-bold tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-1 font-heading">
-            {full_name || "Alumnus"}
-          </h3>
+          <div className="space-y-1">
+            <h3 className="text-xl font-bold tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-1 font-heading">
+              {full_name || "Alumnus"}
+            </h3>
+            {membership_type && membership_type !== "none" && (
+              <div className="pt-0.5">
+                <MembershipBadge type={membership_type} size="sm" />
+              </div>
+            )}
+          </div>
           {mentorship_available && (
-            <span className="shrink-0 inline-flex items-center gap-1 bg-emerald-400 text-slate-900 border-2 border-slate-900 px-2.5 py-0.5 rounded-full text-xs font-bold shadow-[2px_2px_0px_#0f172a]">
+            <span className="shrink-0 inline-flex items-center gap-1 bg-emerald-400 text-slate-900 border-2 border-slate-900 px-2 py-0.5 rounded-full text-[11px] font-bold shadow-[2px_2px_0px_#0f172a]">
               <CheckCircle2 className="w-3.5 h-3.5" strokeWidth={2.5} />
               Mentor
             </span>

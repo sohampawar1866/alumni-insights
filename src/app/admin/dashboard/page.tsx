@@ -40,7 +40,7 @@ export default function AdminDashboardPage() {
   }, [supabase]);
 
   useEffect(() => {
-    fetchModerators();
+    void (async () => { await fetchModerators(); })();
   }, [fetchModerators]);
 
   const openCreate = () => {

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Send, X } from "lucide-react";
+import { toast } from "sonner";
 
 type ConnectDialogProps = {
   alumniId: string;
@@ -16,7 +17,7 @@ const TEMPLATES = [
   "Informational chat: Hi! I'd love to learn more about your career journey and experience.",
   "Resume review: Hello! Could you spare a few minutes to review my resume for SDE roles?",
   "Referral ask: Hi! I'm applying to your company and would appreciate a referral if possible.",
-  "Company insight: Hello! I'm curious about the work culture and projects at your company."
+  "Company insight: Hello! I'm curious about the work culture and projects at your company.",
 ];
 
 export function ConnectDialog({
@@ -33,19 +34,48 @@ export function ConnectDialog({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!message.trim() || loading) return;
+
     setLoading(true);
     setError(null);
 
-    const { data, error: fnError } = await supabase.functions.invoke(
-      "send-connection-request",
-      { body: { alumni_id: alumniId, message, request_type: requestType } }
-    );
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
-    if (fnError || data?.error) {
-      setError(data?.error || fnError?.message || "Failed to send request");
-      setLoading(false);
-    } else {
+      if (!user) throw new Error("You must be logged in to send a request.");
+
+      // Attempt edge function call first
+      const { data, error: fnError } = await supabase.functions.invoke(
+        "send-connection-request",
+        { body: { alumni_id: alumniId, message: message.trim(), request_type: requestType } }
+      );
+
+      if (fnError || data?.error) {
+        // Direct Database insert fallback
+        const { error: dbError } = await supabase
+          .from("connection_requests")
+          .insert({
+            student_id: user.id,
+            alumni_id: alumniId,
+            request_type: requestType,
+            message: message.trim(),
+            note: message.trim(),
+            status: "pending",
+          });
+
+        if (dbError) throw new Error(dbError.message);
+      }
+
+      toast.success(`Mentorship request sent to ${alumniName}!`);
       onSuccess();
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : "Failed to send connection request";
+      setError(errMsg);
+      toast.error(errMsg);
+    } finally {
+      setLoading(false);
     }
   };
 

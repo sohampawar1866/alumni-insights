@@ -105,14 +105,6 @@ export async function middleware(request: NextRequest) {
     roles = profile?.roles || [];
   }
 
-  // Primary role helper for dashboard redirect
-  const getPrimaryRole = (r: string[]): string => {
-    if (r.includes("admin")) return "admin";
-    if (r.includes("moderator")) return "moderator";
-    if (r.includes("alumni")) return "alumni";
-    if (r.includes("student")) return "student";
-    return "student";
-  };
 
   // Redirect authenticated users away from auth pages.
   // CRITICAL: Each login portal redirects ONLY to its own dashboard.
@@ -158,12 +150,17 @@ export async function middleware(request: NextRequest) {
   const isStudentRoute = studentRoutes.some(
     (r) => path === r || path.startsWith(r + "/")
   );
+
+  if (isStudentRoute && !roles.includes("student")) {
+    return NextResponse.redirect(new URL("/unauthorized", request.url));
+  }
+
   const isAlumniProfileView =
     path.startsWith("/alumni/") &&
     !path.startsWith("/alumni/dashboard") &&
     path !== "/alumni/login";
 
-  if ((isStudentRoute || isAlumniProfileView) && !roles.includes("student")) {
+  if (isAlumniProfileView && !roles.includes("student") && !roles.includes("alumni")) {
     return NextResponse.redirect(new URL("/unauthorized", request.url));
   }
 

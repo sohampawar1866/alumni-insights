@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Pin, School, User, Crosshair, Link2, ThumbsUp, Trash2, Flag } from "lucide-react";
+import { Pin, Link2, ThumbsUp, Trash2, Filter } from "lucide-react";
 
 type Announcement = {
   id: string;
@@ -16,6 +16,7 @@ type Announcement = {
   created_at: string;
   is_flagged: boolean;
   author_id: string;
+  target_role: string | null;
   target_branch: string | null;
   target_batch: number | null;
   target_city: string | null;
@@ -47,16 +48,16 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
   const [expiresAt, setExpiresAt] = useState("");
   const [isPinned, setIsPinned] = useState(false);
   const [posting, setPosting] = useState(false);
-  
+
   // Targeting State (Moderator Only)
+  const [targetRole, setTargetRole] = useState("all");
   const [targetBranch, setTargetBranch] = useState("");
   const [targetBatch, setTargetBatch] = useState("");
   const [targetCity, setTargetCity] = useState("");
 
   const fetchAnnouncements = useCallback(async () => {
-    setLoading(true);
     const now = new Date().toISOString();
-    
+
     const { data } = await supabase
       .from("announcements")
       .select(`
@@ -78,6 +79,16 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
 
       let filteredData = data as Announcement[];
 
+      // Role-based targeting filter
+      if (currentUserRole !== "moderator") {
+        filteredData = filteredData.filter((a) => {
+          if (a.target_role && a.target_role !== "all" && a.target_role !== currentUserRole) {
+            return false;
+          }
+          return true;
+        });
+      }
+
       if (currentUserRole === "alumni") {
         const { data: userProfile } = await supabase
           .from("profiles")
@@ -86,7 +97,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
           .single();
 
         if (userProfile) {
-          filteredData = filteredData.filter(a => {
+          filteredData = filteredData.filter((a) => {
             if (a.target_branch && a.target_branch.toLowerCase() !== userProfile.branch?.toLowerCase()) return false;
             if (a.target_batch && a.target_batch !== userProfile.graduation_year) return false;
             if (a.target_city && a.target_city.toLowerCase() !== userProfile.city?.toLowerCase()) return false;
@@ -106,7 +117,14 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
   }, [supabase, currentUserId, currentUserRole]);
 
   useEffect(() => {
-    fetchAnnouncements();
+    let ignore = false;
+    async function init() {
+      if (!ignore) await fetchAnnouncements();
+    }
+    init();
+    return () => {
+      ignore = true;
+    };
   }, [fetchAnnouncements]);
 
   const handlePost = async (e: React.FormEvent) => {
@@ -121,6 +139,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
       attachment_url: attachmentUrl || null,
       is_pinned: currentUserRole === "moderator" ? isPinned : false,
       expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
+      target_role: targetRole || "all",
       target_branch: targetBranch || null,
       target_batch: targetBatch ? parseInt(targetBatch) : null,
       target_city: targetCity || null,
@@ -133,6 +152,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
       setAttachmentUrl("");
       setIsPinned(false);
       setExpiresAt("");
+      setTargetRole("all");
       setTargetBranch("");
       setTargetBatch("");
       setTargetCity("");
@@ -162,127 +182,90 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
         .eq("announcement_id", id)
         .eq("user_id", currentUserId);
     } else {
-      await supabase
-        .from("announcement_likes")
-        .insert({ announcement_id: id, user_id: currentUserId });
+      await supabase.from("announcement_likes").insert({
+        announcement_id: id,
+        user_id: currentUserId,
+      });
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this announcement?")) return;
-    await supabase.from("announcements").delete().eq("id", id);
-    setAnnouncements((prev) => prev.filter((a) => a.id !== id));
+  const togglePin = async (id: string, currentlyPinned: boolean) => {
+    if (currentUserRole !== "moderator") return;
+    await supabase.from("announcements").update({ is_pinned: !currentlyPinned }).eq("id", id);
+    fetchAnnouncements();
   };
 
-  const handleFlag = async (id: string) => {
-    await supabase.rpc("flag_announcement", { announcement_id: id });
-    alert("Post flagged for moderator review.");
+  const deleteAnnouncement = async (id: string) => {
+    if (currentUserRole !== "moderator") return;
+    if (confirm("Are you sure you want to delete this announcement?")) {
+      await supabase.from("announcements").delete().eq("id", id);
+      fetchAnnouncements();
+    }
   };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20 font-sans">
-        <div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-300 border-t-slate-900" />
+      <div className="flex justify-center p-12">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-900 border-t-transparent" />
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 space-y-6 font-sans">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+    <div className="space-y-6 font-sans">
+      {/* Header Actions */}
+      <div className="flex items-center justify-between border-b border-slate-200 pb-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 font-heading">
-            Community Announcements
-          </h1>
-          <p className="text-sm text-slate-600 mt-1">
-            Official placement notices, event updates, and alumni announcements.
+          <h2 className="text-xl font-bold text-slate-900 font-heading">
+            Official Announcements & Events
+          </h2>
+          <p className="text-xs text-slate-600">
+            Committee updates, college events, reunions, and official notifications.
           </p>
         </div>
-        {currentUserRole !== "student" && (
-          <Button 
+
+        {(currentUserRole === "moderator" || currentUserRole === "alumni") && (
+          <Button
             onClick={() => setShowNewPost(!showNewPost)}
-            className="shrink-0"
+            className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-sm"
           >
-            {showNewPost ? "Cancel" : "New Post"}
+            {showNewPost ? "Cancel" : "Post Announcement"}
           </Button>
         )}
       </div>
 
       {/* New Post Form */}
       {showNewPost && (
-        <form
-          onSubmit={handlePost}
-          className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-5"
-        >
+        <form onSubmit={handlePost} className="bg-white border-2 border-slate-900 rounded-2xl p-6 shadow-md space-y-4">
+          <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-heading">
+            Create Announcement
+          </h3>
+
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-slate-700">Title</label>
             <Input
               required
-              maxLength={100}
-              placeholder="Announcement title..."
+              placeholder="e.g. Annual Alumni Meet 2026 Registration Open"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-700">Message</label>
+            <label className="text-xs font-semibold text-slate-700">Body Content</label>
             <textarea
               required
-              maxLength={1000}
               rows={4}
-              placeholder="Write announcement details..."
+              className="w-full rounded-xl border border-slate-300 p-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+              placeholder="Share event details, registration links, or official updates..."
               value={body}
               onChange={(e) => setBody(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 bg-white p-3 text-sm text-slate-900 shadow-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition-colors"
             />
-            <p className="text-xs text-slate-400 text-right">
-              {body.length}/1000
-            </p>
           </div>
 
-          {currentUserRole === "moderator" && (
-            <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 space-y-3">
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-700">Target Audience (Optional)</p>
-              <div className="grid sm:grid-cols-3 gap-3">
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-slate-600">Branch</label>
-                  <select
-                    className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-900 shadow-sm focus:border-slate-900 focus:outline-none"
-                    value={targetBranch}
-                    onChange={(e) => setTargetBranch(e.target.value)}
-                  >
-                    <option value="">All Branches</option>
-                    <option value="CSE">CSE</option>
-                    <option value="ECE">ECE</option>
-                  </select>
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-slate-600">Batch (Grad Year)</label>
-                  <Input
-                    type="number"
-                    placeholder="e.g. 2026"
-                    value={targetBatch}
-                    onChange={(e) => setTargetBatch(e.target.value)}
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-slate-600">City</label>
-                  <Input
-                    type="text"
-                    placeholder="e.g. Bangalore"
-                    value={targetCity}
-                    onChange={(e) => setTargetCity(e.target.value)}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
           <div className="grid sm:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-700">Attachment / Link URL</label>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-700">Attachment / Event Link</label>
               <Input
                 type="url"
                 placeholder="https://..."
@@ -290,33 +273,78 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
                 onChange={(e) => setAttachmentUrl(e.target.value)}
               />
             </div>
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-700">Expiry Date (Optional)</label>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-700">Expiration Date (Optional)</label>
               <Input
                 type="date"
-                min={new Date().toISOString().split("T")[0]}
                 value={expiresAt}
                 onChange={(e) => setExpiresAt(e.target.value)}
               />
             </div>
           </div>
-          
+
+          {/* Targeting controls for Moderators */}
           {currentUserRole === "moderator" && (
-            <label className="flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700">
-              <input
-                type="checkbox"
-                className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900"
-                checked={isPinned}
-                onChange={(e) => setIsPinned(e.target.checked)}
-              />
-              <span>Pin this announcement to top</span>
-            </label>
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-900 uppercase">
+                <Filter className="w-3.5 h-3.5 text-blue-600" />
+                Target Audience Controls
+              </div>
+
+              <div className="grid sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="text-[11px] font-medium text-slate-600">Target Role</label>
+                  <select
+                    value={targetRole}
+                    onChange={(e) => setTargetRole(e.target.value)}
+                    className="w-full border border-slate-300 rounded-lg p-2 text-xs bg-white text-slate-900"
+                  >
+                    <option value="all">All Members (Students + Alumni)</option>
+                    <option value="alumni">Alumni Only</option>
+                    <option value="student">Students Only</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-[11px] font-medium text-slate-600">Target Branch</label>
+                  <Input
+                    placeholder="e.g. CSE"
+                    value={targetBranch}
+                    onChange={(e) => setTargetBranch(e.target.value)}
+                    className="text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="text-[11px] font-medium text-slate-600">Target Batch</label>
+                  <Input
+                    type="number"
+                    placeholder="e.g. 2024"
+                    value={targetBatch}
+                    onChange={(e) => setTargetBatch(e.target.value)}
+                    className="text-xs"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 pt-1">
+                <input
+                  type="checkbox"
+                  id="pin"
+                  checked={isPinned}
+                  onChange={(e) => setIsPinned(e.target.checked)}
+                  className="rounded text-slate-900 focus:ring-slate-900"
+                />
+                <label htmlFor="pin" className="text-xs font-semibold text-slate-800">
+                  Pin to top of board
+                </label>
+              </div>
+            </div>
           )}
 
-          <div className="pt-2">
-            <Button 
-              type="submit" 
-              disabled={posting || !title || !body}
+          <div className="flex justify-end gap-3 pt-2">
+            <Button
+              type="submit"
+              disabled={posting}
+              className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl"
             >
               {posting ? "Publishing..." : "Publish Announcement"}
             </Button>
@@ -324,116 +352,101 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
         </form>
       )}
 
-      {/* Feed */}
+      {/* Announcements Feed List */}
       <div className="space-y-4">
-        {announcements.length === 0 ? (
-          <div className="bg-white border border-slate-200 rounded-xl p-10 text-center shadow-sm">
-            <p className="text-sm font-medium text-slate-500">No active announcements found.</p>
-          </div>
-        ) : (
-          announcements.map((post) => {
-            const isAuthor = post.author_id === currentUserId;
-            const canDelete = isAuthor || currentUserRole === "moderator";
-            const likesCount = post.likes[0]?.count || 0;
-
-            const targets = [];
-            if (post.target_branch) targets.push(post.target_branch);
-            if (post.target_batch) targets.push(`Batch '${post.target_batch}`);
-            if (post.target_city) targets.push(post.target_city);
-            const targetString = targets.length > 0 ? targets.join(", ") : null;
-
-            return (
-              <div
-                key={post.id}
-                className={`bg-white border rounded-xl p-6 shadow-sm transition-all ${
-                  post.is_pinned ? "border-amber-300 bg-amber-50/20" : "border-slate-200"
-                }`}
-              >
-                <div className="flex items-start justify-between gap-4 pb-4 border-b border-slate-100">
-                  <div className="space-y-2">
-                    <div className="flex flex-wrap items-center gap-2 text-xs">
-                      {post.is_pinned && (
-                        <span className="inline-flex items-center gap-1 bg-amber-100 text-amber-900 border border-amber-200 px-2 py-0.5 rounded font-semibold text-[11px]">
-                          <Pin className="w-3 h-3 text-amber-700" /> Pinned Notice
-                        </span>
-                      )}
-                      {post.profiles.roles?.includes("moderator") ? (
-                        <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-900 border border-blue-200 px-2.5 py-0.5 rounded-full font-semibold text-[11px]">
-                          <School className="w-3.5 h-3.5 text-blue-600" /> Official: Alumni Committee ({post.profiles.full_name})
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full font-medium text-[11px]">
-                          <User className="w-3.5 h-3.5 text-slate-500" /> Alumni: {post.profiles.full_name} ({post.profiles.role_title || "Graduate"} {post.profiles.company ? `@ ${post.profiles.company}` : ""})
-                        </span>
-                      )}
-                      {targetString && (
-                        <span className="inline-flex items-center gap-1 bg-slate-100 text-slate-600 px-2 py-0.5 rounded text-[11px]">
-                          <Crosshair className="w-3 h-3 text-slate-400" /> Target: {targetString}
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="text-xl font-bold text-slate-900 font-heading">{post.title}</h3>
-                    <p className="text-xs font-normal text-slate-400">
-                      Posted on {new Date(post.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                    </p>
+        {announcements.length > 0 ? (
+          announcements.map((item) => (
+            <div
+              key={item.id}
+              className={`p-6 bg-white border-2 rounded-2xl shadow-sm space-y-4 transition-all ${
+                item.is_pinned
+                  ? "border-amber-400 bg-amber-50/20"
+                  : "border-slate-200 hover:border-slate-300"
+              }`}
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {item.is_pinned && (
+                      <span className="inline-flex items-center gap-1 bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-full text-[10px] font-bold">
+                        <Pin className="w-3 h-3 fill-slate-950" /> Pinned
+                      </span>
+                    )}
+                    {item.target_role && item.target_role !== "all" && (
+                      <span className="inline-flex items-center gap-1 bg-blue-100 text-blue-900 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase">
+                        {item.target_role} Only
+                      </span>
+                    )}
                   </div>
-
-                  <div className="flex items-center gap-2 shrink-0">
-                    {canDelete && (
-                      <button
-                        onClick={() => handleDelete(post.id)}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
-                        title="Delete Post"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    )}
-                    {currentUserRole === "student" && !isAuthor && (
-                      <button
-                        onClick={() => handleFlag(post.id)}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-amber-600 hover:bg-amber-50 transition-colors"
-                        title="Flag Post"
-                      >
-                        <Flag className="w-4 h-4" />
-                      </button>
-                    )}
+                  <h3 className="text-lg font-bold text-slate-900 font-heading leading-snug">
+                    {item.title}
+                  </h3>
+                  <div className="flex items-center gap-2 text-xs text-slate-500">
+                    <span className="font-semibold text-slate-700">
+                      {item.profiles?.full_name || "Committee Moderator"}
+                    </span>
+                    <span>•</span>
+                    <span>{new Date(item.created_at).toLocaleDateString()}</span>
                   </div>
                 </div>
 
-                <div className="py-4 text-sm font-normal text-slate-700 leading-relaxed whitespace-pre-wrap">
-                  {post.body}
-                </div>
-
-                {post.attachment_url && (
-                  <div className="pt-2">
-                    <a
-                      href={post.attachment_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-lg transition-colors"
+                {currentUserRole === "moderator" && (
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={() => togglePin(item.id, item.is_pinned)}
+                      className={`p-1.5 rounded-lg border text-xs font-semibold ${
+                        item.is_pinned
+                          ? "bg-amber-100 border-amber-300 text-amber-900"
+                          : "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200"
+                      }`}
                     >
-                      <Link2 className="w-3.5 h-3.5" /> View Attachment / Document
-                    </a>
+                      <Pin className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => deleteAnnouncement(item.id)}
+                      className="p-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 )}
-
-                <div className="border-t border-slate-100 mt-4 pt-3 flex items-center justify-between">
-                  <button
-                    onClick={() => toggleLike(post.id, !!post.user_liked)}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                      post.user_liked
-                        ? "bg-blue-50 text-blue-700 border border-blue-200"
-                        : "text-slate-600 hover:bg-slate-100"
-                    }`}
-                  >
-                    <ThumbsUp className={`w-3.5 h-3.5 ${post.user_liked ? "fill-blue-600 text-blue-600" : ""}`} />
-                    <span>{post.user_liked ? "Liked" : "Like"}</span>
-                    {likesCount > 0 && <span className="ml-1 text-slate-400 text-[11px]">({likesCount})</span>}
-                  </button>
-                </div>
               </div>
-            );
-          })
+
+              <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">
+                {item.body}
+              </p>
+
+              {item.attachment_url && (
+                <a
+                  href={item.attachment_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:underline bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200"
+                >
+                  <Link2 className="w-3.5 h-3.5" /> Open Attachment / Event Link
+                </a>
+              )}
+
+              {/* Likes & Reactions Bar */}
+              <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs">
+                <button
+                  onClick={() => toggleLike(item.id, !!item.user_liked)}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold border transition-all ${
+                    item.user_liked
+                      ? "bg-blue-600 text-white border-blue-600"
+                      : "bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200"
+                  }`}
+                >
+                  <ThumbsUp className="w-3.5 h-3.5" />
+                  <span>{item.likes[0]?.count || 0} Reactions</span>
+                </button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="p-12 text-center text-xs text-slate-500 bg-white border border-slate-200 rounded-2xl">
+            No announcements found for this section.
+          </div>
         )}
       </div>
     </div>

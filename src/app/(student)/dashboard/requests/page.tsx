@@ -1,7 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { FeedbackButton } from "@/components/feedback-button";
-import { ArrowLeft, ArrowRight, MessageSquare, CheckCircle2, Clock, XCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, MessageSquare, CheckCircle2 } from "lucide-react";
 
 export default async function MyRequestsPage() {
   const supabase = await createClient();

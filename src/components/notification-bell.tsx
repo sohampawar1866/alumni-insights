@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { createClient } from "@/utils/supabase/client";
 import Link from "next/link";
 import { Bell, CheckCheck } from "lucide-react";
+import type { RealtimePostgresInsertPayload } from "@supabase/supabase-js";
 
 type Notification = {
   id: string;
@@ -20,15 +21,34 @@ export function NotificationBell() {
   const supabase = createClient();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [open, setOpen] = useState(false);
+  const [coords, setCoords] = useState<{ top: number; left?: number; right?: number }>({ top: 0, left: 16 });
+  const [nowTime, setNowTime] = useState<number>(() => Date.now());
+
   const ref = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const unreadCount = notifications.filter((n) => !n.is_read).length;
 
+  // Calculate dropdown position when opened
+  useEffect(() => {
+    if (!open || !ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const isLeftHalf = rect.left < window.innerWidth / 2;
+    setCoords({
+      top: rect.bottom + 8,
+      ...(isLeftHalf
+        ? { left: Math.max(8, rect.left) }
+        : { right: Math.max(8, window.innerWidth - rect.right) }),
+    });
+    setNowTime(Date.now());
+  }, [open]);
+
+  // Click outside to close
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (
-        ref.current && !ref.current.contains(e.target as Node) &&
+        ref.current &&
+        !ref.current.contains(e.target as Node) &&
         (!dropdownRef.current || !dropdownRef.current.contains(e.target as Node))
       ) {
         setOpen(false);
@@ -49,15 +69,26 @@ export function NotificationBell() {
   }, [supabase]);
 
   useEffect(() => {
-    fetchNotifications();
+    let ignore = false;
+    async function init() {
+      const { data } = await supabase
+        .from("notifications")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(20);
+      if (!ignore && data) setNotifications(data);
+    }
+    init();
 
     const channel = supabase
       .channel("notif_realtime_" + Math.random().toString(36).slice(2, 8))
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "notifications" },
-        (payload: any) => {
-          setNotifications((prev) => [payload.new as Notification, ...prev]);
+        (payload: RealtimePostgresInsertPayload<Notification>) => {
+          if (payload.new) {
+            setNotifications((prev) => [payload.new, ...prev]);
+          }
         }
       )
       .subscribe();
@@ -65,25 +96,42 @@ export function NotificationBell() {
     const pollInterval = setInterval(fetchNotifications, 30000);
 
     return () => {
+      ignore = true;
       clearInterval(pollInterval);
       supabase.removeChannel(channel);
     };
   }, [supabase, fetchNotifications]);
 
+  const markSingleRead = async (notification: Notification) => {
+    setOpen(false);
+    if (notification.is_read) return;
+
+    // Optimistically mark as read in local state
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === notification.id ? { ...n, is_read: true } : n))
+    );
+
+    // Update Supabase DB
+    await supabase
+      .from("notifications")
+      .update({ is_read: true })
+      .eq("id", notification.id);
+  };
+
   const markAllRead = async () => {
     const unreadIds = notifications.filter((n) => !n.is_read).map((n) => n.id);
     if (unreadIds.length === 0) return;
+
+    setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
 
     await supabase
       .from("notifications")
       .update({ is_read: true })
       .in("id", unreadIds);
-
-    setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
   };
 
-  const formatTime = (dateStr: string) => {
-    const diff = Date.now() - new Date(dateStr).getTime();
+  const formatTime = (dateStr: string, currentNow: number) => {
+    const diff = currentNow - new Date(dateStr).getTime();
     const mins = Math.floor(diff / 60000);
     if (mins < 1) return "now";
     if (mins < 60) return `${mins}m`;
@@ -108,76 +156,76 @@ export function NotificationBell() {
         )}
       </button>
 
-      {open && typeof document !== "undefined" && createPortal(
-        <div 
-          ref={dropdownRef}
-          className="fixed z-[9999] max-h-96 w-[calc(100vw-2rem)] max-w-sm sm:w-80 bg-white border-2 border-slate-900 rounded-2xl shadow-[8px_8px_0px_#0f172a] flex flex-col overflow-hidden font-sans"
-          style={(() => {
-            if (!ref.current) return { top: 0, left: 16 };
-            const rect = ref.current.getBoundingClientRect();
-            const isLeftHalf = rect.left < window.innerWidth / 2;
-            return {
-              top: rect.bottom + 8,
-              ...(isLeftHalf
-                ? { left: Math.max(8, rect.left) }
-                : { right: Math.max(8, window.innerWidth - rect.right) }),
-            };
-          })()}
-        >
-          <div className="flex items-center justify-between px-4 py-3 border-b-2 border-slate-900 bg-amber-400 shrink-0">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 font-heading">Notifications</h3>
-            {unreadCount > 0 && (
-              <button
-                onClick={markAllRead}
-                className="text-[11px] font-bold text-slate-900 hover:underline flex items-center gap-1"
-              >
-                <CheckCheck className="w-3.5 h-3.5" /> Mark all read
-              </button>
-            )}
-          </div>
-
-          {notifications.length === 0 ? (
-            <div className="p-8 text-center text-xs font-semibold text-slate-500">
-              No new notifications.
+      {open &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            ref={dropdownRef}
+            className="fixed z-[9999] max-h-96 w-[calc(100vw-2rem)] max-w-sm sm:w-80 bg-white border-2 border-slate-900 rounded-2xl shadow-[8px_8px_0px_#0f172a] flex flex-col overflow-hidden font-sans animate-in fade-in duration-150"
+            style={coords}
+          >
+            <div className="flex items-center justify-between px-4 py-3 border-b-2 border-slate-900 bg-amber-400 shrink-0">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 font-heading">
+                Notifications
+              </h3>
+              {unreadCount > 0 && (
+                <button
+                  onClick={markAllRead}
+                  className="text-[11px] font-bold text-slate-900 hover:underline flex items-center gap-1"
+                >
+                  <CheckCheck className="w-3.5 h-3.5" /> Mark all read
+                </button>
+              )}
             </div>
-          ) : (
-            <div className="divide-y divide-slate-100 bg-white overflow-y-auto flex-1">
-              {notifications.map((n) => {
-                const inner = (
-                  <div
-                    className={`px-4 py-3 flex gap-3 transition-colors hover:bg-slate-50 cursor-pointer ${
-                      !n.is_read ? "bg-amber-50/60" : ""
-                    }`}
-                  >
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-slate-900 truncate">
-                        {n.title}
-                      </p>
-                      {n.body && (
-                        <p className="text-xs text-slate-600 mt-0.5 line-clamp-2">
-                          {n.body}
-                        </p>
-                      )}
+
+            {notifications.length === 0 ? (
+              <div className="p-8 text-center text-xs font-semibold text-slate-500">
+                No new notifications.
+              </div>
+            ) : (
+              <div className="divide-y divide-slate-100 bg-white overflow-y-auto flex-1">
+                {notifications.map((n) => {
+                  const inner = (
+                    <div
+                      onClick={() => markSingleRead(n)}
+                      className={`px-4 py-3 flex gap-3 transition-colors hover:bg-slate-50 cursor-pointer ${
+                        !n.is_read ? "bg-amber-50/60 font-semibold" : ""
+                      }`}
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-1">
+                          <p className="text-xs font-bold text-slate-900 truncate">
+                            {n.title}
+                          </p>
+                          {!n.is_read && (
+                            <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
+                          )}
+                        </div>
+                        {n.body && (
+                          <p className="text-xs text-slate-600 mt-0.5 line-clamp-2">
+                            {n.body}
+                          </p>
+                        )}
+                      </div>
+                      <span className="text-[10px] font-semibold text-slate-400 shrink-0 whitespace-nowrap">
+                        {formatTime(n.created_at, nowTime)}
+                      </span>
                     </div>
-                    <span className="text-[10px] font-semibold text-slate-400 shrink-0 whitespace-nowrap">
-                      {formatTime(n.created_at)}
-                    </span>
-                  </div>
-                );
+                  );
 
-                return n.link ? (
-                  <Link key={n.id} href={n.link} onClick={() => setOpen(false)}>
-                    {inner}
-                  </Link>
-                ) : (
-                  <div key={n.id}>{inner}</div>
-                );
-              })}
-            </div>
-          )}
-        </div>,
-        document.body
-      )}
+                  return n.link ? (
+                    <Link key={n.id} href={n.link} onClick={() => markSingleRead(n)}>
+                      {inner}
+                    </Link>
+                  ) : (
+                    <div key={n.id}>{inner}</div>
+                  );
+                })}
+              </div>
+            )}
+          </div>,
+          document.body
+        )}
     </div>
   );
 }

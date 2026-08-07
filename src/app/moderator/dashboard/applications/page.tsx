@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -33,11 +33,7 @@ export default function ApplicationsPage() {
     password: string;
   } | null>(null);
 
-  useEffect(() => {
-    loadApplications();
-  }, []);
-
-  async function loadApplications() {
+  const fetchApplications = useCallback(async () => {
     setLoading(true);
     const { data } = await supabase
       .from("alumni_applications")
@@ -62,7 +58,11 @@ export default function ApplicationsPage() {
       setApplications(data as unknown as Application[]);
     }
     setLoading(false);
-  }
+  }, [supabase]);
+
+  useEffect(() => {
+    void (async () => { await fetchApplications(); })();
+  }, [fetchApplications]);
 
   const handleApprove = async (app: Application) => {
     setProcessingId(app.id);

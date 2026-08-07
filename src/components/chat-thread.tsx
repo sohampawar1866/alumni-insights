@@ -5,6 +5,8 @@ import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Send, MessageSquare } from "lucide-react";
 
+import type { RealtimePostgresInsertPayload } from "@supabase/supabase-js";
+
 type Message = {
   id: string;
   content: string;
@@ -52,7 +54,8 @@ export function ChatThread({ requestId, currentUserId, otherUserName }: Props) {
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "messages", filter: `connection_request_id=eq.${requestId}` },
-        async (payload: any) => {
+        async (payload: RealtimePostgresInsertPayload<{ id: string; content: string; created_at: string; sender_id: string }>) => {
+          if (!payload.new) return;
           const { data: profile } = await supabase
             .from("profiles")
             .select("full_name")

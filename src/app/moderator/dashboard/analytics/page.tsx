@@ -1,3 +1,4 @@
+import React from "react";
 import { createClient } from "@/utils/supabase/server";
 import { BarChart3, Users, Activity, CheckCircle2 } from "lucide-react";
 
@@ -102,7 +103,7 @@ export default async function AnalyticsPage() {
   );
 }
 
-function StatCard({ label, value, icon: Icon }: { label: string; value: number; icon: any }) {
+function StatCard({ label, value, icon: Icon }: { label: string; value: number; icon: React.ElementType }) {
   return (
     <div className="border-2 border-slate-900 rounded-2xl bg-white p-5 shadow-[4px_4px_0px_#0f172a] space-y-2">
       <div className="flex items-center justify-between text-slate-500">
