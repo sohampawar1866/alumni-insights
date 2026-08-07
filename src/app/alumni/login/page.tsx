@@ -73,7 +73,7 @@ export default function AlumniLoginPage() {
             Alumni Sign In
           </h1>
           <p className="text-xs text-slate-500 font-medium">
-            Sign in with the login credentials provided by the Placement Cell.
+            Sign in with the login credentials provided by the Alumni Committee.
           </p>
         </div>
         

@@ -70,46 +70,48 @@ export default function AboutPage() {
             A product by
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-10">
-            {/* CRISPR Club Logo */}
-            <div className="flex items-center gap-3">
-              <div className="relative w-10 h-10 sm:w-14 sm:h-14 shrink-0">
+            {/* Shani Digital Works Logo */}
+            <div className="border-2 border-slate-900 rounded-2xl bg-white p-4 sm:p-5 shadow-[4px_4px_0px_#0f172a] flex items-center gap-3 sm:gap-4">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-slate-900 overflow-hidden bg-slate-900 shrink-0 flex items-center justify-center shadow-[2px_2px_0px_#0f172a]">
                 <Image
                   src="/images/crispt.png"
-                  alt="CRISPR Club Logo"
+                  alt="Shani Digital Works Logo"
                   width={56}
                   height={56}
-                  className="w-10 h-10 sm:w-14 sm:h-14 object-contain rounded-full"
+                  className="w-full h-full object-contain rounded-full"
                 />
               </div>
-              <div className="text-left">
-                <p className="text-xs sm:text-sm font-bold text-slate-900 font-heading">CRISPR Club</p>
-                <p className="text-[10px] sm:text-xs font-semibold text-slate-500">Official Tech & Coding Club</p>
+              <div>
+                <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Developed By</p>
+                <p className="text-xs sm:text-sm font-bold text-slate-900 font-heading">Shani Digital Works</p>
+                <p className="text-[11px] text-slate-600">Digital Product & Software Club</p>
               </div>
             </div>
 
             <div className="hidden sm:block text-slate-300 font-bold text-xl">&times;</div>
 
-            {/* IIITN Placement Cell */}
-            <div className="flex items-center gap-3">
-              <div className="relative w-10 h-10 sm:w-14 sm:h-14 shrink-0">
+            {/* Alumni Committee, IIITN */}
+            <div className="border-2 border-slate-900 rounded-2xl bg-white p-4 sm:p-5 shadow-[4px_4px_0px_#0f172a] flex items-center gap-3 sm:gap-4">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-slate-900 overflow-hidden bg-slate-900 shrink-0 flex items-center justify-center shadow-[2px_2px_0px_#0f172a]">
                 <Image
                   src="/images/iiitn.png"
-                  alt="IIIT Nagpur Logo"
+                  alt="IIIT Nagpur Emblem"
                   width={56}
                   height={56}
-                  className="w-10 h-10 sm:w-14 sm:h-14 object-contain rounded-full"
+                  className="w-full h-full object-contain rounded-full"
                 />
               </div>
-              <div className="text-left">
-                <p className="text-xs sm:text-sm font-bold text-slate-900 font-heading">IIITN Placement Cell</p>
-                <p className="text-[10px] sm:text-xs font-semibold text-slate-500">Training & Placement Office</p>
+              <div>
+                <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">In Collaboration With</p>
+                <p className="text-xs sm:text-sm font-bold text-slate-900 font-heading">Alumni Committee, IIITN</p>
+                <p className="text-[11px] text-slate-600">Official IIIT Nagpur Committee</p>
               </div>
             </div>
           </div>
 
-          <p className="text-[11px] sm:text-xs font-bold text-slate-800 bg-amber-50/80 border-2 border-slate-900 rounded-xl p-2.5 sm:p-3 shadow-[2px_2px_0px_#0f172a]">
-            &ldquo;A product by the CRISPR Club, IIITN in collaboration with IIITN Placement Cell&rdquo;
-          </p>
+          <div className="bg-amber-400 border-2 border-slate-900 rounded-2xl p-4 sm:p-6 shadow-[5px_5px_0px_#0f172a] text-center font-bold text-slate-900 text-xs sm:text-sm">
+            &ldquo;A product by Shani Digital Works in collaboration with Alumni Committee, IIITN&rdquo;
+          </div>
         </div>
       </section>
 
@@ -130,9 +132,9 @@ export default function AboutPage() {
               <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-100 border-2 border-slate-900 flex items-center justify-center text-blue-700 shadow-[2px_2px_0px_#0f172a]">
                 <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
               </div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-900 font-heading">Verified Institutional Identity</h3>
+              <h3 className="text-sm sm:text-base font-bold text-slate-900 font-heading">Verified Institutional Access</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Students log in strictly via verified <span className="font-bold text-slate-900">@iiitn.ac.in</span> Google OAuth. Alumni profiles are added and approved directly by the Placement Cell.
+                Students log in strictly via verified <span className="font-bold text-slate-900">@iiitn.ac.in</span> Google OAuth. Alumni profiles are added and approved directly by the Alumni Committee.
               </p>
             </div>
 
@@ -183,11 +185,11 @@ export default function AboutPage() {
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
           <div className="flex flex-col sm:flex-row items-center gap-2.5 text-center sm:text-left">
             <div className="flex items-center gap-2 shrink-0">
-              <Image src="/images/iiitn.png" alt="IIITN" width={22} height={22} className="w-5 h-5 object-contain rounded-full" />
-              <Image src="/images/crispt.png" alt="CRISPR" width={22} height={22} className="w-5 h-5 object-contain rounded-full" />
+              <Image src="/images/iiitn.png" alt="IIITN Logo" width={22} height={22} className="w-5 h-5 object-contain rounded-full" />
+              <Image src="/images/crispt.png" alt="Shani Digital Works" width={22} height={22} className="w-5 h-5 object-contain rounded-full" />
             </div>
             <span className="text-slate-300 font-semibold text-[11px] sm:text-xs">
-              A product by the CRISPR Club, IIITN in collaboration with IIITN Placement Cell
+              A product by Shani Digital Works in collaboration with Alumni Committee, IIITN
             </span>
           </div>
           <div className="flex items-center gap-3 text-xs font-semibold shrink-0">

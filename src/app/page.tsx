@@ -153,10 +153,10 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row items-center gap-2.5 text-center sm:text-left">
             <div className="flex items-center gap-2 shrink-0">
               <Image src="/images/iiitn.png" alt="IIITN Logo" width={22} height={22} className="w-5 h-5 object-contain rounded-full" />
-              <Image src="/images/crispt.png" alt="CRISPR Logo" width={22} height={22} className="w-5 h-5 object-contain rounded-full" />
+              <Image src="/images/crispt.png" alt="Shani Digital Works Logo" width={22} height={22} className="w-5 h-5 object-contain rounded-full" />
             </div>
             <span className="text-slate-300 font-semibold text-[11px] sm:text-xs">
-              A product by the CRISPR Club, IIITN in collaboration with IIITN Placement Cell
+              A product by Shani Digital Works in collaboration with Alumni Committee, IIITN
             </span>
           </div>
           <div className="flex items-center gap-4 text-xs font-semibold shrink-0">

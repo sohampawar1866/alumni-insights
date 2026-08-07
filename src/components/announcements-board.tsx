@@ -359,7 +359,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
                       )}
                       {post.profiles.roles?.includes("moderator") ? (
                         <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-900 border border-blue-200 px-2.5 py-0.5 rounded-full font-semibold text-[11px]">
-                          <School className="w-3.5 h-3.5 text-blue-600" /> Official: Placement Cell ({post.profiles.full_name})
+                          <School className="w-3.5 h-3.5 text-blue-600" /> Official: Alumni Committee ({post.profiles.full_name})
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full font-medium text-[11px]">

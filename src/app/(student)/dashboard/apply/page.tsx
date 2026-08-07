@@ -71,7 +71,7 @@ export default function ApplyAlumniPage() {
         </div>
         <div className="border-2 border-slate-900 bg-white p-8 rounded-2xl shadow-[6px_6px_0px_#0f172a] space-y-3">
           <h1 className="text-xl font-bold tracking-tight text-slate-900 font-heading">Application Submitted</h1>
-          <p className="text-xs text-slate-600 font-medium">Your application to be listed in the Alumni Directory has been sent to the placement cell for review.</p>
+          <p className="text-xs text-slate-600 font-medium">Your application to be listed in the Alumni Directory has been sent to the Alumni Committee for review.</p>
           <p className="text-xs font-bold text-amber-600 pt-2 animate-pulse">Redirecting to dashboard...</p>
         </div>
       </div>

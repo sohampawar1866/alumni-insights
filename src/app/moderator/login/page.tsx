@@ -55,7 +55,7 @@ export default function ModeratorLoginPage() {
       <div className="p-8 bg-white border-2 border-slate-900 rounded-2xl shadow-[8px_8px_0px_#0f172a] max-w-sm w-full relative z-10 space-y-6">
         <div className="text-center space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 border-2 border-slate-900 text-xs font-bold text-slate-900 shadow-[2px_2px_0px_#0f172a]">
-            <Shield className="w-3.5 h-3.5 text-blue-600" /> Placement Cell Moderator
+            <Shield className="w-3.5 h-3.5 text-blue-600" /> Alumni Committee Moderator
           </div>
           <div className="relative w-16 h-16 mx-auto">
             <Image
@@ -70,7 +70,7 @@ export default function ModeratorLoginPage() {
             Moderator Sign In
           </h1>
           <p className="text-xs text-slate-500 font-medium">
-            IIIT Nagpur Placement Cell administrative login.
+            Alumni Committee, IIITN administrative login.
           </p>
         </div>
         

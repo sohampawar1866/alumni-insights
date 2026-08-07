@@ -151,7 +151,7 @@ export default function ApplicationsPage() {
             <FileText className="w-6 h-6 text-slate-700" /> Student Alumni Applications
           </h1>
           <p className="text-xs text-slate-600 mt-1">
-            Review 4th-year students who have applied for placement cell alumni directory listing.
+            Review 4th-year students who have applied for Alumni Committee directory listing.
           </p>
         </div>
         <Button 

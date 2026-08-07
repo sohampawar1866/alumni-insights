@@ -119,7 +119,7 @@ export default function AdminDashboardPage() {
             <ShieldAlert className="w-6 h-6 text-slate-700" /> Admin Control Panel
           </h1>
           <p className="text-sm text-slate-600 mt-1">
-            Create, update, and manage IIIT Nagpur Placement Cell moderator credentials.
+            Create, update, and manage Alumni Committee, IIITN moderator credentials.
           </p>
         </div>
         <Button 

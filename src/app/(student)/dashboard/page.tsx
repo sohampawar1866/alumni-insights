@@ -138,7 +138,7 @@ export default async function StudentDashboard() {
               <h3 className="text-sm font-bold text-slate-900">Announcements Feed</h3>
             </div>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Stay updated with placement cell talks, official notices, and alumni guest sessions on the bulletin board.
+              Stay updated with Alumni Committee talks, official notices, and alumni guest sessions on the bulletin board.
             </p>
             <Link 
               href="/announcements" 
