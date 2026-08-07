@@ -114,19 +114,33 @@ export async function middleware(request: NextRequest) {
     return "student";
   };
 
-  // Redirect authenticated users away from auth pages to their corresponding dashboard
-  const authPaths = ["/login", "/alumni/login", "/moderator/login", "/admin/login"];
-  if (authPaths.includes(path)) {
-    const primaryRole = getPrimaryRole(roles);
-    const dashboards: Record<string, string> = {
-      admin: "/admin/dashboard",
-      moderator: "/moderator/dashboard",
-      alumni: "/alumni/dashboard",
-      student: "/dashboard",
-    };
-    return NextResponse.redirect(
-      new URL(dashboards[primaryRole] || "/dashboard", request.url)
-    );
+  // Redirect authenticated users away from auth pages.
+  // CRITICAL: Each login portal redirects ONLY to its own dashboard.
+  // This prevents multi-role users (e.g. student + moderator) from being
+  // hijacked to the wrong portal when they intentionally choose a specific login page.
+  if (path === "/login") {
+    if (!roles.includes("student")) {
+      return NextResponse.redirect(new URL("/unauthorized", request.url));
+    }
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+  if (path === "/alumni/login") {
+    if (!roles.includes("alumni")) {
+      return NextResponse.redirect(new URL("/unauthorized", request.url));
+    }
+    return NextResponse.redirect(new URL("/alumni/dashboard", request.url));
+  }
+  if (path === "/moderator/login") {
+    if (!roles.includes("moderator")) {
+      return NextResponse.redirect(new URL("/unauthorized", request.url));
+    }
+    return NextResponse.redirect(new URL("/moderator/dashboard", request.url));
+  }
+  if (path === "/admin/login") {
+    if (!roles.includes("admin")) {
+      return NextResponse.redirect(new URL("/unauthorized", request.url));
+    }
+    return NextResponse.redirect(new URL("/admin/dashboard", request.url));
   }
 
   // Strict Role-Based Access Control (RBAC)
