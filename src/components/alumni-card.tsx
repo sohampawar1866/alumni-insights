@@ -33,7 +33,7 @@ export const AlumniCard = memo(function AlumniCard({
   return (
     <Link
       href={`${hrefPrefix}/${id}`}
-      className="group flex flex-col justify-between p-6 bg-white border-2 border-slate-900 rounded-2xl shadow-[4px_4px_0px_#0f172a] hover:shadow-[7px_7px_0px_#0f172a] hover:-translate-y-1 hover:-translate-x-1 transition-all duration-200"
+      className="group flex flex-col justify-between p-6 bg-white border-2 border-slate-900 rounded-2xl shadow-[4px_4px_0px_#0f172a] hover:shadow-[7px_7px_0px_#0f172a] hover:-translate-y-1 hover:-translate-x-1 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-all duration-200"
     >
       {/* Header */}
       <div className="space-y-3 mb-6">
