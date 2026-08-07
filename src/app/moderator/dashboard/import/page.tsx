@@ -39,6 +39,8 @@ export default function BulkImportPage() {
     });
   };
 
+  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
+
   const handleImport = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) {
@@ -51,7 +53,8 @@ export default function BulkImportPage() {
     setLoading(true);
     setError(null);
     setResult(null);
-    
+    setProgress(null);
+
     toast.info("Importing Records", {
       description: "Processing alumni records..."
     });
@@ -102,43 +105,62 @@ export default function BulkImportPage() {
 
     const successList: ImportResult["success"] = [];
     const errorList: ImportResult["errors"] = [];
+    const BATCH_SIZE = 5;
+    let processed = 0;
 
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
+    setProgress({ done: 0, total: rows.length });
 
-      if (!row.email || !row.full_name) {
-        errorList.push({ row: row.rowNum, message: "Missing required name or email field" });
-        continue;
-      }
+    for (let i = 0; i < rows.length; i += BATCH_SIZE) {
+      const batch = rows.slice(i, i + BATCH_SIZE);
 
-      // Check duplicate within the uploaded CSV itself
-      if (seenEmailsInFile.has(row.email)) {
-        errorList.push({ row: row.rowNum, message: `Duplicate email "${row.email}" in CSV file (skipped)` });
-        continue;
-      }
-      seenEmailsInFile.add(row.email);
+      // Pre-filter duplicates within the file before sending batch
+      const validBatch = batch.filter((row) => {
+        if (!row.email || !row.full_name) {
+          errorList.push({ row: row.rowNum, message: "Missing required name or email field" });
+          return false;
+        }
+        if (seenEmailsInFile.has(row.email)) {
+          errorList.push({ row: row.rowNum, message: `Duplicate email "${row.email}" in CSV file (skipped)` });
+          return false;
+        }
+        seenEmailsInFile.add(row.email);
+        return true;
+      });
 
-      const { data, error: fnError } = await supabase.functions.invoke(
-        "create-alumni",
-        { body: row }
+      // Send the valid batch concurrently
+      const batchResults = await Promise.allSettled(
+        validBatch.map((row) =>
+          supabase.functions.invoke("create-alumni", { body: row }).then(({ data, error: fnError }) => ({
+            row,
+            data,
+            fnError,
+          }))
+        )
       );
 
-      if (fnError || data?.error) {
-        errorList.push({
-          row: row.rowNum,
-          message: data?.error || fnError?.message || "User creation failed (email may already exist)",
-        });
-      } else {
-        successList.push({
-          name: row.full_name,
-          email: row.email,
-          password: row.password,
-        });
-      }
+      batchResults.forEach((result) => {
+        if (result.status === "fulfilled") {
+          const { row, data, fnError } = result.value;
+          if (fnError || data?.error) {
+            errorList.push({
+              row: row.rowNum,
+              message: data?.error || fnError?.message || "User creation failed (email may already exist)",
+            });
+          } else {
+            successList.push({ name: row.full_name, email: row.email, password: row.password });
+          }
+        } else {
+          errorList.push({ row: 0, message: "Network error during batch processing" });
+        }
+      });
+
+      processed += batch.length;
+      setProgress({ done: processed, total: rows.length });
     }
 
     setResult({ success: successList, errors: errorList });
     setLoading(false);
+    setProgress(null);
 
     if (successList.length > 0) {
       toast.success("Import Completed", {
@@ -225,7 +247,11 @@ export default function BulkImportPage() {
           disabled={loading || !file} 
           className="w-full mt-2 font-bold text-xs shadow-[3px_3px_0px_#0f172a]"
         >
-          {loading ? "Importing Accounts..." : "Start Bulk Import"}
+          {progress
+            ? `Importing ${progress.done} of ${progress.total} records...`
+            : loading
+            ? "Starting Import..."
+            : "Start Bulk Import"}
         </Button>
       </form>
 

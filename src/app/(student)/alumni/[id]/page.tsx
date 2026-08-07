@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ConnectSection } from "./connect-section";
 import { AlumniBadge } from "@/components/alumni-badge";
-import { ArrowLeft, ExternalLink, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, CheckCircle2, BellOff } from "lucide-react";
 
 export default async function AlumniProfilePage({
   params,
@@ -24,12 +24,14 @@ export default async function AlumniProfilePage({
     notFound();
   }
 
-  // Execute secondary stats queries concurrently via Promise.all for maximum speed
+  // Fetch current user, secondary stats, and duplicate request check concurrently
   const [
+    { data: { user } },
     { count: totalRequests },
     { count: acceptedRequests },
     { data: stats },
   ] = await Promise.all([
+    supabase.auth.getUser(),
     supabase
       .from("connection_requests")
       .select("*", { count: "exact", head: true })
@@ -45,6 +47,19 @@ export default async function AlumniProfilePage({
       .eq("alumni_id", id)
       .single(),
   ]);
+
+  // Check if the current student already has an active request with this alumni
+  let hasExistingRequest = false;
+  if (user) {
+    const { data: existingReq } = await supabase
+      .from("connection_requests")
+      .select("id")
+      .eq("alumni_id", id)
+      .eq("student_id", user.id)
+      .in("status", ["pending", "accepted"])
+      .maybeSingle();
+    hasExistingRequest = !!existingReq;
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-6 font-sans">
@@ -64,9 +79,13 @@ export default async function AlumniProfilePage({
               <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 font-heading">
                 {alumni.full_name || "Alumnus"}
               </h1>
-              {alumni.mentorship_available && (
+              {alumni.mentorship_available ? (
                 <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full text-xs font-semibold">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Available for Mentorship
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 bg-slate-100 text-slate-500 border border-slate-200 px-2.5 py-0.5 rounded-full text-xs font-semibold">
+                  <BellOff className="w-3.5 h-3.5 text-slate-400" /> Currently Unavailable
                 </span>
               )}
             </div>
@@ -124,27 +143,21 @@ export default async function AlumniProfilePage({
         />
       )}
 
-      {/* Bio / Mentorship details */}
+      {/* Bio */}
       {alumni.bio && (
         <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-3">
           <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500">
             About & Mentorship Focus
           </h2>
-          <p className="text-sm text-slate-700 leading-relaxed">
-            {alumni.bio}
-          </p>
+          <p className="text-sm text-slate-700 leading-relaxed">{alumni.bio}</p>
         </div>
       )}
 
       {/* Mentorship Preferences */}
       {alumni.mentorship_preferences && (
         <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 shadow-sm space-y-3">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500">
-            Preferred Topics
-          </h2>
-          <p className="text-sm text-slate-800 font-medium leading-relaxed">
-            {alumni.mentorship_preferences}
-          </p>
+          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500">Preferred Topics</h2>
+          <p className="text-sm text-slate-800 font-medium leading-relaxed">{alumni.mentorship_preferences}</p>
         </div>
       )}
 
@@ -160,9 +173,14 @@ export default async function AlumniProfilePage({
         </a>
       )}
 
-      {/* Connect Section */}
+      {/* Connect Section - passes availability + duplicate state */}
       <div className="pt-6 border-t border-slate-200 space-y-2">
-        <ConnectSection alumniId={alumni.id} alumniName={alumni.full_name || "Alumnus"} />
+        <ConnectSection
+          alumniId={alumni.id}
+          alumniName={alumni.full_name || "Alumnus"}
+          mentorshipAvailable={alumni.mentorship_available ?? false}
+          hasExistingRequest={hasExistingRequest}
+        />
       </div>
     </div>
   );

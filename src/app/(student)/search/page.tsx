@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -24,75 +25,98 @@ type Alumni = {
 
 export default function SearchPage() {
   const supabase = createClient();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Initialize filters from URL params so Back navigation restores state
   const [results, setResults] = useState<Alumni[]>([]);
   const [loading, setLoading] = useState(true);
+  const [company, setCompany] = useState(searchParams.get("company") || "");
+  const [roleKeyword, setRoleKeyword] = useState(searchParams.get("role") || "");
+  const [branch, setBranch] = useState(searchParams.get("branch") || "");
+  const [city, setCity] = useState(searchParams.get("city") || "");
+  const [yearFrom, setYearFrom] = useState(searchParams.get("from") || "");
+  const [yearTo, setYearTo] = useState(searchParams.get("to") || "");
+  const [empType, setEmpType] = useState<"" | "Intern" | "Full-time">((searchParams.get("type") || "") as "" | "Intern" | "Full-time");
+  const [mentorshipOnly, setMentorshipOnly] = useState(searchParams.get("mentors") === "1");
 
-  // Filter state
-  const [company, setCompany] = useState("");
-  const [roleKeyword, setRoleKeyword] = useState("");
-  const [branch, setBranch] = useState("");
-  const [city, setCity] = useState("");
-  const [yearFrom, setYearFrom] = useState("");
-  const [yearTo, setYearTo] = useState("");
-  const [empType, setEmpType] = useState<"" | "Intern" | "Full-time">("");
-  const [mentorshipOnly, setMentorshipOnly] = useState(false);
+  // Debounce timer ref
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const search = useCallback(async () => {
+  const pushFiltersToUrl = useCallback((params: Record<string, string>) => {
+    const url = new URLSearchParams();
+    Object.entries(params).forEach(([k, v]) => { if (v) url.set(k, v); });
+    router.replace(`/search?${url.toString()}`, { scroll: false });
+  }, [router]);
+
+  const search = useCallback(async (filters: {
+    company: string; roleKeyword: string; branch: string; city: string;
+    yearFrom: string; yearTo: string; empType: string; mentorshipOnly: boolean;
+  }) => {
     setLoading(true);
 
     let query = supabase
       .from("profiles")
-      .select(
-        "id, full_name, role_title, company, emp_type, graduation_year, branch, city, mentorship_available, bio, linkedin_url"
-      )
+      .select("id, full_name, role_title, company, emp_type, graduation_year, branch, city, mentorship_available, bio, linkedin_url")
       .contains("roles", ["alumni"]);
 
-    if (company.trim()) query = query.ilike("company", `%${company.trim()}%`);
-    if (roleKeyword.trim())
-      query = query.ilike("role_title", `%${roleKeyword.trim()}%`);
-    if (branch.trim()) query = query.ilike("branch", `%${branch.trim()}%`);
-    if (city.trim()) query = query.ilike("city", `%${city.trim()}%`);
-    if (yearFrom) query = query.gte("graduation_year", parseInt(yearFrom));
-    if (yearTo) query = query.lte("graduation_year", parseInt(yearTo));
-    if (empType) query = query.eq("emp_type", empType);
-    if (mentorshipOnly) query = query.eq("mentorship_available", true);
+    if (filters.company.trim()) query = query.ilike("company", `%${filters.company.trim()}%`);
+    if (filters.roleKeyword.trim()) query = query.ilike("role_title", `%${filters.roleKeyword.trim()}%`);
+    if (filters.branch.trim()) query = query.ilike("branch", `%${filters.branch.trim()}%`);
+    if (filters.city.trim()) query = query.ilike("city", `%${filters.city.trim()}%`);
+    if (filters.yearFrom) query = query.gte("graduation_year", parseInt(filters.yearFrom));
+    if (filters.yearTo) query = query.lte("graduation_year", parseInt(filters.yearTo));
+    if (filters.empType) query = query.eq("emp_type", filters.empType);
+    if (filters.mentorshipOnly) query = query.eq("mentorship_available", true);
 
     const { data } = await query;
     let fetchedData = (data as Alumni[]) || [];
 
-    // Calculate completeness and sort
     fetchedData = fetchedData.sort((a, b) => {
-      const getScore = (profile: Alumni) => {
+      const getScore = (p: Alumni) => {
         let score = 0;
-        if (profile.role_title?.trim()) score += 20;
-        if (profile.company?.trim()) score += 20;
-        if (profile.emp_type) score += 10;
-        if (profile.city?.trim()) score += 15;
-        if (profile.bio?.trim()) score += 20;
-        if (profile.linkedin_url?.trim()) score += 15;
+        if (p.role_title?.trim()) score += 20;
+        if (p.company?.trim()) score += 20;
+        if (p.emp_type) score += 10;
+        if (p.city?.trim()) score += 15;
+        if (p.bio?.trim()) score += 20;
+        if (p.linkedin_url?.trim()) score += 15;
         return score;
       };
-      
-      const scoreA = getScore(a);
-      const scoreB = getScore(b);
-      
-      if (scoreA === scoreB) {
-        return (a.full_name || "").localeCompare(b.full_name || "");
-      }
-      return scoreB - scoreA;
+      const diff = getScore(b) - getScore(a);
+      if (diff !== 0) return diff;
+      return (a.full_name || "").localeCompare(b.full_name || "");
     });
 
     setResults(fetchedData);
     setLoading(false);
-  }, [company, roleKeyword, branch, city, yearFrom, yearTo, empType, mentorshipOnly, supabase]);
+  }, [supabase]);
 
+  // Debounced effect: wait 300ms after last filter change before querying
   useEffect(() => {
-    search();
-  }, [search]);
+    const currentFilters = { company, roleKeyword, branch, city, yearFrom, yearTo, empType, mentorshipOnly };
+
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+
+    debounceTimer.current = setTimeout(() => {
+      // Push filter state to URL so Back navigation restores it
+      pushFiltersToUrl({
+        company, role: roleKeyword, branch, city,
+        from: yearFrom, to: yearTo, type: empType,
+        mentors: mentorshipOnly ? "1" : "",
+      });
+      search(currentFilters);
+    }, 300);
+
+    return () => {
+      if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    };
+  }, [company, roleKeyword, branch, city, yearFrom, yearTo, empType, mentorshipOnly, search, pushFiltersToUrl]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    search();
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    search({ company, roleKeyword, branch, city, yearFrom, yearTo, empType, mentorshipOnly });
   };
 
   const clearFilters = () => {
@@ -104,6 +128,7 @@ export default function SearchPage() {
     setYearTo("");
     setEmpType("");
     setMentorshipOnly(false);
+    router.replace("/search", { scroll: false });
   };
 
   return (
@@ -135,9 +160,9 @@ export default function SearchPage() {
             <h2 className="text-sm font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
               <Filter className="w-4 h-4 text-slate-500" /> Filters
             </h2>
-            <button 
-              type="button" 
-              onClick={clearFilters} 
+            <button
+              type="button"
+              onClick={clearFilters}
               className="text-xs font-medium text-slate-500 hover:text-slate-900 flex items-center gap-1 transition-colors"
             >
               <RotateCcw className="w-3 h-3" /> Clear
@@ -146,58 +171,32 @@ export default function SearchPage() {
 
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-slate-700">Company</label>
-            <Input
-              placeholder="e.g. Google, Zomato"
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
-            />
+            <Input placeholder="e.g. Google, Zomato" value={company} onChange={(e) => setCompany(e.target.value)} />
           </div>
 
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-slate-700">Role / Title</label>
-            <Input
-              placeholder="e.g. SDE, Product Manager"
-              value={roleKeyword}
-              onChange={(e) => setRoleKeyword(e.target.value)}
-            />
+            <Input placeholder="e.g. SDE, Product Manager" value={roleKeyword} onChange={(e) => setRoleKeyword(e.target.value)} />
           </div>
 
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-slate-700">Branch</label>
-            <Input
-              placeholder="e.g. CSE, ECE"
-              value={branch}
-              onChange={(e) => setBranch(e.target.value)}
-            />
+            <Input placeholder="e.g. CSE, ECE" value={branch} onChange={(e) => setBranch(e.target.value)} />
           </div>
 
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-slate-700">City</label>
-            <Input
-              placeholder="e.g. Bangalore, Pune"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-            />
+            <Input placeholder="e.g. Bangalore, Pune" value={city} onChange={(e) => setCity(e.target.value)} />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-700">From Year</label>
-              <Input
-                type="number"
-                placeholder="2020"
-                value={yearFrom}
-                onChange={(e) => setYearFrom(e.target.value)}
-              />
+              <Input type="number" placeholder="2020" value={yearFrom} onChange={(e) => setYearFrom(e.target.value)} />
             </div>
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-700">To Year</label>
-              <Input
-                type="number"
-                placeholder="2026"
-                value={yearTo}
-                onChange={(e) => setYearTo(e.target.value)}
-              />
+              <Input type="number" placeholder="2026" value={yearTo} onChange={(e) => setYearTo(e.target.value)} />
             </div>
           </div>
 
@@ -221,9 +220,7 @@ export default function SearchPage() {
               checked={mentorshipOnly}
               onChange={(e) => setMentorshipOnly(e.target.checked)}
             />
-            <span className="text-xs font-semibold text-slate-800">
-              Mentors Only
-            </span>
+            <span className="text-xs font-semibold text-slate-800">Mentors Only</span>
           </label>
 
           <Button type="submit" className="w-full gap-2">
@@ -239,12 +236,8 @@ export default function SearchPage() {
             </div>
           ) : results.length === 0 ? (
             <div className="text-center py-16 bg-white border border-slate-200 rounded-xl shadow-sm p-8 space-y-2">
-              <p className="text-base font-bold text-slate-900 font-heading">
-                No Alumni Profiles Found
-              </p>
-              <p className="text-xs text-slate-500">
-                Try loosening your filter criteria or searching by company name.
-              </p>
+              <p className="text-base font-bold text-slate-900 font-heading">No Alumni Profiles Found</p>
+              <p className="text-xs text-slate-500">Try loosening your filter criteria or searching by company name.</p>
             </div>
           ) : (
             <div className="space-y-4">

@@ -108,6 +108,11 @@ export default async function MyRequestsPage() {
                     >
                       {req.status === "pending" ? "Pending Approval" : req.status.toUpperCase()}
                     </span>
+                    {req.status === "declined" && (
+                      <span className="text-xs font-semibold text-slate-500 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-lg">
+                        Try a different mentor
+                      </span>
+                    )}
                     <time className="text-xs font-bold text-slate-700 border-2 border-slate-900 px-2.5 py-1 rounded-lg bg-white shadow-[2px_2px_0px_#0f172a]">
                       {new Date(req.created_at).toLocaleDateString("en-US", {
                         month: "short",
@@ -123,6 +128,14 @@ export default async function MyRequestsPage() {
                     <div className="bg-amber-50/50 border-2 border-slate-900 rounded-xl p-4 shadow-[3px_3px_0px_#0f172a]">
                       <p className="text-sm font-medium text-slate-800 leading-relaxed whitespace-pre-wrap">{req.message}</p>
                     </div>
+                    {req.status === "declined" && (
+                      <p className="text-xs text-slate-500 mt-2 font-medium">
+                        This mentor was unable to take your request.{" "}
+                        <Link href="/search" className="font-bold text-slate-700 underline hover:text-slate-900">
+                          Browse available mentors &rarr;
+                        </Link>
+                      </p>
+                    )}
                   </div>
 
                   {req.status === "accepted" && alumni && (

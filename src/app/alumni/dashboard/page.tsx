@@ -84,7 +84,7 @@ export default function AlumniDashboardPage() {
     } = await supabase.auth.getUser();
     if (!user) return;
 
-    await supabase
+    const { error: saveError } = await supabase
       .from("profiles")
       .update({
         role_title: roleTitle || null,
@@ -100,6 +100,14 @@ export default function AlumniDashboardPage() {
       .eq("id", user.id);
 
     setSaving(false);
+
+    if (saveError) {
+      // Profile update failed - surface a visible error rather than silently claiming success
+      console.error("Profile save failed:", saveError.message);
+      alert("Failed to save profile. Please check your connection and try again.");
+      return;
+    }
+
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   };

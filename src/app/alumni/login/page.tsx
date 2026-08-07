@@ -41,7 +41,7 @@ export default function AlumniLoginPage() {
         
         if (!profile?.roles?.includes('alumni')) {
           await supabase.auth.signOut()
-          setError('This account does not have alumni access. Contact the placement moderator.')
+          setError('ACCESS DENIED: This portal is for verified alumni only. If you are a student, please use the Student Login instead.')
           setLoading(false)
           return
         }
@@ -102,8 +102,11 @@ export default function AlumniLoginPage() {
           </div>
           
           {error && (
-            <div className="bg-red-50 border-2 border-red-900 rounded-xl p-3 text-xs font-bold text-red-900 shadow-[2px_2px_0px_#0f172a]">
-              {error}
+            <div className="bg-red-50 border-2 border-red-900 rounded-xl p-3 text-xs font-bold text-red-900 shadow-[2px_2px_0px_#0f172a] space-y-2">
+              <p>{error}</p>
+              {error.includes('student') && (
+                <a href="/login" className="underline text-red-800 hover:text-red-950 block">Go to Student Login &rarr;</a>
+              )}
             </div>
           )}
           
@@ -112,8 +115,14 @@ export default function AlumniLoginPage() {
           </Button>
         </form>
 
-        <div className="pt-2 text-center">
-          <Link href="/" className="inline-flex items-center text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors gap-1">
+        <div className="pt-2 space-y-2 text-center">
+          <p className="text-xs text-slate-500">
+            Are you a student?{" "}
+            <Link href="/login" className="font-bold text-slate-900 underline hover:text-slate-700 transition-colors">
+              Go to Student Login
+            </Link>
+          </p>
+          <Link href="/" className="inline-flex items-center text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors gap-1">
             <ArrowLeft className="w-3.5 h-3.5" /> Back to Landing Page
           </Link>
         </div>
