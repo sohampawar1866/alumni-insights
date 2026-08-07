@@ -1,10 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import { Search, Handshake, Rocket, ShieldCheck, ArrowRight, CheckCircle2 } from "lucide-react";
-
-// Dynamically import WebGL component — no SSR, zero impact on initial HTML render
-const LiquidHero = dynamic(() => import("@/components/liquid-hero"), { ssr: false });
+import LiquidHeroWrapper from "@/components/liquid-hero-wrapper";
+import MagnetizingLinesWrapper from "@/components/magnetizing-lines-wrapper";
 
 export const revalidate = 3600;
 
@@ -64,7 +62,7 @@ export default function LandingPage() {
       <section className="relative flex flex-1 flex-col items-center justify-center px-3.5 sm:px-6 py-10 sm:py-20 text-center z-10 max-w-full mx-auto overflow-hidden">
         {/* WebGL canvas sits behind all text — pointer events pass through naturally */}
         <div className="absolute inset-0">
-          <LiquidHero />
+          <LiquidHeroWrapper />
         </div>
 
         {/* Gradient overlay: softens edges so hero blends into page below */}
@@ -113,9 +111,14 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Value Props Grid */}
-      <section className="py-12 sm:py-20 px-3.5 sm:px-6 bg-white border-t border-slate-200 relative z-10">
-        <div className="max-w-5xl mx-auto">
+      {/* Value Props Grid — magnetizing lines at 20% opacity as background */}
+      <section className="py-12 sm:py-20 px-3.5 sm:px-6 bg-white border-t border-slate-200 relative z-10 overflow-hidden">
+        {/* Magnetizing Lines Background — 20% opacity, pointer-events:none so cards still clickable */}
+        <div className="absolute inset-0" style={{ opacity: 0.20 }}>
+          <MagnetizingLinesWrapper />
+        </div>
+
+        <div className="relative z-10 max-w-5xl mx-auto">
           <div className="text-center max-w-xl mx-auto mb-10 sm:mb-16 space-y-1.5">
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 font-heading">
               How Alumni Insights Works
