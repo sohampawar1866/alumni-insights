@@ -1,6 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { Search, Handshake, Rocket, ShieldCheck, ArrowRight, CheckCircle2 } from "lucide-react";
+
+// Dynamically import WebGL component — no SSR, zero impact on initial HTML render
+const LiquidHero = dynamic(() => import("@/components/liquid-hero"), { ssr: false });
 
 export const revalidate = 3600;
 
@@ -56,45 +60,53 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative flex flex-1 flex-col items-center justify-center px-3.5 sm:px-6 py-10 sm:py-20 text-center z-10 max-w-4xl mx-auto">
-        <div className="space-y-4 sm:space-y-6">
-          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 bg-blue-50 border border-blue-200/80 rounded-full text-[11px] sm:text-xs font-semibold text-blue-900 shadow-sm">
-            <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
-            Official IIIT Nagpur Alumni & Mentorship Network
+      {/* Hero Section — full viewport with WebGL liquid distortion background */}
+      <section className="relative flex flex-1 flex-col items-center justify-center px-3.5 sm:px-6 py-10 sm:py-20 text-center z-10 max-w-full mx-auto overflow-hidden">
+        {/* WebGL canvas sits behind all text — pointer events pass through naturally */}
+        <div className="absolute inset-0">
+          <LiquidHero />
+        </div>
+
+        {/* Gradient overlay: softens edges so hero blends into page below */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-50/70 pointer-events-none" />
+
+        <div className="relative z-10 space-y-4 sm:space-y-6 max-w-4xl mx-auto">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 bg-white/10 backdrop-blur-md border border-white/25 rounded-full text-[11px] sm:text-xs font-semibold text-white shadow-sm">
+            <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-sky-300" />
+            Official IIIT Nagpur Alumni &amp; Mentorship Network
           </div>
 
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-[1.15] font-heading">
-            Connect with IIIT Nagpur Graduates for <br className="hidden sm:inline" />
-            <span className="text-blue-600 underline decoration-blue-200 decoration-wavy underline-offset-8">
-              Mentorship & Guidance
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.15] font-heading drop-shadow-lg">
+            Connect with IIIT Nagpur Graduates for{" "}<br className="hidden sm:inline" />
+            <span className="text-sky-300 underline decoration-sky-500/40 decoration-wavy underline-offset-8">
+              Mentorship &amp; Guidance
             </span>
           </h1>
 
-          <p className="max-w-2xl mx-auto text-xs sm:text-lg text-slate-600 font-normal leading-relaxed">
+          <p className="max-w-2xl mx-auto text-xs sm:text-lg text-white/80 font-normal leading-relaxed drop-shadow">
             Discover alumni working across top tech companies and startups. Access free career advice, resume reviews, and volunteer mentorship from graduates who walked in your shoes.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-2 sm:pt-4">
             <Link
               href="/login"
-              className="group inline-flex h-11 sm:h-12 w-full sm:w-auto items-center justify-center bg-slate-900 rounded-xl px-6 sm:px-7 text-xs sm:text-sm font-semibold text-white shadow-md hover:bg-slate-800 transition-all gap-2"
+              className="group inline-flex h-11 sm:h-12 w-full sm:w-auto items-center justify-center bg-white rounded-xl px-6 sm:px-7 text-xs sm:text-sm font-semibold text-slate-900 shadow-lg hover:bg-slate-100 transition-all gap-2"
             >
               Student Login (@iiitn.ac.in)
-              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-4 h-4 text-slate-500 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
               href="/alumni/login"
-              className="inline-flex h-11 sm:h-12 w-full sm:w-auto items-center justify-center bg-white border-2 border-slate-900 rounded-xl px-6 sm:px-7 text-xs sm:text-sm font-bold text-slate-900 shadow-[3px_3px_0px_#0f172a] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0f172a] transition-all"
+              className="inline-flex h-11 sm:h-12 w-full sm:w-auto items-center justify-center bg-white/10 backdrop-blur-md border-2 border-white/40 rounded-xl px-6 sm:px-7 text-xs sm:text-sm font-bold text-white shadow-md hover:-translate-y-0.5 hover:bg-white/20 transition-all"
             >
               Alumni Sign In
             </Link>
           </div>
 
-          {/* Institutional Trust Badges */}
-          <div className="flex items-center justify-center pt-4 sm:pt-8 text-xs font-medium text-slate-500">
+          {/* Institutional Trust Badge */}
+          <div className="flex items-center justify-center pt-4 sm:pt-8 text-xs font-medium text-white/60">
             <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
               Verified Institutional OAuth (@iiitn.ac.in)
             </span>
           </div>
