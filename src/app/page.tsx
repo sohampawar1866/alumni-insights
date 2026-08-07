@@ -1,8 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Search, Handshake, Rocket, ShieldCheck, ArrowRight, CheckCircle2 } from "lucide-react";
-import LiquidHeroWrapper from "@/components/liquid-hero-wrapper";
-import MagnetizingLinesWrapper from "@/components/magnetizing-lines-wrapper";
+import LiquidCardWrapper from "@/components/liquid-card-wrapper";
 
 export const revalidate = 3600;
 
@@ -58,67 +57,54 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* Hero Section — full viewport with WebGL liquid distortion background */}
-      <section className="relative flex flex-1 flex-col items-center justify-center px-3.5 sm:px-6 py-10 sm:py-20 text-center z-10 max-w-full mx-auto overflow-hidden">
-        {/* WebGL canvas sits behind all text — pointer events pass through naturally */}
-        <div className="absolute inset-0">
-          <LiquidHeroWrapper />
-        </div>
-
-        {/* Gradient overlay: softens edges so hero blends into page below */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-50/70 pointer-events-none" />
-
-        <div className="relative z-10 space-y-4 sm:space-y-6 max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 bg-white/10 backdrop-blur-md border border-white/25 rounded-full text-[11px] sm:text-xs font-semibold text-white shadow-sm">
-            <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-sky-300" />
+      {/* Hero Section */}
+      <section className="relative flex flex-1 flex-col items-center justify-center px-3.5 sm:px-6 py-10 sm:py-20 text-center z-10 max-w-4xl mx-auto">
+        <div className="space-y-4 sm:space-y-6">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 bg-blue-50 border border-blue-200/80 rounded-full text-[11px] sm:text-xs font-semibold text-blue-900 shadow-sm">
+            <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
             Official IIIT Nagpur Alumni &amp; Mentorship Network
           </div>
 
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.15] font-heading drop-shadow-lg">
-            Connect with IIIT Nagpur Graduates for{" "}<br className="hidden sm:inline" />
-            <span className="text-sky-300 underline decoration-sky-500/40 decoration-wavy underline-offset-8">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-[1.15] font-heading">
+            Connect with IIIT Nagpur Graduates for <br className="hidden sm:inline" />
+            <span className="text-blue-600 underline decoration-blue-200 decoration-wavy underline-offset-8">
               Mentorship &amp; Guidance
             </span>
           </h1>
 
-          <p className="max-w-2xl mx-auto text-xs sm:text-lg text-white/80 font-normal leading-relaxed drop-shadow">
+          <p className="max-w-2xl mx-auto text-xs sm:text-lg text-slate-600 font-normal leading-relaxed">
             Discover alumni working across top tech companies and startups. Access free career advice, resume reviews, and volunteer mentorship from graduates who walked in your shoes.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-2 sm:pt-4">
             <Link
               href="/login"
-              className="group inline-flex h-11 sm:h-12 w-full sm:w-auto items-center justify-center bg-white rounded-xl px-6 sm:px-7 text-xs sm:text-sm font-semibold text-slate-900 shadow-lg hover:bg-slate-100 transition-all gap-2"
+              className="group inline-flex h-11 sm:h-12 w-full sm:w-auto items-center justify-center bg-slate-900 rounded-xl px-6 sm:px-7 text-xs sm:text-sm font-semibold text-white shadow-md hover:bg-slate-800 transition-all gap-2"
             >
               Student Login (@iiitn.ac.in)
-              <ArrowRight className="w-4 h-4 text-slate-500 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
               href="/alumni/login"
-              className="inline-flex h-11 sm:h-12 w-full sm:w-auto items-center justify-center bg-white/10 backdrop-blur-md border-2 border-white/40 rounded-xl px-6 sm:px-7 text-xs sm:text-sm font-bold text-white shadow-md hover:-translate-y-0.5 hover:bg-white/20 transition-all"
+              className="inline-flex h-11 sm:h-12 w-full sm:w-auto items-center justify-center bg-white border-2 border-slate-900 rounded-xl px-6 sm:px-7 text-xs sm:text-sm font-bold text-slate-900 shadow-[3px_3px_0px_#0f172a] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0f172a] transition-all"
             >
               Alumni Sign In
             </Link>
           </div>
 
           {/* Institutional Trust Badge */}
-          <div className="flex items-center justify-center pt-4 sm:pt-8 text-xs font-medium text-white/60">
+          <div className="flex items-center justify-center pt-4 sm:pt-8 text-xs font-medium text-slate-500">
             <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
               Verified Institutional OAuth (@iiitn.ac.in)
             </span>
           </div>
         </div>
       </section>
 
-      {/* Value Props Grid — magnetizing lines at 20% opacity as background */}
-      <section className="py-12 sm:py-20 px-3.5 sm:px-6 bg-white border-t border-slate-200 relative z-10 overflow-hidden">
-        {/* Magnetizing Lines Background — 20% opacity, pointer-events:none so cards still clickable */}
-        <div className="absolute inset-0" style={{ opacity: 0.20 }}>
-          <MagnetizingLinesWrapper />
-        </div>
-
-        <div className="relative z-10 max-w-5xl mx-auto">
+      {/* Value Props Grid — liquid distortion inside each card */}
+      <section className="py-12 sm:py-20 px-3.5 sm:px-6 bg-white border-t border-slate-200 relative z-10">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center max-w-xl mx-auto mb-10 sm:mb-16 space-y-1.5">
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 font-heading">
               How Alumni Insights Works
@@ -129,34 +115,52 @@ export default function LandingPage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-5 sm:gap-8">
-            <div className="p-5 sm:p-7 rounded-2xl bg-slate-50 border border-slate-200/80 shadow-sm space-y-3 sm:space-y-4 hover:border-slate-300 transition-all">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-100 border border-blue-200/60 flex items-center justify-center text-blue-700">
-                <Search className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2} />
+            {/* Card 1 — Liquid bg + white text on hover */}
+            <div className="relative p-5 sm:p-7 rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm space-y-3 sm:space-y-4 group transition-all hover:shadow-lg hover:border-transparent min-h-[220px]">
+              {/* WebGL liquid distortion background */}
+              <LiquidCardWrapper />
+              {/* Semi-transparent overlay so text stays readable at rest */}
+              <div className="absolute inset-0 bg-slate-50/85 group-hover:bg-slate-900/20 transition-colors duration-500 pointer-events-none rounded-2xl" />
+              {/* Content sits above canvas + overlay */}
+              <div className="relative z-10">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-100 border border-blue-200/60 flex items-center justify-center text-blue-700 group-hover:bg-white/20 group-hover:border-white/30 group-hover:text-white transition-colors duration-500">
+                  <Search className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2} />
+                </div>
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 font-heading mt-3 group-hover:text-white transition-colors duration-500">Discover Alumni</h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed group-hover:text-white/80 transition-colors duration-500">
+                  Filter alumni by company, role title, branch, graduation year, and city to target the exact career path you aspire to.
+                </p>
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-slate-900 font-heading">Discover Alumni</h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Filter alumni by company, role title, branch, graduation year, and city to target the exact career path you aspire to.
-              </p>
             </div>
 
-            <div className="p-5 sm:p-7 rounded-2xl bg-slate-50 border border-slate-200/80 shadow-sm space-y-3 sm:space-y-4 hover:border-slate-300 transition-all">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-100 border border-amber-200/60 flex items-center justify-center text-amber-700">
-                <Handshake className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2} />
+            {/* Card 2 */}
+            <div className="relative p-5 sm:p-7 rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm space-y-3 sm:space-y-4 group transition-all hover:shadow-lg hover:border-transparent min-h-[220px]">
+              <LiquidCardWrapper />
+              <div className="absolute inset-0 bg-slate-50/85 group-hover:bg-slate-900/20 transition-colors duration-500 pointer-events-none rounded-2xl" />
+              <div className="relative z-10">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-100 border border-amber-200/60 flex items-center justify-center text-amber-700 group-hover:bg-white/20 group-hover:border-white/30 group-hover:text-white transition-colors duration-500">
+                  <Handshake className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2} />
+                </div>
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 font-heading mt-3 group-hover:text-white transition-colors duration-500">Structured Requests</h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed group-hover:text-white/80 transition-colors duration-500">
+                  Send structured mentorship asks (resume review, career chat, job referral) with clear response time expectations.
+                </p>
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-slate-900 font-heading">Structured Requests</h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Send structured mentorship asks (resume review, career chat, job referral) with clear response time expectations.
-              </p>
             </div>
 
-            <div className="p-5 sm:p-7 rounded-2xl bg-slate-50 border border-slate-200/80 shadow-sm space-y-3 sm:space-y-4 hover:border-slate-300 transition-all">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-100 border border-emerald-200/60 flex items-center justify-center text-emerald-700">
-                <Rocket className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2} />
+            {/* Card 3 */}
+            <div className="relative p-5 sm:p-7 rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm space-y-3 sm:space-y-4 group transition-all hover:shadow-lg hover:border-transparent min-h-[220px]">
+              <LiquidCardWrapper />
+              <div className="absolute inset-0 bg-slate-50/85 group-hover:bg-slate-900/20 transition-colors duration-500 pointer-events-none rounded-2xl" />
+              <div className="relative z-10">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-100 border border-emerald-200/60 flex items-center justify-center text-emerald-700 group-hover:bg-white/20 group-hover:border-white/30 group-hover:text-white transition-colors duration-500">
+                  <Rocket className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2} />
+                </div>
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 font-heading mt-3 group-hover:text-white transition-colors duration-500">Accelerate Growth</h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed group-hover:text-white/80 transition-colors duration-500">
+                  Gain real-world industry insights, interview preparation tips, and direct referral opportunities from IIIT Nagpur seniors.
+                </p>
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-slate-900 font-heading">Accelerate Growth</h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Gain real-world industry insights, interview preparation tips, and direct referral opportunities from IIIT Nagpur seniors.
-              </p>
             </div>
           </div>
         </div>
