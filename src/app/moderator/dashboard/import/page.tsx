@@ -130,11 +130,13 @@ export default function BulkImportPage() {
       // Send the valid batch concurrently
       const batchResults = await Promise.allSettled(
         validBatch.map((row) =>
-          supabase.functions.invoke("create-alumni", { body: row }).then(({ data, error: fnError }) => ({
-            row,
-            data,
-            fnError,
-          }))
+          supabase.functions
+            .invoke("create-alumni", { body: row })
+            .then((res: { data: { error?: string } | null; error: { message: string } | null }) => ({
+              row,
+              data: res.data,
+              fnError: res.error,
+            }))
         )
       );
 
