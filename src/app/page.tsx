@@ -18,6 +18,7 @@ export default function LandingPage() {
                 alt="IIIT Nagpur Logo"
                 width={40}
                 height={40}
+                priority
                 className="w-8 h-8 sm:w-10 sm:h-10 object-contain rounded-full"
               />
             </div>

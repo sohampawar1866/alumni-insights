@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from "next";
 import type { NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
@@ -7,13 +7,53 @@ export async function middleware(request: NextRequest) {
     request: { headers: request.headers },
   });
 
+  // Apply Security Headers to prevent Clickjacking, MIME-sniffing, and Cross-Site leaks
+  response.headers.set("X-Frame-Options", "DENY");
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  response.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+
   const path = request.nextUrl.pathname;
 
-  // Skip static assets
-  if (path.startsWith("/_next") || path.includes(".")) {
+  // 1. Instantly bypass static files and API assets for maximum speed
+  if (
+    path.startsWith("/_next") ||
+    path.startsWith("/images") ||
+    path.includes(".") ||
+    path === "/favicon.ico"
+  ) {
     return response;
   }
 
+  // 2. Define Public Routes that do NOT require authentication
+  const publicPaths = [
+    "/",
+    "/about",
+    "/login",
+    "/alumni/login",
+    "/moderator/login",
+    "/admin/login",
+    "/api/auth",
+    "/unauthorized",
+    "/not-found",
+    "/~offline",
+  ];
+
+  const isPublicPath = publicPaths.some(
+    (p) => path === p || path.startsWith(p + "/")
+  );
+
+  // Check if any Supabase auth cookies exist on the request
+  const hasAuthCookie = request.cookies
+    .getAll()
+    .some((c) => c.name.includes("sb-") && c.name.includes("-auth-token"));
+
+  // If visiting a public page and NO auth cookie exists, serve immediately (0ms delay)
+  if (isPublicPath && !hasAuthCookie) {
+    return response;
+  }
+
+  // Create Supabase SSR client for authenticated session verification
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -36,28 +76,36 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Public paths - no auth required
+  // If user is unauthenticated and attempting to access a protected route, redirect to login
   if (!user) {
-    const publicPaths = ["/", "/login", "/alumni/login", "/moderator/login", "/admin/login", "/api/auth", "/unauthorized"];
-    if (publicPaths.some((p) => path === p || path.startsWith(p + "/"))) {
-      return response;
-    }
+    if (isPublicPath) return response;
 
-    if (path.startsWith("/admin")) return NextResponse.redirect(new URL("/admin/login", request.url));
-    if (path.startsWith("/moderator")) return NextResponse.redirect(new URL("/moderator/login", request.url));
-    // Only /alumni/dashboard* and /alumni/login are alumni-portal routes.
-    // /alumni/[id] is a student page (inside the (student) route group) - redirect to student login.
+    if (path.startsWith("/admin")) {
+      return NextResponse.redirect(new URL("/admin/login", request.url));
+    }
+    if (path.startsWith("/moderator")) {
+      return NextResponse.redirect(new URL("/moderator/login", request.url));
+    }
     if (path.startsWith("/alumni/dashboard") || path === "/alumni/login") {
       return NextResponse.redirect(new URL("/alumni/login", request.url));
     }
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Fetch roles (multi-role array)
-  const { data: profile } = await supabase.from("profiles").select("roles").eq("id", user.id).single();
-  const roles: string[] = profile?.roles || [];
+  // Fetch roles with optimized cache / App Metadata fallback
+  let roles: string[] = (user.app_metadata?.roles as string[]) || [];
 
-  // Determine the "primary" role for dashboard redirect (priority: admin > moderator > alumni > student)
+  if (roles.length === 0) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("roles")
+      .eq("id", user.id)
+      .single();
+
+    roles = profile?.roles || [];
+  }
+
+  // Primary role helper for dashboard redirect
   const getPrimaryRole = (r: string[]): string => {
     if (r.includes("admin")) return "admin";
     if (r.includes("moderator")) return "moderator";
@@ -66,9 +114,9 @@ export async function middleware(request: NextRequest) {
     return "student";
   };
 
-  // Redirect logged-in users away from login pages to their dashboard
-  const loginPaths = ["/", "/login", "/alumni/login", "/moderator/login", "/admin/login"];
-  if (loginPaths.includes(path)) {
+  // Redirect authenticated users away from auth pages to their corresponding dashboard
+  const authPaths = ["/login", "/alumni/login", "/moderator/login", "/admin/login"];
+  if (authPaths.includes(path)) {
     const primaryRole = getPrimaryRole(roles);
     const dashboards: Record<string, string> = {
       admin: "/admin/dashboard",
@@ -76,10 +124,12 @@ export async function middleware(request: NextRequest) {
       alumni: "/alumni/dashboard",
       student: "/dashboard",
     };
-    return NextResponse.redirect(new URL(dashboards[primaryRole] || "/dashboard", request.url));
+    return NextResponse.redirect(
+      new URL(dashboards[primaryRole] || "/dashboard", request.url)
+    );
   }
 
-  // Role-based access control (multi-role: user needs at least one matching role)
+  // Strict Role-Based Access Control (RBAC)
   if (path.startsWith("/admin/dashboard") && !roles.includes("admin")) {
     return NextResponse.redirect(new URL("/unauthorized", request.url));
   }
@@ -89,12 +139,16 @@ export async function middleware(request: NextRequest) {
   if (path.startsWith("/alumni/dashboard") && !roles.includes("alumni")) {
     return NextResponse.redirect(new URL("/unauthorized", request.url));
   }
-  // Student routes - (student) route group pages: /dashboard, /search, /announcements, /alumni/[id]
-  // /alumni/[id] is inside the (student) group but maps to /alumni/<uuid> in the URL.
-  // We match it as: starts with /alumni/ but NOT /alumni/dashboard or /alumni/login.
+
   const studentRoutes = ["/dashboard", "/search", "/announcements"];
-  const isStudentRoute = studentRoutes.some((r) => path === r || path.startsWith(r + "/"));
-  const isAlumniProfileView = path.startsWith("/alumni/") && !path.startsWith("/alumni/dashboard") && path !== "/alumni/login";
+  const isStudentRoute = studentRoutes.some(
+    (r) => path === r || path.startsWith(r + "/")
+  );
+  const isAlumniProfileView =
+    path.startsWith("/alumni/") &&
+    !path.startsWith("/alumni/dashboard") &&
+    path !== "/alumni/login";
+
   if ((isStudentRoute || isAlumniProfileView) && !roles.includes("student")) {
     return NextResponse.redirect(new URL("/unauthorized", request.url));
   }

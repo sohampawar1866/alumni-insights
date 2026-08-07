@@ -31,6 +31,7 @@ export function Navigation() {
                 alt="IIIT Nagpur Logo"
                 width={40}
                 height={40}
+                priority
                 className="w-10 h-10 object-contain rounded-full"
               />
             </div>
