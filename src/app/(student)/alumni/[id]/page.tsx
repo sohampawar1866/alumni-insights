@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ConnectSection } from "./connect-section";
 import { AlumniBadge } from "@/components/alumni-badge";
-import { ArrowLeft, ExternalLink, Building2, MapPin, GraduationCap, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, CheckCircle2 } from "lucide-react";
 
 export default async function AlumniProfilePage({
   params,
@@ -24,24 +24,27 @@ export default async function AlumniProfilePage({
     notFound();
   }
 
-  // Fetch connection stats for this alumni
-  const { count: totalRequests } = await supabase
-    .from("connection_requests")
-    .select("*", { count: "exact", head: true })
-    .eq("alumni_id", id);
-
-  const { count: acceptedRequests } = await supabase
-    .from("connection_requests")
-    .select("*", { count: "exact", head: true })
-    .eq("alumni_id", id)
-    .eq("status", "accepted");
-
-  // Fetch contribution stats for badges
-  const { data: stats } = await supabase
-    .from("alumni_contribution_stats")
-    .select("*")
-    .eq("alumni_id", id)
-    .single();
+  // Execute secondary stats queries concurrently via Promise.all for maximum speed
+  const [
+    { count: totalRequests },
+    { count: acceptedRequests },
+    { data: stats },
+  ] = await Promise.all([
+    supabase
+      .from("connection_requests")
+      .select("*", { count: "exact", head: true })
+      .eq("alumni_id", id),
+    supabase
+      .from("connection_requests")
+      .select("*", { count: "exact", head: true })
+      .eq("alumni_id", id)
+      .eq("status", "accepted"),
+    supabase
+      .from("alumni_contribution_stats")
+      .select("*")
+      .eq("alumni_id", id)
+      .single(),
+  ]);
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-6 font-sans">

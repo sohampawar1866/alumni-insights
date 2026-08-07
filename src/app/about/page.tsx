@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, ShieldCheck, Sparkles, Users, GraduationCap, ArrowRight } from "lucide-react";
 
+export const revalidate = 3600;
+
 export default function AboutPage() {
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 relative font-sans">

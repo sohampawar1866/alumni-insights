@@ -6,11 +6,13 @@ import "./globals.css";
 const manrope = Manrope({
   variable: "--font-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-heading",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {

@@ -4,28 +4,53 @@ import { BarChart3, Users, Activity, CheckCircle2 } from "lucide-react";
 export default async function AnalyticsPage() {
   const supabase = await createClient();
 
-  const { count: totalAlumni } = await supabase
-    .from("profiles")
-    .select("*", { count: "exact", head: true })
-    .contains("roles", ["alumni"]);
+  const ninetyDaysAgo = new Date();
+  ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
 
-  const { data: branchData } = await supabase
-    .from("profiles")
-    .select("branch")
-    .contains("roles", ["alumni"])
-    .not("branch", "is", null);
+  // Execute all 6 analytics queries concurrently via Promise.all for maximum speed
+  const [
+    { count: totalAlumni },
+    { data: branchData },
+    { data: companyData },
+    { data: cityData },
+    { data: activeAlumniData },
+    { count: completedSessions },
+  ] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("*", { count: "exact", head: true })
+      .contains("roles", ["alumni"]),
+    supabase
+      .from("profiles")
+      .select("branch")
+      .contains("roles", ["alumni"])
+      .not("branch", "is", null),
+    supabase
+      .from("profiles")
+      .select("company")
+      .contains("roles", ["alumni"])
+      .not("company", "is", null),
+    supabase
+      .from("profiles")
+      .select("city")
+      .contains("roles", ["alumni"])
+      .not("city", "is", null),
+    supabase
+      .from("connection_requests")
+      .select("alumni_id")
+      .eq("status", "accepted")
+      .gte("updated_at", ninetyDaysAgo.toISOString()),
+    supabase
+      .from("connection_requests")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "completed"),
+  ]);
 
   const branchCounts: Record<string, number> = {};
   branchData?.forEach((r) => {
     const b = r.branch || "Unknown";
     branchCounts[b] = (branchCounts[b] || 0) + 1;
   });
-
-  const { data: companyData } = await supabase
-    .from("profiles")
-    .select("company")
-    .contains("roles", ["alumni"])
-    .not("company", "is", null);
 
   const companyCounts: Record<string, number> = {};
   companyData?.forEach((r) => {
@@ -36,12 +61,6 @@ export default async function AnalyticsPage() {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 10);
 
-  const { data: cityData } = await supabase
-    .from("profiles")
-    .select("city")
-    .contains("roles", ["alumni"])
-    .not("city", "is", null);
-
   const cityCounts: Record<string, number> = {};
   cityData?.forEach((r) => {
     const c = r.city || "Unknown";
@@ -51,23 +70,9 @@ export default async function AnalyticsPage() {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 10);
 
-  const ninetyDaysAgo = new Date();
-  ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
-
-  const { data: activeAlumniData } = await supabase
-    .from("connection_requests")
-    .select("alumni_id")
-    .eq("status", "accepted")
-    .gte("updated_at", ninetyDaysAgo.toISOString());
-
   const activeAlumniCount = new Set(
     activeAlumniData?.map((r) => r.alumni_id)
   ).size;
-
-  const { count: completedSessions } = await supabase
-    .from("connection_requests")
-    .select("*", { count: "exact", head: true })
-    .eq("status", "completed");
 
   return (
     <div className="max-w-5xl mx-auto space-y-6 font-sans">

@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Search, Handshake, Rocket, ShieldCheck, ArrowRight, CheckCircle2 } from "lucide-react";
 
+export const revalidate = 3600;
+
 export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 relative overflow-hidden font-sans">

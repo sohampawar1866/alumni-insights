@@ -1,116 +1,143 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Check, X, CheckCircle2 } from "lucide-react";
+import { Check, X, MessageSquare, Clock } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
 
-type Request = {
+type RequestItem = {
   id: string;
   message: string;
-  status: string;
+  status: "pending" | "accepted" | "declined" | "completed";
   created_at: string;
   student: {
+    id: string;
     full_name: string | null;
     branch: string | null;
     graduation_year: number | null;
-  };
+  } | null;
 };
 
-export default function IncomingRequestsPage() {
+export default function AlumniRequestsPage() {
   const supabase = createClient();
-  const [requests, setRequests] = useState<Request[]>([]);
+  const [activeRequests, setActiveRequests] = useState<RequestItem[]>([]);
+  const [pastRequests, setPastRequests] = useState<RequestItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchRequests = useCallback(async () => {
+  const loadRequests = useCallback(async () => {
+    setLoading(true);
     const {
       data: { user },
     } = await supabase.auth.getUser();
+
     if (!user) return;
 
-    const { data } = await supabase
-      .from("connection_requests")
-      .select(
-        `
-        id,
-        message,
-        status,
-        created_at,
-        student:profiles!connection_requests_student_id_fkey (
-          full_name,
-          branch,
-          graduation_year
-        )
-      `
-      )
-      .eq("alumni_id", user.id)
-      .order("created_at", { ascending: false });
+    // Parallelize Active and Past Requests fetching concurrently via Promise.all
+    const [{ data: pendingData }, { data: historyData }] = await Promise.all([
+      supabase
+        .from("connection_requests")
+        .select(`
+          id,
+          message,
+          status,
+          created_at,
+          student:profiles!connection_requests_student_id_fkey (
+            id,
+            full_name,
+            branch,
+            graduation_year
+          )
+        `)
+        .eq("alumni_id", user.id)
+        .eq("status", "pending")
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("connection_requests")
+        .select(`
+          id,
+          message,
+          status,
+          created_at,
+          student:profiles!connection_requests_student_id_fkey (
+            id,
+            full_name,
+            branch,
+            graduation_year
+          )
+        `)
+        .eq("alumni_id", user.id)
+        .in("status", ["accepted", "declined", "completed"])
+        .order("created_at", { ascending: false }),
+    ]);
 
-    setRequests((data as unknown as Request[]) || []);
+    if (pendingData) {
+      setActiveRequests(pendingData as unknown as RequestItem[]);
+    }
+    if (historyData) {
+      setPastRequests(historyData as unknown as RequestItem[]);
+    }
     setLoading(false);
   }, [supabase]);
 
   useEffect(() => {
-    fetchRequests();
-  }, [fetchRequests]);
+    loadRequests();
+  }, [loadRequests]);
 
-  const handleUpdateStatus = async (id: string, newStatus: string) => {
-    const { data, error } = await supabase.functions.invoke("update-request-status", {
-      body: { request_id: id, status: newStatus },
-    });
+  const handleUpdateStatus = async (
+    requestId: string,
+    status: "accepted" | "declined"
+  ) => {
+    const { error } = await supabase
+      .from("connection_requests")
+      .update({ status })
+      .eq("id", requestId);
 
-    if (!error && !data?.error) {
-      fetchRequests();
+    if (error) {
+      toast.error("Failed to update status", {
+        description: error.message,
+      });
     } else {
-      alert(data?.error || error?.message || "Failed to update status");
+      toast.success(status === "accepted" ? "Request Accepted!" : "Request Declined", {
+        description: status === "accepted" ? "A 1:1 chat thread has been created." : "The student has been notified.",
+      });
+      loadRequests();
     }
   };
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[40vh] space-y-3 font-sans">
-        <div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-300 border-t-slate-900" />
-        <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Loading Requests...</p>
+      <div className="flex items-center justify-center py-20 font-sans">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-slate-900" />
       </div>
     );
   }
 
-  const pendingRequests = requests.filter((r) => r.status === "pending");
-  const pastRequests = requests.filter((r) => r.status !== "pending");
-
   return (
-    <div className="max-w-4xl mx-auto space-y-8 font-sans">
+    <div className="max-w-5xl mx-auto space-y-8 font-sans">
+      {/* Header */}
       <div className="pb-6 border-b-2 border-slate-900">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 font-heading flex items-center gap-2">
-          <MessageSquare className="w-6 h-6 text-slate-700" /> Student Mentorship Requests
+        <h1 className="font-heading text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+          <Clock className="w-6 h-6 text-slate-700" /> Mentorship Requests
         </h1>
         <p className="text-xs text-slate-600 mt-1">
-          Review and respond to incoming guidance requests from IIIT Nagpur students.
+          Review inbound guidance requests from IIIT Nagpur students and manage your active chat sessions.
         </p>
       </div>
 
-      {/* Pending Requests */}
+      {/* Active Pending Requests */}
       <div className="space-y-4">
-        <div className="flex items-center gap-2">
-          <h2 className="text-lg font-bold text-slate-900 font-heading">
-            Pending Requests
-          </h2>
-          <span className="bg-amber-400 text-slate-900 border-2 border-slate-900 px-2.5 py-0.5 rounded-full text-xs font-bold shadow-[2px_2px_0px_#0f172a]">
-            {pendingRequests.length}
-          </span>
-        </div>
-
-        {pendingRequests.length === 0 ? (
-          <div className="border-2 border-slate-900 rounded-2xl bg-white p-8 text-center shadow-[4px_4px_0px_#0f172a]">
-            <p className="text-sm font-bold text-slate-900 font-heading">No Pending Requests</p>
-            <p className="text-xs text-slate-500 mt-1">You are all caught up! New student requests will appear here.</p>
+        <h2 className="text-lg font-bold text-slate-900 font-heading">Pending Outreach</h2>
+        {activeRequests.length === 0 ? (
+          <div className="text-xs font-semibold text-slate-500 bg-white border-2 border-slate-900 rounded-2xl p-8 shadow-[4px_4px_0px_#0f172a] text-center">
+            No pending requests. You will be notified when students reach out!
           </div>
         ) : (
-          pendingRequests.map((req) => (
+          activeRequests.map((req) => (
             <div
               key={req.id}
-              className="border-2 border-slate-900 rounded-2xl bg-white p-6 shadow-[5px_5px_0px_#0f172a] space-y-4"
+              className="border-2 border-slate-900 rounded-2xl bg-white p-6 shadow-[5px_5px_0px_#0f172a] space-y-4 hover:-translate-y-0.5 transition-all"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-slate-100 pb-3">
                 <div>
@@ -179,27 +206,17 @@ export default function IncomingRequestsPage() {
                       ? "bg-emerald-400 text-slate-900"
                       : req.status === "completed"
                       ? "bg-cyan-300 text-slate-900"
-                      : "bg-slate-200 text-slate-700"
+                      : "bg-slate-200 text-slate-800"
                   }`}
                 >
                   {req.status.toUpperCase()}
                 </span>
-                {(req.status === "accepted" || req.status === "completed") && (
+                {req.status === "accepted" && (
                   <Link href={`/alumni/dashboard/messages/${req.id}`}>
-                    <Button variant="outline" size="sm" className="gap-1.5 text-xs">
+                    <Button size="sm" className="gap-1.5 text-xs bg-slate-900 text-white shadow-[2px_2px_0px_#0f172a]">
                       <MessageSquare className="w-3.5 h-3.5" /> Open Chat
                     </Button>
                   </Link>
-                )}
-                {req.status === "accepted" && (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleUpdateStatus(req.id, "completed")}
-                    className="gap-1 text-xs bg-emerald-50 text-emerald-800 border-emerald-900"
-                  >
-                    <CheckCircle2 className="w-3.5 h-3.5" /> Complete Session
-                  </Button>
                 )}
               </div>
             </div>

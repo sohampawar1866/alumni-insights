@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
-import { ArrowRight, Search, MessageSquare, Clock, GraduationCap, CheckCircle2, Megaphone } from "lucide-react";
+import { ArrowRight, Search, MessageSquare, Clock, GraduationCap, Megaphone } from "lucide-react";
 
 export default async function StudentDashboard() {
   const supabase = await createClient();
@@ -8,25 +8,26 @@ export default async function StudentDashboard() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("full_name, branch, graduation_year")
-    .eq("id", user!.id)
-    .single();
-
-  // Calculate weekly requests remaining
   const now = new Date();
-  const dayOfWeek = now.getDay(); // 0=Sun, 1=Mon...
+  const dayOfWeek = now.getDay();
   const mondayOffset = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
   const weekStart = new Date(now);
   weekStart.setDate(now.getDate() - mondayOffset);
   weekStart.setHours(0, 0, 0, 0);
 
-  const { count: requestsSentThisWeek } = await supabase
-    .from("connection_requests")
-    .select("*", { count: "exact", head: true })
-    .eq("student_id", user!.id)
-    .gte("created_at", weekStart.toISOString());
+  // Parallelize Profile and Weekly Quota calculation queries via Promise.all
+  const [{ data: profile }, { count: requestsSentThisWeek }] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("full_name, branch, graduation_year")
+      .eq("id", user!.id)
+      .single(),
+    supabase
+      .from("connection_requests")
+      .select("*", { count: "exact", head: true })
+      .eq("student_id", user!.id)
+      .gte("created_at", weekStart.toISOString()),
+  ]);
 
   const weeklyLimit = parseInt(process.env.STUDENT_WEEKLY_REQUEST_LIMIT || "10");
   const remaining = Math.max(0, weeklyLimit - (requestsSentThisWeek || 0));
