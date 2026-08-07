@@ -18,7 +18,7 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "Alumni Insights - IIIT Nagpur",
   description:
-    "Official IIIT Nagpur alumni discovery and mentorship platform for career guidance and networking. A product by Shani Digital Works in collaboration with Alumni Committee, IIITN.",
+    "Official IIIT Nagpur alumni discovery and mentorship platform for career guidance and networking. A product by Shani Digital Works built for the Alumni Committee, IIITN.",
   icons: {
     icon: "/images/iiitn.png",
     shortcut: "/images/iiitn.png",

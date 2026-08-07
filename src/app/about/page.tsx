@@ -53,7 +53,7 @@ export default function AboutPage() {
       <section className="relative z-10 max-w-4xl mx-auto px-3.5 sm:px-6 py-8 sm:py-16 text-center space-y-5 sm:space-y-8">
         <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-4 sm:py-1.5 bg-amber-400 border-2 border-slate-900 rounded-full text-[11px] sm:text-xs font-bold text-slate-900 shadow-[2px_2px_0px_#0f172a]">
           <Sparkles className="w-3.5 h-3.5" />
-          Official Collaboration
+          Official Platform
         </div>
 
         <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 font-heading leading-tight">
@@ -84,7 +84,7 @@ export default function AboutPage() {
               <div>
                 <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Developed By</p>
                 <p className="text-xs sm:text-sm font-bold text-slate-900 font-heading">Shani Digital Works</p>
-                <p className="text-[11px] text-slate-600">Digital Product & Software Club</p>
+                <p className="text-[11px] text-slate-600 font-medium">Student Startup from IIIT Nagpur</p>
               </div>
             </div>
 
@@ -102,7 +102,7 @@ export default function AboutPage() {
                 />
               </div>
               <div>
-                <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">In Collaboration With</p>
+                <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Built For</p>
                 <p className="text-xs sm:text-sm font-bold text-slate-900 font-heading">Alumni Committee, IIITN</p>
                 <p className="text-[11px] text-slate-600">Official IIIT Nagpur Committee</p>
               </div>
@@ -110,7 +110,7 @@ export default function AboutPage() {
           </div>
 
           <div className="bg-amber-400 border-2 border-slate-900 rounded-2xl p-4 sm:p-6 shadow-[5px_5px_0px_#0f172a] text-center font-bold text-slate-900 text-xs sm:text-sm">
-            &ldquo;A product by Shani Digital Works in collaboration with Alumni Committee, IIITN&rdquo;
+            &ldquo;A product by Shani Digital Works built for the Alumni Committee, IIITN&rdquo;
           </div>
         </div>
       </section>
@@ -189,7 +189,7 @@ export default function AboutPage() {
               <Image src="/images/shanidw.png" alt="Shani Digital Works" width={22} height={22} className="w-5 h-5 object-contain rounded-full" />
             </div>
             <span className="text-slate-300 font-semibold text-[11px] sm:text-xs">
-              A product by Shani Digital Works in collaboration with Alumni Committee, IIITN
+              A product by Shani Digital Works built for the Alumni Committee, IIITN
             </span>
           </div>
           <div className="flex items-center gap-3 text-xs font-semibold shrink-0">
