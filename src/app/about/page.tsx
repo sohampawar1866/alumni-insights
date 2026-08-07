@@ -74,7 +74,7 @@ export default function AboutPage() {
             <div className="border-2 border-slate-900 rounded-2xl bg-white p-4 sm:p-5 shadow-[4px_4px_0px_#0f172a] flex items-center gap-3 sm:gap-4">
               <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-slate-900 overflow-hidden bg-slate-900 shrink-0 flex items-center justify-center shadow-[2px_2px_0px_#0f172a]">
                 <Image
-                  src="/images/crispt.png"
+                  src="/images/shanidw.png"
                   alt="Shani Digital Works Logo"
                   width={56}
                   height={56}
@@ -186,7 +186,7 @@ export default function AboutPage() {
           <div className="flex flex-col sm:flex-row items-center gap-2.5 text-center sm:text-left">
             <div className="flex items-center gap-2 shrink-0">
               <Image src="/images/iiitn.png" alt="IIITN Logo" width={22} height={22} className="w-5 h-5 object-contain rounded-full" />
-              <Image src="/images/crispt.png" alt="Shani Digital Works" width={22} height={22} className="w-5 h-5 object-contain rounded-full" />
+              <Image src="/images/shanidw.png" alt="Shani Digital Works" width={22} height={22} className="w-5 h-5 object-contain rounded-full" />
             </div>
             <span className="text-slate-300 font-semibold text-[11px] sm:text-xs">
               A product by Shani Digital Works in collaboration with Alumni Committee, IIITN
