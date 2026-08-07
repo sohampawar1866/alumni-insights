@@ -39,7 +39,9 @@ export default async function AlumniDirectoryPage({ searchParams }: AlumniDirect
     query = query.ilike("city", `%${cityFilter}%`);
   }
 
-  const { data: alumniList } = await query.order("full_name", { ascending: true });
+  const { data: alumniList } = await query
+    .order("full_name", { ascending: true })
+    .limit(50);
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-8 py-8 space-y-8 font-sans">

@@ -5,7 +5,7 @@ import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Send, X } from "lucide-react";
 import { toast } from "sonner";
-
+import { MentorshipRequestSchema } from "@/types";
 type ConnectDialogProps = {
   alumniId: string;
   alumniName: string;
@@ -38,6 +38,20 @@ export function ConnectDialog({
 
     setLoading(true);
     setError(null);
+
+    // Validate payload schema
+    const validation = MentorshipRequestSchema.safeParse({
+      alumni_id: alumniId,
+      message: message.trim(),
+    });
+
+    if (!validation.success) {
+      const errText = validation.error.issues[0]?.message || "Invalid inputs";
+      setError(errText);
+      toast.error(errText);
+      setLoading(false);
+      return;
+    }
 
     try {
       const {

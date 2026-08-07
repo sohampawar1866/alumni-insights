@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Sparkles, Crown, ExternalLink, CheckCircle2, ShieldCheck, X } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
+import { MembershipRequestSchema } from "@/types";
 
 interface MembershipBannerProps {
   currentMembership?: string | null;
@@ -32,8 +33,16 @@ export function MembershipBanner({
 
   const handleSubmitProof = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!transactionId.trim()) {
-      toast.error("Please enter a valid Transaction ID / Reference No.");
+
+    const validation = MembershipRequestSchema.safeParse({
+      plan_type: membershipType,
+      transaction_id: transactionId.trim(),
+      receipt_url: proofUrl.trim() || undefined,
+    });
+
+    if (!validation.success) {
+      const errText = validation.error.issues[0]?.message || "Please enter valid transaction details";
+      toast.error(errText);
       return;
     }
 

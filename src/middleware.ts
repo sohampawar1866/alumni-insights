@@ -7,11 +7,16 @@ export async function middleware(request: NextRequest) {
     request: { headers: request.headers },
   });
 
-  // Apply Security Headers to prevent Clickjacking, MIME-sniffing, and Cross-Site leaks
+  // Apply Security Headers to prevent Clickjacking, MIME-sniffing, XSS, and Cross-Site leaks
   response.headers.set("X-Frame-Options", "DENY");
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   response.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  response.headers.set("X-XSS-Protection", "1; mode=block");
+  response.headers.set(
+    "Strict-Transport-Security",
+    "max-age=31536000; includeSubDomains; preload"
+  );
 
   const path = request.nextUrl.pathname;
 

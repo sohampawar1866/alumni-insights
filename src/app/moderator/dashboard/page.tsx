@@ -52,8 +52,9 @@ export default function AlumniManagementPage() {
     setLoadingRequests(true);
     const { data } = await supabase
       .from("membership_requests")
-      .select("*, profiles:alumni_id(full_name, email, branch, graduation_year)")
-      .order("created_at", { ascending: false });
+      .select("id, alumni_id, membership_type, transaction_id, proof_url, status, created_at, profiles:alumni_id(full_name, email, branch, graduation_year)")
+      .order("created_at", { ascending: false })
+      .limit(100);
 
     if (data) {
       setRequests(data as unknown as MembershipRequest[]);

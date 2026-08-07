@@ -67,7 +67,8 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
       `)
       .or(`expires_at.is.null,expires_at.gt.${now}`)
       .order("is_pinned", { ascending: false })
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .limit(50);
 
     if (data) {
       const { data: userLikes } = await supabase

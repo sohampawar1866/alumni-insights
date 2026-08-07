@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Link from "next/link";
 import { Building2, MapPin, GraduationCap, CheckCircle2 } from "lucide-react";
 import { MembershipBadge, MembershipType } from "./membership-badge";
@@ -16,7 +17,7 @@ type AlumniCardProps = {
   hrefPrefix?: string;
 };
 
-export function AlumniCard({
+export const AlumniCard = memo(function AlumniCard({
   id,
   full_name,
   role_title,
@@ -101,4 +102,4 @@ export function AlumniCard({
       </div>
     </Link>
   );
-}
+});
