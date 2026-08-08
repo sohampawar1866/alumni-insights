@@ -28,16 +28,16 @@ export function MembershipBadge({ type = "none", showDetails = false, size = "md
     case "core":
       return (
         <span
-          className={`inline-flex items-center font-bold tracking-wide rounded-full bg-gradient-to-r from-amber-500 via-purple-600 to-indigo-600 text-white shadow-sm border border-amber-300/40 ${sizeClasses}`}
+          className={`inline-flex items-center font-bold tracking-wide rounded-full bg-purple-900 text-white border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] ${sizeClasses}`}
         >
-          <Crown className={`${iconSize} text-amber-200 fill-amber-300/30 animate-pulse`} />
+          <Crown className={`${iconSize} text-amber-400 fill-amber-400`} />
           Core Team Member
         </span>
       );
     case "lifetime":
       return (
         <span
-          className={`inline-flex items-center font-bold tracking-wide rounded-full bg-emerald-600 text-white border border-emerald-400/50 shadow-sm ${sizeClasses}`}
+          className={`inline-flex items-center font-bold tracking-wide rounded-full bg-emerald-700 text-white border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] ${sizeClasses}`}
         >
           <Sparkles className={`${iconSize} text-emerald-200`} />
           Lifetime Member
@@ -46,7 +46,7 @@ export function MembershipBadge({ type = "none", showDetails = false, size = "md
     case "5_year":
       return (
         <span
-          className={`inline-flex items-center font-bold tracking-wide rounded-full bg-blue-600 text-white border border-blue-400/50 shadow-sm ${sizeClasses}`}
+          className={`inline-flex items-center font-bold tracking-wide rounded-full bg-blue-700 text-white border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] ${sizeClasses}`}
         >
           <Award className={`${iconSize} text-blue-200`} />
           5-Year Member
@@ -55,7 +55,7 @@ export function MembershipBadge({ type = "none", showDetails = false, size = "md
     case "2_year":
       return (
         <span
-          className={`inline-flex items-center font-semibold rounded-full bg-amber-500 text-slate-900 border border-amber-300 shadow-sm ${sizeClasses}`}
+          className={`inline-flex items-center font-bold tracking-wide rounded-full bg-amber-400 text-slate-900 border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] ${sizeClasses}`}
         >
           <Medal className={`${iconSize} text-slate-900`} />
           2-Year Member
@@ -66,9 +66,9 @@ export function MembershipBadge({ type = "none", showDetails = false, size = "md
       if (!showDetails) return null;
       return (
         <span
-          className={`inline-flex items-center font-medium rounded-full bg-slate-100 text-slate-600 border border-slate-200 ${sizeClasses}`}
+          className={`inline-flex items-center font-bold rounded-full bg-slate-100 text-slate-700 border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] ${sizeClasses}`}
         >
-          <ShieldAlert className={`${iconSize} text-slate-400`} />
+          <ShieldAlert className={`${iconSize} text-slate-500`} />
           Non-Member
         </span>
       );

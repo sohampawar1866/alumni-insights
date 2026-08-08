@@ -53,19 +53,19 @@ export default function AboutPage() {
       <section className="relative z-10 max-w-4xl mx-auto px-3.5 sm:px-6 py-8 sm:py-16 text-center space-y-5 sm:space-y-8">
         <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-4 sm:py-1.5 bg-amber-400 border-2 border-slate-900 rounded-full text-[11px] sm:text-xs font-bold text-slate-900 shadow-[2px_2px_0px_#0f172a]">
           <Sparkles className="w-3.5 h-3.5" />
-          Official Platform
+          Official Alumni Association & Committee Portal
         </div>
 
         <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 font-heading leading-tight">
-          Bridging IIIT Nagpur Students & Alumni Mentors
+          Empowering IIIT Nagpur Alumni & Student Network
         </h1>
 
-        <p className="text-xs sm:text-base text-slate-700 max-w-2xl mx-auto leading-relaxed">
-          Alumni Insights is built to give every IIIT Nagpur student direct, structured access to seniors working at top tech firms, product startups, and research institutions worldwide.
+        <p className="text-xs sm:text-base text-slate-700 max-w-2xl mx-auto font-semibold leading-relaxed">
+          Alumni Insights is built under the guidance of the IIIT Nagpur Alumni Committee Head to give alumni a dedicated home to discover peers, receive committee updates, get verified membership credentials, and guide current students.
         </p>
 
         {/* Co-Branding Banner */}
-        <div className="bg-white border-2 border-slate-900 rounded-2xl p-4 sm:p-8 shadow-[4px_4px_0px_#0f172a] sm:shadow-[6px_6px_0px_#0f172a] max-w-2xl mx-auto space-y-4 sm:space-y-6">
+        <div className="bg-white border-2 border-slate-900 rounded-2xl p-4 sm:p-8 shadow-[6px_6px_0px_#0f172a] max-w-2xl mx-auto space-y-4 sm:space-y-6">
           <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-500">
             A product by
           </p>
@@ -81,14 +81,14 @@ export default function AboutPage() {
                   className="w-full h-full object-contain rounded-full"
                 />
               </div>
-              <div>
+              <div className="text-left">
                 <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Developed By</p>
                 <p className="text-xs sm:text-sm font-bold text-slate-900 font-heading">Shani Digital Works</p>
-                <p className="text-[11px] text-slate-600 font-medium">Student Startup from IIIT Nagpur</p>
+                <p className="text-[11px] text-slate-600 font-semibold">Student Startup from IIIT Nagpur</p>
               </div>
             </div>
 
-            <div className="hidden sm:block text-slate-300 font-bold text-xl">&times;</div>
+            <div className="hidden sm:block text-slate-400 font-bold text-xl">&times;</div>
 
             {/* Alumni Committee, IIITN */}
             <div className="border-2 border-slate-900 rounded-2xl bg-white p-4 sm:p-5 shadow-[4px_4px_0px_#0f172a] flex items-center gap-3 sm:gap-4">
@@ -101,15 +101,15 @@ export default function AboutPage() {
                   className="w-full h-full object-contain rounded-full"
                 />
               </div>
-              <div>
+              <div className="text-left">
                 <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Built For</p>
                 <p className="text-xs sm:text-sm font-bold text-slate-900 font-heading">Alumni Committee, IIITN</p>
-                <p className="text-[11px] text-slate-600">Official IIIT Nagpur Committee</p>
+                <p className="text-[11px] text-slate-600 font-semibold">Official IIIT Nagpur Committee</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-amber-400 border-2 border-slate-900 rounded-2xl p-4 sm:p-6 shadow-[5px_5px_0px_#0f172a] text-center font-bold text-slate-900 text-xs sm:text-sm">
+          <div className="bg-amber-400 border-2 border-slate-900 rounded-2xl p-4 sm:p-6 shadow-[4px_4px_0px_#0f172a] text-center font-bold text-slate-900 text-xs sm:text-sm">
             &ldquo;A product by Shani Digital Works built for the Alumni Committee, IIITN&rdquo;
           </div>
         </div>
@@ -120,61 +120,61 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto space-y-6 sm:space-y-10">
           <div className="text-center space-y-1.5">
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 font-heading">
-              Platform Features & Architecture
+              Platform Features & Committee Mandate
             </h2>
             <p className="text-[11px] sm:text-xs font-semibold text-slate-500">
-              Designed specifically for university mentorship workflows.
+              Designed specifically for institutional alumni engagement and structured mentorship workflows.
             </p>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
             <div className="bg-white border-2 border-slate-900 rounded-2xl p-4 sm:p-6 shadow-[4px_4px_0px_#0f172a] space-y-2.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_#0f172a] transition-all">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-100 border-2 border-slate-900 flex items-center justify-center text-blue-700 shadow-[2px_2px_0px_#0f172a]">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-400 border-2 border-slate-900 flex items-center justify-center text-slate-900 shadow-[2px_2px_0px_#0f172a]">
                 <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
               </div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-900 font-heading">Verified Institutional Access</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Students log in strictly via verified <span className="font-bold text-slate-900">@iiitn.ac.in</span> Google OAuth. Alumni profiles are added and approved directly by the Alumni Committee.
+              <h3 className="text-sm sm:text-base font-bold text-slate-900 font-heading">Alumni Priority & Verification</h3>
+              <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                Alumni profiles are created & verified by the Alumni Committee admin. Passouts can sign in using credentials issued by the committee and explore alumni peers across companies.
               </p>
             </div>
 
             <div className="bg-white border-2 border-slate-900 rounded-2xl p-4 sm:p-6 shadow-[4px_4px_0px_#0f172a] space-y-2.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_#0f172a] transition-all">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-100 border-2 border-slate-900 flex items-center justify-center text-amber-800 shadow-[2px_2px_0px_#0f172a]">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-400 border-2 border-slate-900 flex items-center justify-center text-slate-900 shadow-[2px_2px_0px_#0f172a]">
                 <Users className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
               </div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-900 font-heading">Anti-Spam Weekly Quotas</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Students are allocated 10 mentorship requests per week to ensure every outreach is thoughtful, high-quality, and respectful of alumni time.
+              <h3 className="text-sm sm:text-base font-bold text-slate-900 font-heading">Official Membership Credentials</h3>
+              <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                Alumni can submit payment receipts or Google Form verification to get official Core Team, Lifetime, 5-Year, or 2-Year Association Member badges displayed on their profile.
               </p>
             </div>
 
             <div className="bg-white border-2 border-slate-900 rounded-2xl p-4 sm:p-6 shadow-[4px_4px_0px_#0f172a] space-y-2.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_#0f172a] transition-all">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-100 border-2 border-slate-900 flex items-center justify-center text-emerald-800 shadow-[2px_2px_0px_#0f172a]">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-400 border-2 border-slate-900 flex items-center justify-center text-slate-900 shadow-[2px_2px_0px_#0f172a]">
                 <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
               </div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-900 font-heading">Alumni Impact Recognition Tiers</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Seniors earn Platinum, Gold, Silver, and Bronze Mentor badges based on completed sessions, ratings, and student feedback.
+              <h3 className="text-sm sm:text-base font-bold text-slate-900 font-heading">Committee Announcements & Events</h3>
+              <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                Stay updated with official committee news, college reunions, guest lectures, and institutional milestones via the dedicated announcement board.
               </p>
             </div>
 
             <div className="bg-white border-2 border-slate-900 rounded-2xl p-4 sm:p-6 shadow-[4px_4px_0px_#0f172a] space-y-2.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_#0f172a] transition-all">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-purple-100 border-2 border-slate-900 flex items-center justify-center text-purple-800 shadow-[2px_2px_0px_#0f172a]">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-400 border-2 border-slate-900 flex items-center justify-center text-slate-900 shadow-[2px_2px_0px_#0f172a]">
                 <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
               </div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-900 font-heading">1:1 Private Mentorship Threads</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Once a request is accepted, a secure private chat thread enables seamless resume sharing, mock interview setup, and referral guidance.
+              <h3 className="text-sm sm:text-base font-bold text-slate-900 font-heading">Controlled Student Outreach</h3>
+              <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                Students log in with <span className="font-bold text-slate-900">@iiitn.ac.in</span> Google accounts and are limited to 10 requests per week to protect alumni time while allowing structured 1:1 career guidance.
               </p>
             </div>
           </div>
 
           <div className="pt-4 text-center">
             <Link
-              href="/login"
-              className="inline-flex items-center gap-2 bg-slate-900 text-white font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl border-2 border-slate-900 shadow-[3px_3px_0px_#0f172a] hover:bg-slate-800 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0f172a] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-all"
+              href="/alumni/login"
+              className="inline-flex items-center gap-2 bg-slate-900 text-white font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-xl border-2 border-slate-900 shadow-[3px_3px_0px_#0f172a] hover:bg-slate-800 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0f172a] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-all"
             >
-              Get Started on Alumni Insights <ArrowRight className="w-4 h-4" />
+              Sign In to Alumni Portal <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
