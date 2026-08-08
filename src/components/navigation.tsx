@@ -83,10 +83,11 @@ export function Navigation() {
         {/* Mobile Menu Toggle */}
         <div className="flex md:hidden items-center gap-3">
           <NotificationBell />
-          <button 
-            onClick={() => setIsOpen(!isOpen)} 
-            className="p-2.5 rounded-xl border-2 border-slate-900 bg-white text-slate-900 shadow-[2px_2px_0px_#0f172a] focus:outline-none"
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-2.5 rounded-xl border-2 border-slate-900 bg-white text-slate-900 shadow-[2px_2px_0px_#0f172a] hover:shadow-[4px_4px_0px_#0f172a] hover:-translate-y-0.5 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-all"
             aria-label="Toggle Menu"
+            aria-expanded={isOpen}
           >
             {isOpen ? (
               <X className="w-5 h-5" strokeWidth={2.5} />

@@ -52,6 +52,9 @@ export default function ModeratorLoginPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 font-sans p-4 relative overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none opacity-[0.4] bg-[linear-gradient(to_right,#cbd5e1_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e1_1px,transparent_1px)] bg-[size:28px_28px]" />
+      <div className="absolute -bottom-16 -right-16 w-60 h-60 rotate-12 bg-blue-400/10 border-2 border-blue-400/20 rounded-3xl pointer-events-none" />
+
       <div className="p-8 bg-white border-2 border-slate-900 rounded-2xl shadow-[8px_8px_0px_#0f172a] max-w-sm w-full relative z-10 space-y-6">
         <div className="text-center space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 border-2 border-slate-900 text-xs font-bold text-slate-900 shadow-[2px_2px_0px_#0f172a]">
@@ -104,9 +107,9 @@ export default function ModeratorLoginPage() {
             </div>
           )}
           
-          <Button type="submit" className="w-full h-11 text-sm font-bold shadow-[4px_4px_0px_#0f172a] mt-4" disabled={loading}>
+          <button type="submit" disabled={loading} className="w-full min-h-[48px] flex items-center justify-center text-sm font-bold bg-slate-900 text-white border-2 border-slate-900 rounded-xl shadow-[4px_4px_0px_#0f172a] hover:bg-slate-800 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_#0f172a] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 mt-4">
             {loading ? 'Authenticating...' : 'Sign In as Moderator'}
-          </Button>
+          </button>
         </form>
         <div className="pt-2 text-center">
           <Link href="/" className="inline-flex items-center text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors gap-1">

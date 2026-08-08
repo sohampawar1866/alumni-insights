@@ -107,7 +107,8 @@ export function ConnectDialog({
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg hover:bg-slate-900/10 text-slate-900"
+            className="min-w-[40px] min-h-[40px] flex items-center justify-center p-1.5 rounded-xl border-2 border-slate-900/0 hover:border-slate-900 hover:bg-slate-900/10 text-slate-900 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-all"
+            aria-label="Close dialog"
           >
             <X className="w-5 h-5" />
           </button>
@@ -126,7 +127,7 @@ export function ConnectDialog({
                       key={i}
                       type="button"
                       onClick={() => { setMessage(t.split(": ")[1]); setRequestType(typeKey); }}
-                      className={`text-xs font-bold px-3 py-1 rounded-lg border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] transition-all ${requestType === typeKey ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-800 hover:bg-amber-300"}`}
+                      className={`text-xs font-bold px-3 py-1.5 rounded-full border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-all ${requestType === typeKey ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-800 hover:bg-amber-300"}`}
                     >
                       {label}
                     </button>
@@ -166,13 +167,14 @@ export function ConnectDialog({
               variant="outline"
               onClick={onClose}
               disabled={loading}
+              className="border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] hover:shadow-[3px_3px_0px_#0f172a] hover:-translate-y-0.5 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-600 transition-all"
             >
               Cancel
             </Button>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={loading || !message.trim()}
-              className="gap-2"
+              className="gap-2 border-2 border-slate-900 shadow-[3px_3px_0px_#0f172a] hover:shadow-[5px_5px_0px_#0f172a] hover:-translate-y-0.5 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
             >
               <Send className="w-4 h-4" />
               {loading ? "Sending Request..." : "Send Request"}

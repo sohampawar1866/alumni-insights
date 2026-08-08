@@ -128,7 +128,7 @@ export default function AboutPage() {
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
-            <div className="bg-slate-50 border-2 border-slate-900 rounded-2xl p-4 sm:p-6 shadow-[3px_3px_0px_#0f172a] space-y-2.5">
+            <div className="bg-white border-2 border-slate-900 rounded-2xl p-4 sm:p-6 shadow-[4px_4px_0px_#0f172a] space-y-2.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_#0f172a] transition-all">
               <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-100 border-2 border-slate-900 flex items-center justify-center text-blue-700 shadow-[2px_2px_0px_#0f172a]">
                 <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
               </div>
@@ -138,7 +138,7 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="bg-slate-50 border-2 border-slate-900 rounded-2xl p-4 sm:p-6 shadow-[3px_3px_0px_#0f172a] space-y-2.5">
+            <div className="bg-white border-2 border-slate-900 rounded-2xl p-4 sm:p-6 shadow-[4px_4px_0px_#0f172a] space-y-2.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_#0f172a] transition-all">
               <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-100 border-2 border-slate-900 flex items-center justify-center text-amber-800 shadow-[2px_2px_0px_#0f172a]">
                 <Users className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
               </div>
@@ -148,7 +148,7 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="bg-slate-50 border-2 border-slate-900 rounded-2xl p-4 sm:p-6 shadow-[3px_3px_0px_#0f172a] space-y-2.5">
+            <div className="bg-white border-2 border-slate-900 rounded-2xl p-4 sm:p-6 shadow-[4px_4px_0px_#0f172a] space-y-2.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_#0f172a] transition-all">
               <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-100 border-2 border-slate-900 flex items-center justify-center text-emerald-800 shadow-[2px_2px_0px_#0f172a]">
                 <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
               </div>
@@ -158,7 +158,7 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="bg-slate-50 border-2 border-slate-900 rounded-2xl p-4 sm:p-6 shadow-[3px_3px_0px_#0f172a] space-y-2.5">
+            <div className="bg-white border-2 border-slate-900 rounded-2xl p-4 sm:p-6 shadow-[4px_4px_0px_#0f172a] space-y-2.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_#0f172a] transition-all">
               <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-purple-100 border-2 border-slate-900 flex items-center justify-center text-purple-800 shadow-[2px_2px_0px_#0f172a]">
                 <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
               </div>
@@ -172,7 +172,7 @@ export default function AboutPage() {
           <div className="pt-4 text-center">
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 bg-slate-900 text-white font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl border-2 border-slate-900 shadow-[3px_3px_0px_#0f172a] hover:-translate-y-0.5 transition-all"
+              className="inline-flex items-center gap-2 bg-slate-900 text-white font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl border-2 border-slate-900 shadow-[3px_3px_0px_#0f172a] hover:bg-slate-800 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0f172a] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-all"
             >
               Get Started on Alumni Insights <ArrowRight className="w-4 h-4" />
             </Link>

@@ -113,7 +113,7 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-6 font-sans">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b-2 border-slate-900">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 font-heading flex items-center gap-2">
             <ShieldAlert className="w-6 h-6 text-slate-700" /> Admin Control Panel
@@ -122,9 +122,9 @@ export default function AdminDashboardPage() {
             Create, update, and manage Alumni Committee, IIITN moderator credentials.
           </p>
         </div>
-        <Button 
+        <Button
           onClick={() => showForm ? setShowForm(false) : openCreate()}
-          className="gap-2 shrink-0"
+          className="gap-2 shrink-0 border-2 border-slate-900 shadow-[3px_3px_0px_#0f172a] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0f172a] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-600 transition-all"
         >
           {showForm ? "Cancel" : <><Plus className="w-4 h-4" /> Add Moderator</>}
         </Button>
@@ -202,7 +202,7 @@ export default function AdminDashboardPage() {
       )}
 
       {/* Moderator List */}
-      <div className="border border-slate-200 bg-white rounded-xl shadow-sm overflow-hidden">
+      <div className="border-2 border-slate-900 bg-white rounded-xl shadow-[5px_5px_0px_#0f172a] overflow-hidden">
         {loading ? (
           <div className="p-10 flex justify-center items-center">
             <div className="h-8 w-8 border-2 border-slate-300 border-t-slate-900 rounded-full animate-spin" />

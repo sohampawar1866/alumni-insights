@@ -168,7 +168,7 @@ export default function AlumniManagementPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-10 font-sans">
       {/* Header */}
-      <div className="pb-6 border-b border-slate-200">
+      <div className="pb-6 border-b-2 border-slate-900">
         <h1 className="text-2xl font-bold text-slate-900 font-heading flex items-center gap-2">
           <ShieldCheck className="w-7 h-7 text-indigo-600" /> Alumni Association Management
         </h1>
@@ -178,8 +178,8 @@ export default function AlumniManagementPage() {
       </div>
 
       {/* Membership Verification Queue */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+      <div className="bg-white border-2 border-slate-900 rounded-2xl p-6 shadow-[6px_6px_0px_#0f172a] space-y-6">
+        <div className="flex items-center justify-between border-b-2 border-slate-100 pb-4">
           <div>
             <h2 className="text-lg font-bold text-slate-900 font-heading flex items-center gap-2">
               <Award className="w-5 h-5 text-amber-500" /> Membership Verification Queue
@@ -190,7 +190,7 @@ export default function AlumniManagementPage() {
           </div>
           <button
             onClick={fetchRequests}
-            className="text-xs font-semibold text-blue-600 hover:underline"
+            className="text-xs font-bold text-slate-900 bg-slate-100 border-2 border-slate-900 px-3 py-1.5 rounded-full shadow-[2px_2px_0px_#0f172a] hover:bg-slate-200 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-all"
           >
             Refresh Queue
           </button>
@@ -203,7 +203,7 @@ export default function AlumniManagementPage() {
             {requests.map((req) => (
               <div
                 key={req.id}
-                className="p-4 border border-slate-200 rounded-xl bg-slate-50 flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
+                className="p-4 border-2 border-slate-200 rounded-xl bg-slate-50 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:border-slate-900 hover:shadow-[3px_3px_0px_#0f172a] transition-all"
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">

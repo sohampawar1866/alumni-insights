@@ -156,7 +156,6 @@ export function ChatThread({ requestId, currentUserId, otherUserName }: Props) {
         <div ref={bottomRef} />
       </div>
 
-      {/* Form */}
       <form onSubmit={handleSend} className="p-4 border-t-2 border-slate-900 bg-white flex items-center gap-3">
         <textarea
           required
@@ -170,12 +169,12 @@ export function ChatThread({ requestId, currentUserId, otherUserName }: Props) {
               handleSend(e);
             }
           }}
-          className="flex-1 min-h-[48px] max-h-[120px] resize-none border-2 border-slate-900 bg-white px-4 py-3 text-sm font-semibold text-slate-900 shadow-[2px_2px_0px_#0f172a] focus:shadow-[4px_4px_0px_#0f172a] focus:outline-none rounded-xl"
+          className="flex-1 min-h-[48px] max-h-[120px] resize-none border-2 border-slate-900 bg-white px-4 py-3 text-sm font-semibold text-slate-900 shadow-[2px_2px_0px_#0f172a] focus:shadow-[4px_4px_0px_#0f172a] focus:outline-none focus-visible:ring-0 rounded-xl transition-shadow"
         />
-        <Button 
-          type="submit" 
-          disabled={!newMessage.trim()} 
-          className="h-[48px] px-6 gap-2 shrink-0"
+        <Button
+          type="submit"
+          disabled={!newMessage.trim()}
+          className="h-[48px] px-6 gap-2 shrink-0 border-2 border-slate-900 shadow-[3px_3px_0px_#0f172a] hover:shadow-[5px_5px_0px_#0f172a] hover:-translate-y-0.5 active:scale-[0.98] active:shadow-[1px_1px_0px_#0f172a] focus-visible:ring-2 focus-visible:ring-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
         >
           <Send className="w-4 h-4" /> Send
         </Button>

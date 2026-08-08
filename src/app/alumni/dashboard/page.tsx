@@ -147,8 +147,9 @@ export default function AlumniDashboardPage() {
       <MembershipBanner currentMembership={membershipType} alumniId={userId} />
 
       {/* Header Banner */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-        <div className="space-y-2">
+      <div className="bg-white border-2 border-slate-900 rounded-2xl p-6 sm:p-8 shadow-[6px_6px_0px_#0f172a] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-28 h-28 bg-emerald-400/10 rounded-bl-3xl pointer-events-none" />
+        <div className="space-y-2 z-10">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
               Alumni Portal
@@ -163,17 +164,17 @@ export default function AlumniDashboardPage() {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 shrink-0">
+        <div className="flex flex-wrap items-center gap-3 shrink-0 z-10">
           <Link
             href="/alumni/dashboard/directory"
-            className="inline-flex items-center gap-2 bg-slate-900 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-sm hover:bg-slate-800 transition-all"
+            className="inline-flex items-center gap-2 bg-slate-900 text-white font-bold text-xs px-4 py-2.5 rounded-xl border-2 border-slate-900 shadow-[3px_3px_0px_#0f172a] hover:bg-slate-800 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0f172a] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-all"
           >
             <Users className="w-4 h-4 text-blue-400" />
             Alumni Directory
           </Link>
           <Link
             href="/alumni/dashboard/announcements"
-            className="inline-flex items-center gap-2 bg-white border-2 border-slate-900 text-slate-900 font-bold text-xs px-4 py-2.5 rounded-xl shadow-[3px_3px_0px_#0f172a] hover:-translate-y-0.5 transition-all"
+            className="inline-flex items-center gap-2 bg-white border-2 border-slate-900 text-slate-900 font-bold text-xs px-4 py-2.5 rounded-xl shadow-[3px_3px_0px_#0f172a] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0f172a] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-all"
           >
             <Megaphone className="w-4 h-4 text-slate-700" />
             Committee News
@@ -349,10 +350,10 @@ export default function AlumniDashboardPage() {
                           : [...current, topic];
                         setMentorshipPreferences(updated.join(", "));
                       }}
-                      className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${
+                      className={`px-3 py-1.5 rounded-full text-xs font-bold border-2 transition-all active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${
                         isSelected
-                          ? "bg-slate-900 text-white border-slate-900"
-                          : "bg-white text-slate-700 border-slate-300 hover:border-slate-500"
+                          ? "bg-slate-900 text-white border-slate-900 shadow-[2px_2px_0px_#0f172a]"
+                          : "bg-white text-slate-700 border-slate-300 hover:border-slate-900 hover:shadow-[2px_2px_0px_#0f172a]"
                       }`}
                     >
                       {topic}

@@ -52,8 +52,8 @@ export default function AlumniLoginPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 font-sans p-4 relative overflow-hidden">
-      {/* Decorative Grid Background */}
-      <div className="absolute inset-0 pointer-events-none opacity-30 bg-[linear-gradient(to_right,#cbd5e1_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e1_1px,transparent_1px)] bg-[size:32px_32px]" />
+      <div className="absolute inset-0 pointer-events-none opacity-[0.4] bg-[linear-gradient(to_right,#cbd5e1_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e1_1px,transparent_1px)] bg-[size:28px_28px]" />
+      <div className="absolute -top-16 -left-16 w-60 h-60 -rotate-12 bg-emerald-400/10 border-2 border-emerald-400/20 rounded-3xl pointer-events-none" />
 
       <div className="p-8 bg-white border-2 border-slate-900 rounded-2xl shadow-[8px_8px_0px_#0f172a] max-w-sm w-full relative z-10 space-y-6">
         <div className="text-center space-y-3">
@@ -110,9 +110,9 @@ export default function AlumniLoginPage() {
             </div>
           )}
           
-          <Button type="submit" className="w-full h-11 text-sm font-bold shadow-[4px_4px_0px_#0f172a] mt-4" disabled={loading}>
+          <button type="submit" disabled={loading} className="w-full min-h-[48px] flex items-center justify-center text-sm font-bold bg-slate-900 text-white border-2 border-slate-900 rounded-xl shadow-[4px_4px_0px_#0f172a] hover:bg-slate-800 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_#0f172a] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 mt-4">
             {loading ? 'Signing In...' : 'Sign In to Alumni Portal'}
-          </Button>
+          </button>
         </form>
 
         <div className="pt-2 space-y-2 text-center">

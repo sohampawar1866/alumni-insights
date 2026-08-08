@@ -75,7 +75,11 @@ export function FeedbackModal({
               Leave feedback for {alumniName}
             </p>
           </div>
-          <button onClick={onClose} className="p-1 rounded-lg hover:bg-slate-900/10 text-slate-900">
+          <button
+            onClick={onClose}
+            className="min-w-[40px] min-h-[40px] flex items-center justify-center p-1.5 rounded-xl border-2 border-slate-900/0 hover:border-slate-900 hover:bg-slate-900/10 text-slate-900 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-all"
+            aria-label="Close feedback modal"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -92,7 +96,7 @@ export function FeedbackModal({
                   onClick={() => setRating(star)}
                   onMouseEnter={() => setHoveredRating(star)}
                   onMouseLeave={() => setHoveredRating(0)}
-                  className="transition-transform hover:-translate-y-0.5 hover:scale-110 focus:outline-none"
+                  className="transition-transform hover:-translate-y-0.5 hover:scale-110 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded"
                 >
                   <Star
                     className={`w-8 h-8 transition-colors ${
@@ -134,16 +138,18 @@ export function FeedbackModal({
           )}
 
           <div className="flex justify-end gap-3 pt-4 border-t-2 border-slate-900">
-            <Button 
-              variant="outline" 
-              onClick={onClose} 
+            <Button
+              variant="outline"
+              onClick={onClose}
               disabled={submitting}
+              className="border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] hover:shadow-[3px_3px_0px_#0f172a] hover:-translate-y-0.5 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-600 transition-all"
             >
               Skip
             </Button>
-            <Button 
-              onClick={handleSubmit} 
+            <Button
+              onClick={handleSubmit}
               disabled={submitting || rating === 0}
+              className="border-2 border-slate-900 shadow-[3px_3px_0px_#0f172a] hover:shadow-[5px_5px_0px_#0f172a] hover:-translate-y-0.5 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
             >
               {submitting ? "Submitting..." : "Submit Feedback"}
             </Button>

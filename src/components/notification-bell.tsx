@@ -145,8 +145,9 @@ export function NotificationBell() {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className="relative p-2.5 rounded-xl border-2 border-slate-900 bg-white text-slate-900 shadow-[2px_2px_0px_#0f172a] hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#0f172a] transition-all focus:outline-none"
+        className="relative min-h-[44px] min-w-[44px] p-2.5 rounded-xl border-2 border-slate-900 bg-white text-slate-900 shadow-[2px_2px_0px_#0f172a] hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#0f172a] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-all flex items-center justify-center"
         aria-label="Notifications"
+        aria-expanded={open}
       >
         <Bell className="w-4 h-4 text-slate-900" strokeWidth={2.5} />
         {unreadCount > 0 && (

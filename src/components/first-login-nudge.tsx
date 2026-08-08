@@ -34,9 +34,9 @@ export function FirstLoginNudge() {
       </p>
       <div className="flex items-center gap-2 pt-1">
         <Link href="/alumni/dashboard/settings" onClick={dismiss}>
-          <Button size="sm" className="text-xs h-9">Update Password</Button>
+          <Button size="sm" className="text-xs h-10 border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] hover:shadow-[3px_3px_0px_#0f172a] hover:-translate-y-0.5 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-600 transition-all">Update Password</Button>
         </Link>
-        <Button size="sm" variant="ghost" className="text-xs h-9" onClick={dismiss}>
+        <Button size="sm" variant="ghost" className="text-xs h-10 hover:bg-slate-100 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-600 transition-all" onClick={dismiss}>
           Dismiss
         </Button>
       </div>

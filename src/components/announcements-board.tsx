@@ -215,7 +215,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
   return (
     <div className="space-y-6 font-sans">
       {/* Header Actions */}
-      <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+      <div className="flex items-center justify-between border-b-2 border-slate-900 pb-4">
         <div>
           <h2 className="text-xl font-bold text-slate-900 font-heading">
             Official Announcements & Events
@@ -228,7 +228,7 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
         {(currentUserRole === "moderator" || currentUserRole === "alumni") && (
           <Button
             onClick={() => setShowNewPost(!showNewPost)}
-            className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-sm"
+            className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl border-2 border-slate-900 shadow-[3px_3px_0px_#0f172a] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0f172a] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-600 transition-all"
           >
             {showNewPost ? "Cancel" : "Post Announcement"}
           </Button>
@@ -359,10 +359,10 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
           announcements.map((item) => (
             <div
               key={item.id}
-              className={`p-6 bg-white border-2 rounded-2xl shadow-sm space-y-4 transition-all ${
+              className={`p-6 bg-white border-2 rounded-2xl space-y-4 transition-all ${
                 item.is_pinned
-                  ? "border-amber-400 bg-amber-50/20"
-                  : "border-slate-200 hover:border-slate-300"
+                  ? "border-amber-400 bg-amber-50/30 shadow-[5px_5px_0px_#f59e0b]"
+                  : "border-slate-200 hover:border-slate-900 hover:shadow-[4px_4px_0px_#0f172a]"
               }`}
             >
               <div className="flex items-start justify-between gap-4">
@@ -432,10 +432,10 @@ export function AnnouncementsBoard({ currentUserRole, currentUserId }: Props) {
               <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs">
                 <button
                   onClick={() => toggleLike(item.id, !!item.user_liked)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold border transition-all ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold border-2 transition-all active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${
                     item.user_liked
-                      ? "bg-blue-600 text-white border-blue-600"
-                      : "bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200"
+                      ? "bg-blue-600 text-white border-blue-600 shadow-[2px_2px_0px_#1d4ed8]"
+                      : "bg-slate-100 text-slate-700 border-slate-200 hover:border-slate-900 hover:shadow-[2px_2px_0px_#0f172a]"
                   }`}
                 >
                   <ThumbsUp className="w-3.5 h-3.5" />
