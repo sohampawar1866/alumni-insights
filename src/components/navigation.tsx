@@ -21,25 +21,26 @@ export function Navigation() {
   ]
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b-2 border-slate-900 bg-white/95 backdrop-blur-md px-4 py-3 sm:px-8 shadow-sm font-sans">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-8">
-          <Link href="/dashboard" className="flex items-center gap-3 group">
-            <div className="relative w-10 h-10 shrink-0">
+    <header className="sticky top-0 z-40 w-full border-b-2 border-slate-900 bg-white/95 backdrop-blur-md px-3 py-2.5 sm:px-8 sm:py-3 shadow-sm font-sans">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
+        <div className="flex items-center gap-3 sm:gap-8 min-w-0">
+          <Link href="/dashboard" className="flex items-center gap-2 sm:gap-3 group shrink-0">
+            <div className="relative w-8 h-8 sm:w-10 sm:h-10 shrink-0">
               <Image
                 src="/images/iiitn.png"
                 alt="IIIT Nagpur Logo"
                 width={40}
                 height={40}
                 priority
-                className="w-10 h-10 object-contain rounded-full"
+                className="w-8 h-8 sm:w-10 sm:h-10 object-contain rounded-full"
               />
             </div>
-            <div className="flex flex-col">
-              <span className="font-heading text-xl font-bold tracking-tight text-slate-900 leading-none">
-                Alumni Insights
+            <div className="flex flex-col min-w-0">
+              <span className="font-heading text-sm sm:text-xl font-bold tracking-tight text-slate-900 leading-none truncate">
+                <span className="sm:hidden">Alumni Insights</span>
+                <span className="hidden sm:inline">Alumni Insights</span>
               </span>
-              <span className="text-[11px] font-bold tracking-wider text-slate-500 uppercase mt-0.5">
+              <span className="text-[9px] sm:text-[11px] font-bold tracking-wider text-slate-500 uppercase mt-0.5 truncate">
                 IIIT Nagpur
               </span>
             </div>

@@ -11,10 +11,10 @@ import {
   CheckCircle2,
   GraduationCap,
   Sparkles,
-  Building2,
   Globe2,
 } from "lucide-react";
 import { MembershipBadge } from "@/components/membership-badge";
+import { LandingHeader } from "@/components/landing-header";
 
 export const revalidate = 3600;
 
@@ -24,53 +24,8 @@ export default function LandingPage() {
       {/* Decorative Subtle Grid Background */}
       <div className="absolute inset-0 pointer-events-none opacity-40 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:32px_32px]" />
 
-      {/* N5 Floating Pill Navigation Archetype */}
-      <header className="sticky top-4 z-50 w-full max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="bg-white/95 border-2 border-slate-900 rounded-full px-4 sm:px-6 py-2.5 shadow-[4px_4px_0px_#0f172a] backdrop-blur-md flex items-center justify-between gap-4">
-          <Link href="/" className="flex items-center gap-3 group shrink-0 min-w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded-full">
-            <div className="relative w-9 h-9 shrink-0">
-              <Image
-                src="/images/iiitn.png"
-                alt="IIIT Nagpur Logo"
-                width={36}
-                height={36}
-                priority
-                className="w-9 h-9 object-contain rounded-full border border-slate-200 shadow-xs"
-              />
-            </div>
-            <div className="flex flex-col min-w-0">
-              <span className="font-heading text-sm sm:text-base font-bold tracking-tight text-slate-900 leading-none truncate">
-                IIIT Nagpur Alumni Association
-              </span>
-              <span className="text-[9px] sm:text-[10px] font-bold tracking-wider text-blue-600 uppercase mt-0.5 truncate">
-                Official Network
-              </span>
-            </div>
-          </Link>
-
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            <Link
-              href="/about"
-              className="text-xs font-bold text-slate-700 hover:text-slate-900 px-3 py-2 rounded-full hover:bg-slate-100 transition-colors hidden sm:inline-block focus-visible:ring-2 focus-visible:ring-blue-600 outline-none"
-            >
-              About
-            </Link>
-            <Link
-              href="/login"
-              className="text-xs font-bold text-slate-900 border-2 border-slate-900 bg-white px-3.5 py-1.5 rounded-full hover:bg-amber-300 transition-all shadow-[2px_2px_0px_#0f172a] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-600 outline-none"
-            >
-              Student Login
-            </Link>
-            <Link
-              href="/alumni/login"
-              className="text-xs sm:text-sm font-bold bg-slate-900 text-white border-2 border-slate-900 px-4 py-1.5 sm:px-5 sm:py-2 rounded-full hover:bg-slate-800 transition-all shadow-[2px_2px_0px_#0f172a] active:scale-[0.98] whitespace-nowrap flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-blue-600 outline-none"
-            >
-              <Crown className="w-3.5 h-3.5 text-amber-400" />
-              Alumni Sign In
-            </Link>
-          </div>
-        </div>
-      </header>
+      {/* Floating Responsive Header */}
+      <LandingHeader />
 
       {/* Hero Section — Stat-Led & Marquee Hybrid */}
       <section className="relative flex flex-1 flex-col items-center justify-center px-4 sm:px-6 pt-12 sm:pt-16 pb-12 text-center z-10 max-w-5xl mx-auto space-y-8">
