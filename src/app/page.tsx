@@ -7,7 +7,6 @@ import {
   Crown,
   Megaphone,
   ArrowRight,
-  ShieldCheck,
   CheckCircle2,
   GraduationCap,
   Sparkles,
@@ -29,10 +28,6 @@ export default function LandingPage() {
 
       {/* Hero Section — Stat-Led & Marquee Hybrid */}
       <section className="relative flex flex-1 flex-col items-center justify-center px-4 sm:px-6 pt-12 sm:pt-16 pb-12 text-center z-10 max-w-5xl mx-auto space-y-8">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 border-2 border-slate-900 rounded-full text-xs font-bold text-slate-900 shadow-[2px_2px_0px_#0f172a]">
-          <ShieldCheck className="w-4 h-4 text-blue-600" />
-          Official IIIT Nagpur Alumni & Committee Portal
-        </div>
 
         <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-[1.15] font-heading">
           Connecting IIIT Nagpur Graduates Across <br className="hidden sm:inline" />

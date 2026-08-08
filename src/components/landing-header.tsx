@@ -60,16 +60,8 @@ export function LandingHeader() {
           </Link>
         </div>
 
-        {/* Mobile Action Pill & Hamburger Toggle (below md) */}
-        <div className="flex md:hidden items-center gap-2 shrink-0">
-          <Link
-            href="/alumni/login"
-            className="text-[11px] font-bold bg-slate-900 text-white border-2 border-slate-900 px-2.5 py-1 rounded-full shadow-[2px_2px_0px_#0f172a] active:scale-95 transition-all flex items-center gap-1 whitespace-nowrap"
-          >
-            <Crown className="w-3 h-3 text-amber-400" />
-            Alumni Login
-          </Link>
-
+        {/* Mobile Hamburger Toggle (below md) */}
+        <div className="flex md:hidden items-center shrink-0">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-1.5 rounded-full border-2 border-slate-900 bg-white text-slate-900 shadow-[2px_2px_0px_#0f172a] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-all"
