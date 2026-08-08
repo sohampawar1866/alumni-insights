@@ -1,6 +1,6 @@
 import { memo } from "react";
 import Link from "next/link";
-import { Building2, MapPin, GraduationCap, CheckCircle2 } from "lucide-react";
+import { Building2, GraduationCap, CheckCircle2 } from "lucide-react";
 import { MembershipBadge, MembershipType } from "./membership-badge";
 
 type AlumniCardProps = {
@@ -11,7 +11,7 @@ type AlumniCardProps = {
   emp_type: "Intern" | "Full-time" | null;
   graduation_year: number | null;
   branch: string | null;
-  city: string | null;
+  city?: string | null;
   mentorship_available?: boolean | null;
   membership_type?: MembershipType | null;
   hrefPrefix?: string;
@@ -25,7 +25,6 @@ export const AlumniCard = memo(function AlumniCard({
   emp_type,
   graduation_year,
   branch,
-  city,
   mentorship_available,
   membership_type,
   hrefPrefix = "/alumni",
@@ -91,12 +90,6 @@ export const AlumniCard = memo(function AlumniCard({
           <span className="inline-flex items-center bg-slate-100 text-slate-900 border-2 border-slate-900 px-2.5 py-1 rounded-lg font-bold text-xs shadow-[2px_2px_0px_#0f172a]">
             <GraduationCap className="w-3.5 h-3.5 mr-1" strokeWidth={2.5} />
             &apos;{String(graduation_year).slice(-2)}
-          </span>
-        )}
-        {city && (
-          <span className="inline-flex items-center bg-slate-100 text-slate-900 border-2 border-slate-900 px-2.5 py-1 rounded-lg font-bold text-xs shadow-[2px_2px_0px_#0f172a] ml-auto">
-            <MapPin className="w-3.5 h-3.5 mr-1" strokeWidth={2.5} />
-            {city}
           </span>
         )}
       </div>

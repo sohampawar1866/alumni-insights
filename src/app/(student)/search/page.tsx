@@ -184,11 +184,6 @@ export default function SearchPage() {
             <Input placeholder="e.g. CSE, ECE" value={branch} onChange={(e) => setBranch(e.target.value)} />
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-700">City</label>
-            <Input placeholder="e.g. Bangalore, Pune" value={city} onChange={(e) => setCity(e.target.value)} />
-          </div>
-
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-700">From Year</label>

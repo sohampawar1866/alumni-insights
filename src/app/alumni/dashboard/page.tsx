@@ -266,16 +266,6 @@ export default function AlumniDashboardPage() {
               <option value="Intern">Intern</option>
             </select>
           </div>
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-700">
-              City / Location
-            </label>
-            <Input
-              placeholder="e.g. Bangalore, India"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-            />
-          </div>
         </div>
 
         <div className="space-y-1.5">

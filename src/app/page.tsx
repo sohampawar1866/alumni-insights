@@ -295,10 +295,6 @@ export default function LandingPage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-medium">
             <p>© {new Date().getFullYear()} IIIT Nagpur Alumni Association. All rights reserved.</p>
-            <p className="flex items-center gap-1 text-slate-400">
-              <Building2 className="w-3.5 h-3.5 text-slate-500" />
-              IIIT Nagpur Campus, Kaladongri, Maharashtra
-            </p>
           </div>
         </div>
       </footer>
